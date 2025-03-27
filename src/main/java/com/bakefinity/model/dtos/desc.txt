@@ -1,0 +1,4 @@
+// used for communication between layers
+
+// is user entity contains database fields like (fname, lname , email, password, ....)
+// userDto will contains Only required fields for a service (email)
