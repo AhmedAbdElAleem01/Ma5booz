@@ -1,0 +1,10 @@
+************repos imps************
+
+// CRUD operations
+// used by service layer
+
+ex:
+public boolean addProduct(Product product) {
+    // communicate with database directly (jdbc/ hibernate)
+}
+
