@@ -19,7 +19,7 @@
                             <a class="nav-link" href="${pageContext.request.contextPath}/views/user/shop.jsp">Shop</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/views/user/profile.jsp">My Profile</a>
+                            <a class="nav-link" href="${pageContext.request.contextPath}/profile">My Profile</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle dropdown-color navbar-text-color" href="#"
