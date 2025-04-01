@@ -1,3 +1,0 @@
-***************** service Interface ****************
-
-public List<OrderDto> getListOfOrderDto(int orderId);

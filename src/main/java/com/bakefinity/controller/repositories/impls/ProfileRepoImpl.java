@@ -1,36 +1,26 @@
 package com.bakefinity.controller.repositories.impls;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
-
 import com.bakefinity.controller.repositories.interfaces.ProfileRepo;
 import com.bakefinity.model.dtos.*;
+import com.bakefinity.utils.ConnectionManager;
 
-public class ProfileRepoImpl implements ProfileRepo{
-    String url = "jdbc:mysql://localhost:3306/ecommercedb";
-    String username = "root";
-    String password = "root";
-    
+public class ProfileRepoImpl implements ProfileRepo{    
     @Override
-    public Optional<Address> findUserAddressById(int id) {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    public Optional<AddressDTO> findUserAddressById(int id) {
         String query = "SELECT * FROM address WHERE userId = ?";
-        try (Connection conn = DriverManager.getConnection(url, username, password);
+        try (Connection conn = ConnectionManager.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(query)) {
 
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) { 
-                Address address = new Address();
+                AddressDTO address = new AddressDTO();
                 address.setCity(rs.getString("city"));
                 address.setCountry(rs.getString("country"));
                 address.setStreet(rs.getString("street"));
@@ -45,22 +35,16 @@ public class ProfileRepoImpl implements ProfileRepo{
     }
 
     @Override
-    public Optional<User> updateCreditLimit(User user, double creditLimit) {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    public Optional<UserDTO> updateCreditLimit(UserDTO user, double creditLimit) {
         String query = "UPDATE user SET creditLimit = ? WHERE id = ?";
         
-        try (Connection conn = DriverManager.getConnection(url, username, password);
+        try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
     
             pstmt.setDouble(1, creditLimit);
             pstmt.setInt(2, user.getId());
             
             int rowsUpdated = pstmt.executeUpdate();
-            System.out.println("newCreditLimit= " + creditLimit + " userId= " + user.getId());
             
             if (rowsUpdated > 0) {
                 user.setCreditLimit(creditLimit); //update
@@ -77,15 +61,10 @@ public class ProfileRepoImpl implements ProfileRepo{
     }
 
     @Override
-    public Optional<Address> updateShippingAddress(User user, String country, String city, String street, String BNo) {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    public Optional<AddressDTO> updateShippingAddress(UserDTO user, String country, String city, String street, String BNo) {
         String query = "UPDATE address SET country = ? , city = ? , street = ? , buildingNo = ? WHERE userId = ?";
         
-        try (Connection conn = DriverManager.getConnection(url, username, password);
+        try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
     
             pstmt.setString(1, country);
@@ -97,7 +76,7 @@ public class ProfileRepoImpl implements ProfileRepo{
             int rowsUpdated = pstmt.executeUpdate();
             
             if (rowsUpdated > 0) {
-                Address address = new Address();
+                AddressDTO address = new AddressDTO();
                 address.setCountry(country);
                 address.setCity(city);
                 address.setStreet(street);
@@ -114,18 +93,13 @@ public class ProfileRepoImpl implements ProfileRepo{
     }
 
     @Override
-    public Optional<User> updateAccountDetails(User user, String username, String job, String email) {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    public Optional<UserDTO> updateAccountDetails(UserDTO user, String name, String job, String email) {
         String query = "UPDATE user SET username = ? , email = ? , job = ? WHERE id = ?";
         
-        try (Connection conn = DriverManager.getConnection(url, username, password);
+        try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
     
-            pstmt.setString(1, username);
+            pstmt.setString(1, name);
             pstmt.setString(2, email);
             pstmt.setString(3, job);
             pstmt.setInt(4, user.getId());
@@ -133,7 +107,7 @@ public class ProfileRepoImpl implements ProfileRepo{
             int rowsUpdated = pstmt.executeUpdate();
             
             if (rowsUpdated > 0) {
-                user.setUsername(username); 
+                user.setUsername(name); 
                 user.setEmail(email);
                 user.setJob(job);
                 return Optional.of(user);
@@ -148,15 +122,10 @@ public class ProfileRepoImpl implements ProfileRepo{
     }
 
     @Override
-    public Optional<User> updatePassword(User user, String newPass) {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    public Optional<UserDTO> updatePassword(UserDTO user, String newPass) {
         String query = "UPDATE user SET password = ?  WHERE id = ?";
         
-        try (Connection conn = DriverManager.getConnection(url, username, password);
+        try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
     
             pstmt.setString(1, newPass);
@@ -177,16 +146,11 @@ public class ProfileRepoImpl implements ProfileRepo{
         return Optional.empty(); 
     }
 
-    public boolean isUsernameTaken(String username) {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    public boolean isUsernameTaken(String name) {
         String query = "SELECT COUNT(*) FROM user WHERE username = ?";
-        try (Connection conn = DriverManager.getConnection(url, username, password);
+        try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, username);
+            ps.setString(1, name);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return rs.getInt(1) > 0; 
@@ -198,15 +162,10 @@ public class ProfileRepoImpl implements ProfileRepo{
     }
 
     @Override
-    public Optional<User> updatePhoneNumber(User user, String mobile) {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    public Optional<UserDTO> updatePhoneNumber(UserDTO user, String mobile) {
         String query = "UPDATE user SET phoneNumber = ?  WHERE id = ?";
         
-        try (Connection conn = DriverManager.getConnection(url, username, password);
+        try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
     
             pstmt.setString(1, mobile);

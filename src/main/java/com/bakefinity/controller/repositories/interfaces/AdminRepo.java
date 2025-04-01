@@ -2,9 +2,9 @@ package com.bakefinity.controller.repositories.interfaces;
 
 import java.util.Optional;
 
-import com.bakefinity.model.dtos.User;
+import com.bakefinity.model.dtos.UserDTO;
 
 public interface AdminRepo {
-    public Optional<User> findByEmailAndPassword(String email ,String password);
+    public Optional<UserDTO> findByEmailAndPassword(String email ,String password);
 }
 

@@ -2,8 +2,8 @@ package com.bakefinity.controller.services.interfaces;
 
 import java.util.Optional;
 
-import com.bakefinity.model.dtos.User;
+import com.bakefinity.model.dtos.UserDTO;
 
 public interface UserLoginService {
-    public Optional<User> login(String email , String password);
+    public Optional<UserDTO> login(String email , String password);
 }

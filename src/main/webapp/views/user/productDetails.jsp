@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
     <title>Product Details| IceDelights</title>
@@ -14,11 +15,11 @@
                         <div class="sub_banner_content text-center" data-aos="fade-up">
                             <h1>Product Details</h1>
                             <div class="box">
-                                <a href="${pageContext.request.contextPath}/views/user/home.jsp" class="text-decoration-none">
+                                <a href="${pageContext.request.contextPath}/home" class="text-decoration-none">
                                     <span class="mb-0">Home</span>
                                 </a>
                                 <span class="mb-0 slash">/</span>
-                                <a href="${pageContext.request.contextPath}/views/user/shop.jsp" class="cart text-decoration-none">
+                                <a href="${pageContext.request.contextPath}/shop" class="cart text-decoration-none">
                                     <span class="mb-0">Shop</span>
                                 </a>
                                 <span class="mb-0 slash">/</span>
@@ -36,24 +37,10 @@
             <div class="row">
                 <div class="col-lg-7 col-12">
                     <div class="product-tab" data-aos="fade-up">
-                        <%-- <ul class="nav nav-tabs" id="myTab" role="tablist">
-                            <li class="nav-item waves-effect waves-light">
-                                <a class="nav-link active" id="first-tab" data-toggle="tab" data-target="#first" role="tab" aria-controls="first" aria-selected="false"><figure class="auction-img mb-0"><img class="img-fluid" src="${pageContext.request.contextPath}/static/img/product1-sm-image1.jpg" alt=""></figure></a>
-                            </li>
-                            <li class="nav-item waves-effect waves-light">
-                                <a class="nav-link" id="second-tab" data-toggle="tab" data-target="#second" role="tab" aria-controls="second" aria-selected="false"><figure class="auction-img mb-0"><img class="img-fluid" src="${pageContext.request.contextPath}/static/img/product1-sm-image2.jpg" alt=""></figure></a>
-                            </li>
-                            <li class="nav-item waves-effect waves-light">
-                                <a class="nav-link" id="third-tab" data-toggle="tab" data-target="#third" role="tab" aria-controls="third" aria-selected="true"><figure class="auction-img mb-0"><img class="img-fluid" src="${pageContext.request.contextPath}/static/img/product1-sm-image3.jpg" alt=""></figure></a>
-                            </li>
-                            <li class="nav-item waves-effect waves-light">
-                                <a class="nav-link" id="fourth-tab" data-toggle="tab" data-target="#fourth" role="tab" aria-controls="fourth" aria-selected="true"><figure class="auction-img mb-0"><img class="img-fluid" src="${pageContext.request.contextPath}/static/img/product1-sm-image4.jpg" alt=""></figure></a>
-                            </li>
-                        </ul> --%>
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane tab-pane2 fade active show" id="first" role="tabpanel" aria-labelledby="first-tab">
                                 <figure class="auction-img mb-0">
-                                    <img class="img-fluid" src="${pageContext.request.contextPath}/static/img/product1-image1.jpg" alt="">
+                                    <img class="img-fluid" src="${pageContext.request.contextPath}/static/img/${product.imageUrl}" alt="${product.name}">
                                 </figure>
                             </div>
                         </div>
@@ -69,11 +56,25 @@
                             <i class="fa-solid fa-star"></i>
                             <span>(4.9/5)</span>
                         </div>
-                        <h4>Classic Vanilla Ice Cream</h4>
-                        <span class="price">$5.99</span>
-                        <p class="text-size-16">Neque porro ruisquam est aui dolorem iesum ruia do sit amet consectetur, adipisci velit, sed quia non num eius modi 
-                            tempoa incidunt ut labore et dolore magna.                    
-                        </p>
+                        <c:if test="${not empty product}">
+                            <h4>${product.name}</h4>
+                            <span class="price">"$" ${product.price}</span>
+                            <p class="text-size-16">${product.description}</p>
+                            <c:choose>
+                                <c:when test="${product.stockQuantity == 0}">
+                                    <p style="color: red;">Out of Stock</p>
+                                </c:when>
+                                <c:when test="${product.stockQuantity < 10}">
+                                    <p style="color: red;">Only ${product.stockQuantity} left in stock</p>
+                                </c:when>
+                                <c:otherwise>
+                                    <p>In Stock</p>
+                                </c:otherwise>
+                            </c:choose>
+
+                        </c:if>
+                       
+                        
                         <div class="colors">
                             <span class="heading">Color:</span>
                             <ul class="list-unstyled mb-0">
@@ -109,17 +110,14 @@
         <div class="container">
             <div class="tabs-box tabs-options">
                 <ul class="nav nav-tabs" data-aos="fade-up">
-                    <li><a class="active" data-toggle="tab" data-target="#description">Description</a></li>
+                    <li><a class="active" data-toggle="tab" data-target="#description">Ingredients</a></li>
                 </ul>
                 <div class="tab-content">
                     <div id="description" class="tab-pane fade in active show">
                         <div class="row" data-aos="fade-up">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="description_content">
-                                    <p class="text-size-16">Ratione volurtatem serui nesciunt neaue porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                                        adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam
-                                        corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.
-                                    </p>
+                                    <p class="text-size-16">${product.description}</p>
                                 </div>
                             </div>
                         </div>

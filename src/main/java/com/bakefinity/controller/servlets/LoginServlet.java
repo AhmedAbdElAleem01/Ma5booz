@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Optional;
 import com.bakefinity.controller.services.impls.UserLoginServiceImpl;
 import com.bakefinity.controller.services.interfaces.UserLoginService;
-import com.bakefinity.model.dtos.User;
+import com.bakefinity.model.dtos.UserDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
@@ -18,7 +18,7 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User user = (User)req.getSession().getAttribute("user");
+        UserDTO user = (UserDTO)req.getSession().getAttribute("user");
         boolean alreadyLoggedIn = (user!=null);
 
         if(alreadyLoggedIn){
@@ -33,7 +33,7 @@ public class LoginServlet extends HttpServlet {
         String password = req.getParameter("password");
         String rememberMe = req.getParameter("rememberMe");
 
-        Optional<User> user = userLoginService.login(email, password);
+        Optional<UserDTO> user = userLoginService.login(email, password);
         if (user.isPresent()) {
             req.getSession().setAttribute("user", user.get());
 
@@ -47,7 +47,7 @@ public class LoginServlet extends HttpServlet {
             resp.sendRedirect("views/user/login.jsp?error-message=Invalid email or password");
         }      
     }
-    private void redirectUser(HttpServletResponse resp , User user) throws IOException{
+    private void redirectUser(HttpServletResponse resp , UserDTO user) throws IOException{
         // redirect user based on his role
         if ("ADMIN".equals(user.getRole())) {
             resp.sendRedirect("views/admin/admin.jsp");

@@ -1,3 +1,6 @@
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <html>
 <head>
     <title>Home | IceDelights</title>
@@ -86,294 +89,34 @@
             <div class="row">
                 <div class="col-12">
                     <div class="owl-carousel owl-theme">
-                        <div class="item">
-                            <div class="classic-box">
-                                <div class="classic_image_box box1">
-                                    <figure class="mb-0">
-                                        <img src="${pageContext.request.contextPath}/static/img/vanilla_icecream.png" alt="image" class="img-fluid">
-                                    </figure>
-                                    <i class="fa-regular fa-heart"></i>
-                                </div>
-                                <div class="classic_box_content">
-                                    <div class="text_wrapper position-relative">
-                                        <h6>Classic Vanilla Ice Cream</h6>
-                                        <div class="rating">
-                                            <i class="fa-solid fa-star"></i>
-                                            <span>4.9/5</span>
-                                        </div>
+
+                        <c:forEach var="product" items="${classicProducts}">
+                            <div class="item">
+                                <div class="classic-box">
+                                    <div class="classic_image_box box1">
+                                        <figure class="mb-0">
+                                            <img src="${pageContext.request.contextPath}/static/img/${product.imageUrl}" alt="image" class="img-fluid">
+                                        </figure>
+                                        <i class="fa-regular fa-heart"></i>
                                     </div>
-                                    <p class="text-size-16">Creamy vanilla ice cream topped with cherry.</p>
-                                    <div class="price_wrapper position-relative">
-                                        <span class="dollar">$<span class="counter">4</span><span>.99</span></span>
-                                        <a href="cart.html"><img src="${pageContext.request.contextPath}/static/img/cart.png" alt="image" class="img-fluid"></a>
+                                    <div class="classic_box_content">
+                                        <div class="text_wrapper position-relative">
+                                            <h6>${product.name}</h6>
+                                            <div class="rating">
+                                                <i class="fa-solid fa-star"></i>
+                                                <span>4.9/5</span>
+                                            </div>
+                                        </div>
+                                        <p class="text-size-16">${product.description}</p>
+                                        <div class="price_wrapper position-relative">
+                                            <span class="dollar">$<span class="counter">${product.price}</span>
+                                            <a href="cart.html"><img src="${pageContext.request.contextPath}/static/img/cart.png" alt="image" class="img-fluid"></a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="item">
-                            <div class="classic-box">
-                                <div class="classic_image_box box2">
-                                    <figure class="mb-0">
-                                        <img src="${pageContext.request.contextPath}/static/img/classic-image2.png" alt="image" class="img-fluid">
-                                    </figure>
-                                    <i class="fa-regular fa-heart"></i>
-                                </div>
-                                <div class="classic_box_content">
-                                    <div class="text_wrapper position-relative">
-                                        <h6>Chocolate Brownie Sundae</h6>
-                                        <div class="rating">
-                                            <i class="fa-solid fa-star"></i>
-                                            <span>4.9/5</span>
-                                        </div>
-                                    </div>
-                                    <p class="text-size-16">Rich chocolate ice cream with chunks of brownie.</p>
-                                    <div class="price_wrapper position-relative">
-                                        <span class="dollar">$<span class="counter">5</span><span>.49</span></span>
-                                        <a href="cart.html"><img src="${pageContext.request.contextPath}/static/img/cart.png" alt="image" class="img-fluid"></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="classic-box">
-                                <div class="classic_image_box box3">
-                                    <figure class="mb-0">
-                                        <img src="${pageContext.request.contextPath}/static/img/classic-image3.png" alt="image" class="img-fluid">
-                                    </figure>
-                                    <i class="fa-regular fa-heart"></i>
-                                </div>
-                                <div class="classic_box_content">
-                                    <div class="text_wrapper position-relative">
-                                        <h6>Strawberry Shortcake</h6>
-                                        <div class="rating">
-                                            <i class="fa-solid fa-star"></i>
-                                            <span>4.9/5</span>
-                                        </div>
-                                    </div>
-                                    <p class="text-size-16">Strawberry ice cream layered with shortcake</p>
-                                    <div class="price_wrapper position-relative">
-                                        <span class="dollar">$<span class="counter">5</span><span>.29</span></span>
-                                        <a href="cart.html"><img src="${pageContext.request.contextPath}/static/img/cart.png" alt="image" class="img-fluid"></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="classic-box">
-                                <div class="classic_image_box box4">
-                                    <figure class="mb-0">
-                                        <img src="${pageContext.request.contextPath}/static/img/classic-image4.png" alt="image" class="img-fluid">
-                                    </figure>
-                                    <i class="fa-regular fa-heart"></i>
-                                </div>
-                                <div class="classic_box_content">
-                                    <div class="text_wrapper position-relative">
-                                        <h6>Mint Chocolate Chip Cone</h6>
-                                        <div class="rating">
-                                            <i class="fa-solid fa-star"></i>
-                                            <span>4.9/5</span>
-                                        </div>
-                                    </div>
-                                    <p class="text-size-16">Refreshing mint ice cream with chocolate chips.</p>
-                                    <div class="price_wrapper position-relative">
-                                        <span class="dollar">$<span class="counter">3</span><span>.99</span></span>
-                                        <a href="cart.html"><img src="${pageContext.request.contextPath}/static/img/cart.png" alt="image" class="img-fluid"></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="classic-box">
-                                <div class="classic_image_box box1">
-                                    <figure class="mb-0">
-                                        <img src="${pageContext.request.contextPath}/static/img/vanilla_icecream.png" alt="image" class="img-fluid">
-                                    </figure>
-                                    <i class="fa-regular fa-heart"></i>
-                                </div>
-                                <div class="classic_box_content">
-                                    <div class="text_wrapper position-relative">
-                                        <h6>Classic Vanilla Ice Cream</h6>
-                                        <div class="rating">
-                                            <i class="fa-solid fa-star"></i>
-                                            <span>4.9/5</span>
-                                        </div>
-                                    </div>
-                                    <p class="text-size-16">Creamy vanilla ice cream topped with cherry.</p>
-                                    <div class="price_wrapper position-relative">
-                                        <span class="dollar">$<span class="counter">4</span><span>.99</span></span>
-                                        <a href="cart.html"><img src="${pageContext.request.contextPath}/static/img/cart.png" alt="image" class="img-fluid"></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="classic-box">
-                                <div class="classic_image_box box2">
-                                    <figure class="mb-0">
-                                        <img src="${pageContext.request.contextPath}/static/img/classic-image2.png" alt="image" class="img-fluid">
-                                    </figure>
-                                    <i class="fa-regular fa-heart"></i>
-                                </div>
-                                <div class="classic_box_content">
-                                    <div class="text_wrapper position-relative">
-                                        <h6>Chocolate Brownie Sundae</h6>
-                                        <div class="rating">
-                                            <i class="fa-solid fa-star"></i>
-                                            <span>4.9/5</span>
-                                        </div>
-                                    </div>
-                                    <p class="text-size-16">Rich chocolate ice cream with chunks of brownie.</p>
-                                    <div class="price_wrapper position-relative">
-                                        <span class="dollar">$<span class="counter">5</span><span>.49</span></span>
-                                        <a href="cart.html"><img src="${pageContext.request.contextPath}/static/img/cart.png" alt="image" class="img-fluid"></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="classic-box">
-                                <div class="classic_image_box box3">
-                                    <figure class="mb-0">
-                                        <img src="${pageContext.request.contextPath}/static/img/classic-image3.png" alt="image" class="img-fluid">
-                                    </figure>
-                                    <i class="fa-regular fa-heart"></i>
-                                </div>
-                                <div class="classic_box_content">
-                                    <div class="text_wrapper position-relative">
-                                        <h6>Strawberry Shortcake</h6>
-                                        <div class="rating">
-                                            <i class="fa-solid fa-star"></i>
-                                            <span>4.9/5</span>
-                                        </div>
-                                    </div>
-                                    <p class="text-size-16">Strawberry ice cream layered with shortcake</p>
-                                    <div class="price_wrapper position-relative">
-                                        <span class="dollar">$<span class="counter">5</span><span>.29</span></span>
-                                        <a href="cart.html"><img src="${pageContext.request.contextPath}/static/img/cart.png" alt="image" class="img-fluid"></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="classic-box">
-                                <div class="classic_image_box box4">
-                                    <figure class="mb-0">
-                                        <img src="${pageContext.request.contextPath}/static/img/classic-image4.png" alt="image" class="img-fluid">
-                                    </figure>
-                                    <i class="fa-regular fa-heart"></i>
-                                </div>
-                                <div class="classic_box_content">
-                                    <div class="text_wrapper position-relative">
-                                        <h6>Mint Chocolate Chip Cone</h6>
-                                        <div class="rating">
-                                            <i class="fa-solid fa-star"></i>
-                                            <span>4.9/5</span>
-                                        </div>
-                                    </div>
-                                    <p class="text-size-16">Refreshing mint ice cream with chocolate chips.</p>
-                                    <div class="price_wrapper position-relative">
-                                        <span class="dollar">$<span class="counter">3</span><span>.99</span></span>
-                                        <a href="cart.html"><img src="${pageContext.request.contextPath}/static/img/cart.png" alt="image" class="img-fluid"></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="classic-box">
-                                <div class="classic_image_box box1">
-                                    <figure class="mb-0">
-                                        <img src="${pageContext.request.contextPath}/static/img/vanilla_icecream.png" alt="image" class="img-fluid">
-                                    </figure>
-                                    <i class="fa-regular fa-heart"></i>
-                                </div>
-                                <div class="classic_box_content">
-                                    <div class="text_wrapper position-relative">
-                                        <h6>Classic Vanilla Ice Cream</h6>
-                                        <div class="rating">
-                                            <i class="fa-solid fa-star"></i>
-                                            <span>4.9/5</span>
-                                        </div>
-                                    </div>
-                                    <p class="text-size-16">Creamy vanilla ice cream topped with cherry.</p>
-                                    <div class="price_wrapper position-relative">
-                                        <span class="dollar">$<span class="counter">4</span><span>.99</span></span>
-                                        <a href="cart.html"><img src="${pageContext.request.contextPath}/static/img/cart.png" alt="image" class="img-fluid"></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="classic-box">
-                                <div class="classic_image_box box2">
-                                    <figure class="mb-0">
-                                        <img src="${pageContext.request.contextPath}/static/img/classic-image2.png" alt="image" class="img-fluid">
-                                    </figure>
-                                    <i class="fa-regular fa-heart"></i>
-                                </div>
-                                <div class="classic_box_content">
-                                    <div class="text_wrapper position-relative">
-                                        <h6>Chocolate Brownie Sundae</h6>
-                                        <div class="rating">
-                                            <i class="fa-solid fa-star"></i>
-                                            <span>4.9/5</span>
-                                        </div>
-                                    </div>
-                                    <p class="text-size-16">Rich chocolate ice cream with chunks of brownie.</p>
-                                    <div class="price_wrapper position-relative">
-                                        <span class="dollar">$<span class="counter">5</span><span>.49</span></span>
-                                        <a href="cart.html"><img src="${pageContext.request.contextPath}/static/img/cart.png" alt="image" class="img-fluid"></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="classic-box">
-                                <div class="classic_image_box box3">
-                                    <figure class="mb-0">
-                                        <img src="${pageContext.request.contextPath}/static/img/classic-image3.png" alt="image" class="img-fluid">
-                                    </figure>
-                                    <i class="fa-regular fa-heart"></i>
-                                </div>
-                                <div class="classic_box_content">
-                                    <div class="text_wrapper position-relative">
-                                        <h6>Strawberry Shortcake</h6>
-                                        <div class="rating">
-                                            <i class="fa-solid fa-star"></i>
-                                            <span>4.9/5</span>
-                                        </div>
-                                    </div>
-                                    <p class="text-size-16">Strawberry ice cream layered with shortcake</p>
-                                    <div class="price_wrapper position-relative">
-                                        <span class="dollar">$<span class="counter">5</span><span>.29</span></span>
-                                        <a href="cart.html"><img src="${pageContext.request.contextPath}/static/img/cart.png" alt="image" class="img-fluid"></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="classic-box">
-                                <div class="classic_image_box box4">
-                                    <figure class="mb-0">
-                                        <img src="${pageContext.request.contextPath}/static/img/classic-image4.png" alt="image" class="img-fluid">
-                                    </figure>
-                                    <i class="fa-regular fa-heart"></i>
-                                </div>
-                                <div class="classic_box_content">
-                                    <div class="text_wrapper position-relative">
-                                        <h6>Mint Chocolate Chip Cone</h6>
-                                        <div class="rating">
-                                            <i class="fa-solid fa-star"></i>
-                                            <span>4.9/5</span>
-                                        </div>
-                                    </div>
-                                    <p class="text-size-16">Refreshing mint ice cream with chocolate chips.</p>
-                                    <div class="price_wrapper position-relative">
-                                        <span class="dollar">$<span class="counter">3</span><span>.99</span></span>
-                                        <a href="cart.html"><img src="${pageContext.request.contextPath}/static/img/cart.png" alt="image" class="img-fluid"></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        </c:forEach>
+
                     </div>
                 </div>
             </div>
@@ -393,50 +136,25 @@
         </div>
         <div class="categories_wrapper" data-aos="fade-up">
             <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                    <div class="categories-box">
-                        <figure class="image mb-0">
-                            <img src="${pageContext.request.contextPath}/static/img/cakes.jpg" alt="image" class="img-fluid">
-                        </figure>
-                        <div class="content">
-                            <h5 class="mb-0">Cakes</h5>
-                            <a href="${pageContext.request.contextPath}/views/user/shop.jsp"><i class="fa-solid fa-arrow-right"></i></a>
+                <c:forEach var="category" items="${homeCategories}">
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                        <div class="categories-box">
+                            <figure class="image mb-0">
+                                <img src="${pageContext.request.contextPath}/static/img/${category.imageUrl}" 
+                                     alt="${category.name}" class="img-fluid">
+                            </figure>
+                            <div class="content">
+                                <h5 class="mb-0">${category.name}</h5>
+                                <c:url value="/shop" var="catUrl">
+                                    <c:param name="catID" value="${category.id}" />
+                                </c:url>
+                                <a href="${catUrl}">
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                    <div class="categories-box">
-                        <figure class="image mb-0">
-                            <img src="${pageContext.request.contextPath}/static/img/icecreams.jpg" alt="image" class="img-fluid">
-                        </figure>
-                        <div class="content">
-                            <h5 class="mb-0">Ice Cream Cones</h5>
-                            <a href="${pageContext.request.contextPath}/views/user/shop.jsp"><i class="fa-solid fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                    <div class="categories-box">
-                        <figure class="image mb-0">
-                            <img src="${pageContext.request.contextPath}/static/img/cupcakes.jpg" alt="image" class="img-fluid">
-                        </figure>
-                        <div class="content">
-                            <h5 class="mb-0">Cupcakes</h5>
-                            <a href="${pageContext.request.contextPath}/views/user/shop.jsp"><i class="fa-solid fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                    <div class="categories-box">
-                        <figure class="image mb-0">
-                            <img src="${pageContext.request.contextPath}/static/img/seasonalIcecreams.jpg" alt="image" class="img-fluid">
-                        </figure>
-                        <div class="content">
-                            <h5 class="mb-0">Seasonal Flavors</h5>
-                            <a href="${pageContext.request.contextPath}/views/user/shop.jsp"><i class="fa-solid fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
+                </c:forEach>
             </div>
         </div>
     </div>

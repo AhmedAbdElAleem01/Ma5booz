@@ -1,30 +1,22 @@
 package com.bakefinity.controller.repositories.impls;
 
 import com.bakefinity.controller.repositories.interfaces.AddressRepo;
-import com.bakefinity.model.dtos.Address;
+import com.bakefinity.model.dtos.AddressDTO;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import com.bakefinity.utils.ConnectionManager;
 
 public class AddressRepoImpl implements AddressRepo {
-    String url = "jdbc:mysql://localhost:3306/ecommercedb";
-    String username = "root";
-    String password = "root";
-
     @Override
-    public boolean createAddress(Address address) throws SQLException {
+    public boolean createAddress(AddressDTO address) throws SQLException {
         if (address == null) {
             System.err.println("Error creating address: Address is null");
             return false;
         }
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        try(Connection connection = DriverManager.getConnection(url, username, password);) {
+        try(Connection connection = ConnectionManager.getConnection();) {
             String query = "INSERT INTO Address (userId, buildingNo, street, city, country) VALUES (?, ?, ?, ?, ?)";
             try(PreparedStatement statement = connection.prepareStatement(query);) {
                 statement.setInt(1, address.getUserId());

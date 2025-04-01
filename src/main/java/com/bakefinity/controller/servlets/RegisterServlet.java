@@ -4,10 +4,10 @@ import com.bakefinity.controller.repositories.impls.AddressRepoImpl;
 import com.bakefinity.controller.repositories.impls.CategoryRepoImpl;
 import com.bakefinity.controller.repositories.impls.UserInterestsRepoImpl;
 import com.bakefinity.controller.repositories.impls.UserRepoImpl;
-import com.bakefinity.model.dtos.Address;
-import com.bakefinity.model.dtos.Category;
-import com.bakefinity.model.dtos.User;
-import com.bakefinity.model.dtos.UserInterests;
+import com.bakefinity.model.dtos.AddressDTO;
+import com.bakefinity.model.dtos.CategoryDTO;
+import com.bakefinity.model.dtos.UserDTO;
+import com.bakefinity.model.dtos.UserInterestsDTO;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -109,7 +109,7 @@ public class RegisterServlet extends HttpServlet {
             forwardWithData(req, resp);
             return;
         }
-        User user = new User(fname + " " + lname, username, phoneNumber, email, password, Double.parseDouble(creditLimit), birthDate, job, LocalDateTime.now());
+        UserDTO user = new UserDTO(fname + " " + lname, username, phoneNumber, email, password, Double.parseDouble(creditLimit), birthDate, job, LocalDateTime.now());
         UserRepoImpl userRepoImpl = new UserRepoImpl();
         int userId;
         try {
@@ -118,7 +118,7 @@ public class RegisterServlet extends HttpServlet {
             throw new RuntimeException(e);
         }
 
-        Address address = new Address(userId, Integer.parseInt(buildingNo), street, city, country);
+        AddressDTO address = new AddressDTO(userId, Integer.parseInt(buildingNo), street, city, country);
         AddressRepoImpl addressRepoImpl = new AddressRepoImpl();
         try {
             addressRepoImpl.createAddress(address);
@@ -131,8 +131,8 @@ public class RegisterServlet extends HttpServlet {
             for (String interest : interests) {
                 CategoryRepoImpl categoryRepoImpl = new CategoryRepoImpl();
                 try {
-                    Category category = categoryRepoImpl.getCategoryByName(interest);
-                    UserInterests userInterests = new UserInterests(userId, category.getId());
+                    CategoryDTO category = categoryRepoImpl.getCategoryByName(interest);
+                    UserInterestsDTO userInterests = new UserInterestsDTO(userId, category.getId());
                     UserInterestsRepoImpl obj = new UserInterestsRepoImpl();
                     obj.createUserInterests(userInterests);
                 } catch (SQLException e) {
