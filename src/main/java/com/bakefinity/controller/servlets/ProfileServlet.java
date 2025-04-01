@@ -4,8 +4,7 @@ import java.io.IOException;
 import java.util.Optional;
 import com.bakefinity.controller.services.impls.ProfileServiceImpl;
 import com.bakefinity.controller.services.interfaces.ProfileService;
-import com.bakefinity.model.entities.Address;
-import com.bakefinity.model.entities.User;
+import com.bakefinity.model.dtos.*;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -52,7 +51,7 @@ public class ProfileServlet extends HttpServlet {
         }
         if("creditLimitForm".equals(form)){
             String creditLimit = req.getParameter("creditLimit");
-            Optional<User> updatedUser = profileService.updateCreditLimit(user , creditLimit);
+            Optional<User> updatedUser = profileService.updateCreditLimit(user , Double.parseDouble(creditLimit));
             if(updatedUser.isPresent())
                 req.getSession().setAttribute("user", updatedUser.get()); //update user
             else{

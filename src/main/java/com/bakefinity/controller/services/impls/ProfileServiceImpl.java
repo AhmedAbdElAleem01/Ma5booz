@@ -6,8 +6,7 @@ import com.bakefinity.controller.repositories.impls.UserRepoImpl;
 import com.bakefinity.controller.repositories.interfaces.ProfileRepo;
 import com.bakefinity.controller.repositories.interfaces.UserRepo;
 import com.bakefinity.controller.services.interfaces.ProfileService;
-import com.bakefinity.model.entities.Address;
-import com.bakefinity.model.entities.User;
+import com.bakefinity.model.dtos.*;
 
 public class ProfileServiceImpl implements ProfileService {
     ProfileRepo profileRepo = new ProfileRepoImpl();
@@ -28,13 +27,13 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public Optional<User> updateCreditLimit(User user , String newCreditLimit) {
+    public Optional<User> updateCreditLimit(User user , Double newCreditLimit) {
         // validation
         Optional<User> retrievedUser = userRepo.findById(user.getId());
-        if(newCreditLimit.isBlank() || newCreditLimit.isEmpty() || retrievedUser.isEmpty()){
+        if(retrievedUser.isEmpty()){
             return Optional.empty();
         }
-        if(Integer.parseInt(newCreditLimit)<=0)
+        if(newCreditLimit<=0)
             return Optional.empty();
         Optional<User> updatedUser = profileRepo.updateCreditLimit(retrievedUser.get() , newCreditLimit);
         if(updatedUser.isPresent()){

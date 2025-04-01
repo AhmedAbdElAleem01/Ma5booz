@@ -14,6 +14,7 @@ public class User {
     private Date birthDate;
     private String job;
     private LocalDateTime createdAt;
+    String role;
 
     public User() {
     }
@@ -30,6 +31,19 @@ public class User {
         this.createdAt = createdAt;
     }
 
+    public void setId(int id){
+        this.id = id;
+    }
+    public int getId(){
+        return this.id;
+    }
+    public String getRole() {
+        return this.role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
     public String getName() {
         return name;
     }

@@ -94,17 +94,23 @@ public class UserRepoImpl implements UserRepo{
         }
     }
 
-   public Optional<User> findByEmailAndPassword(String email, String password) {
-        String query = "SELECT * FROM users WHERE email = ? AND password = ?";
+   public Optional<User> findByEmailAndPassword(String email, String pass) { 
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        String query = "SELECT * FROM user WHERE email = ? AND password = ?";
         try (Connection conn = DriverManager.getConnection(url, username, password);
             PreparedStatement pstmt = conn.prepareStatement(query)) {
 
             pstmt.setString(1, email);
-            pstmt.setString(2, password);
+            pstmt.setString(2, pass);
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) { 
                 User user = new User();
+                user.setId(rs.getInt("id"));
                 user.setName(rs.getString("name"));
                 user.setUsername(rs.getString("username"));
                 user.setEmail(rs.getString("email"));
@@ -122,7 +128,12 @@ public class UserRepoImpl implements UserRepo{
         return Optional.empty();
     }    
     public Optional<User> findById(int id) {
-        String query = "SELECT * FROM users WHERE id = ?";
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        String query = "SELECT * FROM user WHERE id = ?";
         
         try (Connection conn = DriverManager.getConnection(url, username, password);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -132,6 +143,7 @@ public class UserRepoImpl implements UserRepo{
     
             if (rs.next()) {
                 User user = new User();
+                user.setId(rs.getInt("id"));
                 user.setName(rs.getString("name"));
                 user.setUsername(rs.getString("username"));
                 user.setEmail(rs.getString("email"));

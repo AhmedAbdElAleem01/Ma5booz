@@ -5,7 +5,7 @@ import com.bakefinity.controller.repositories.impls.AdminRepoImpl;
 import com.bakefinity.controller.repositories.impls.UserRepoImpl;
 import com.bakefinity.controller.repositories.interfaces.*;
 import com.bakefinity.controller.services.interfaces.*;
-import com.bakefinity.model.entities.User;
+import com.bakefinity.model.dtos.User;
 
 public class UserLoginServiceImpl implements UserLoginService {
     UserRepo userRepo = new UserRepoImpl();

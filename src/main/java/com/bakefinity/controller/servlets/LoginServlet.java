@@ -1,14 +1,10 @@
 package com.bakefinity.controller.servlets;
 
 import java.io.IOException;
-import java.net.http.HttpResponse;
-import java.sql.SQLException;
 import java.util.Optional;
-import java.util.stream.Stream;
-
 import com.bakefinity.controller.services.impls.UserLoginServiceImpl;
 import com.bakefinity.controller.services.interfaces.UserLoginService;
-import com.bakefinity.model.entities.User;
+import com.bakefinity.model.dtos.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
