@@ -186,7 +186,7 @@
                             <div class="classic-box">
                                 <div class="classic_image_box box1">
                                     <figure class="mb-0">
-                                        <img src="${pageContext.request.contextPath}/static/img/classic-image1.png" alt="image" class="img-fluid">
+                                        <img src="${pageContext.request.contextPath}/static/img/vanilla_icecream.png" alt="image" class="img-fluid">
                                     </figure>
                                     <i class="fa-regular fa-heart"></i>
                                 </div>
@@ -282,7 +282,7 @@
                             <div class="classic-box">
                                 <div class="classic_image_box box1">
                                     <figure class="mb-0">
-                                        <img src="${pageContext.request.contextPath}/static/img/classic-image1.png" alt="image" class="img-fluid">
+                                        <img src="${pageContext.request.contextPath}/static/img/vanilla_icecream.png" alt="image" class="img-fluid">
                                     </figure>
                                     <i class="fa-regular fa-heart"></i>
                                 </div>
