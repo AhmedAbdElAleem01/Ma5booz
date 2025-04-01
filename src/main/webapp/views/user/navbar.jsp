@@ -1,7 +1,7 @@
 <header class="header">
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light p-0">
-            <a class="navbar-brand" href="${pageContext.request.contextPath}/views/user/home.jsp">
+            <a class="navbar-brand" href="${pageContext.request.contextPath}/home">
                 <figure class="logo mb-0"><img src="${pageContext.request.contextPath}/static/img/logo.png" alt="image" class="img-fluid"></figure>
             </a>
             <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -13,10 +13,10 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/views/user/home.jsp">Home</a>
+                            <a class="nav-link" href="${pageContext.request.contextPath}/home">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/views/user/shop.jsp">Shop</a>
+                            <a class="nav-link" href="${pageContext.request.contextPath}/shop">Shop</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/profile">My Profile</a>

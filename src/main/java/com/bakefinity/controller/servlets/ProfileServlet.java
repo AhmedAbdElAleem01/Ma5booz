@@ -19,7 +19,7 @@ public class ProfileServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User user = (User)req.getSession().getAttribute("user");
+        UserDTO user = (UserDTO)req.getSession().getAttribute("user");
         if(user== null){
             resp.sendRedirect("views/user/login.jsp");
             return;
@@ -31,7 +31,7 @@ public class ProfileServlet extends HttpServlet {
             resp.getWriter().write(isTaken ? "taken" : "available");
             return;
         }
-        Optional<Address> address = profileService.getAddress(user.getId());
+        Optional<AddressDTO> address = profileService.getAddress(user.getId());
         if (address.isPresent()) {
             req.getSession().setAttribute("address", address.get());  
             req.getRequestDispatcher("views/user/profile.jsp").forward(req, resp);
@@ -43,7 +43,7 @@ public class ProfileServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String form = req.getParameter("form");
-        User user = (User) req.getSession().getAttribute("user");
+        UserDTO user = (UserDTO) req.getSession().getAttribute("user");
 
         if(user== null){
             resp.sendRedirect("views/user/login.jsp");
@@ -51,7 +51,7 @@ public class ProfileServlet extends HttpServlet {
         }
         if("creditLimitForm".equals(form)){
             String creditLimit = req.getParameter("creditLimit");
-            Optional<User> updatedUser = profileService.updateCreditLimit(user , Double.parseDouble(creditLimit));
+            Optional<UserDTO> updatedUser = profileService.updateCreditLimit(user , Double.parseDouble(creditLimit));
             if(updatedUser.isPresent())
                 req.getSession().setAttribute("user", updatedUser.get()); //update user
             else{
@@ -66,8 +66,8 @@ public class ProfileServlet extends HttpServlet {
             String BNo = req.getParameter("BNo");
             String mobile = req.getParameter("mobile");
 
-            Optional<User> updatedUser = profileService.updateShippingInfo(user ,country , city , street , BNo , mobile);
-            Optional<Address> updatedAddress = profileService.getAddress(user.getId());
+            Optional<UserDTO> updatedUser = profileService.updateShippingInfo(user ,country , city , street , BNo , mobile);
+            Optional<AddressDTO> updatedAddress = profileService.getAddress(user.getId());
             if (updatedAddress.isPresent()) {
                 req.getSession().setAttribute("address", updatedAddress.get());  //update address
             } else {
@@ -86,7 +86,7 @@ public class ProfileServlet extends HttpServlet {
             String job = req.getParameter("job");
             String email = req.getParameter("email");
 
-            Optional<User> updatedUser = profileService.updateAccountDetails(user, username , job , email);
+            Optional<UserDTO> updatedUser = profileService.updateAccountDetails(user, username , job , email);
             if(updatedUser.isPresent()){
                 deleteOldCookie(req, resp);
                 req.getSession().setAttribute("user", updatedUser.get());
@@ -100,7 +100,7 @@ public class ProfileServlet extends HttpServlet {
             String newPass = req.getParameter("newPass");
             String confirmPass = req.getParameter("confirmPass");
 
-            Optional<User> updatedUser = profileService.updatePassword(user, currentPass , newPass , confirmPass);
+            Optional<UserDTO> updatedUser = profileService.updatePassword(user, currentPass , newPass , confirmPass);
             if(updatedUser.isPresent()){
                 req.getSession().setAttribute("user", updatedUser.get());
                 deleteOldCookie(req , resp);

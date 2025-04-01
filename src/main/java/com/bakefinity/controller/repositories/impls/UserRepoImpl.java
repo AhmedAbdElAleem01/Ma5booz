@@ -1,7 +1,6 @@
 package com.bakefinity.controller.repositories.impls;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,24 +9,16 @@ import java.util.Optional;
 
 import com.bakefinity.controller.repositories.interfaces.UserRepo;
 import com.bakefinity.model.dtos.*;
+import com.bakefinity.utils.ConnectionManager;
 
 public class UserRepoImpl implements UserRepo{
-    String url = "jdbc:mysql://localhost:3306/ecommercedb";
-    String username = "root";
-    String password = "root";
-
     @Override
-    public int createUser(User user) throws SQLException {
+    public int createUser(UserDTO user) throws SQLException {
         if (user == null) {
             System.err.println("Error creating user: User is null");
             return -1;
         }
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        try(Connection connection = DriverManager.getConnection(url, username, password);) {
+        try(Connection connection = ConnectionManager.getConnection();) {
             String query = "INSERT INTO User (name, email, password, phoneNumber, creditLimit, birthDate, job, username) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             try(PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
                 statement.setString(1, user.getName());
@@ -60,12 +51,7 @@ public class UserRepoImpl implements UserRepo{
 
     @Override
     public boolean isFoundUsername(String name) throws SQLException {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        try(Connection connection = DriverManager.getConnection(url, username, password);) {
+        try(Connection connection = ConnectionManager.getConnection();) {
             String query = "SELECT id FROM User WHERE username = ?";
             try(PreparedStatement statement = connection.prepareStatement(query);) {
                 statement.setString(1, name);
@@ -78,12 +64,7 @@ public class UserRepoImpl implements UserRepo{
 
     @Override
     public boolean isFoundEmail(String email) throws SQLException{
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        try(Connection connection = DriverManager.getConnection(url, username, password);) {
+        try(Connection connection = ConnectionManager.getConnection();) {
             String query = "SELECT id FROM User WHERE email = ?";
             try(PreparedStatement statement = connection.prepareStatement(query);) {
                 statement.setString(1, email);
@@ -94,14 +75,9 @@ public class UserRepoImpl implements UserRepo{
         }
     }
 
-   public Optional<User> findByEmailAndPassword(String email, String pass) { 
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+   public Optional<UserDTO> findByEmailAndPassword(String email, String pass) { 
         String query = "SELECT * FROM user WHERE email = ? AND password = ?";
-        try (Connection conn = DriverManager.getConnection(url, username, password);
+        try (Connection conn = ConnectionManager.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(query)) {
 
             pstmt.setString(1, email);
@@ -109,7 +85,7 @@ public class UserRepoImpl implements UserRepo{
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) { 
-                User user = new User();
+                UserDTO user = new UserDTO();
                 user.setId(rs.getInt("id"));
                 user.setName(rs.getString("name"));
                 user.setUsername(rs.getString("username"));
@@ -127,22 +103,17 @@ public class UserRepoImpl implements UserRepo{
         }
         return Optional.empty();
     }    
-    public Optional<User> findById(int id) {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    public Optional<UserDTO> findById(int id) {
         String query = "SELECT * FROM user WHERE id = ?";
         
-        try (Connection conn = DriverManager.getConnection(url, username, password);
+        try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
     
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
     
             if (rs.next()) {
-                User user = new User();
+                UserDTO user = new UserDTO();
                 user.setId(rs.getInt("id"));
                 user.setName(rs.getString("name"));
                 user.setUsername(rs.getString("username"));
