@@ -21,7 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet(value = "/shop")
-public class ShopController extends HttpServlet {
+public class ShopServlet extends HttpServlet {
 
     private CategoryService categoryService;
     private ProductService productService;

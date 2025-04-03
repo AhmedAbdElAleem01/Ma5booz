@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet(value = "/home")
-public class HomeController extends HttpServlet {
+public class HomeServlet extends HttpServlet {
     private ProductService productService;
     private CategoryService categoryService;
 

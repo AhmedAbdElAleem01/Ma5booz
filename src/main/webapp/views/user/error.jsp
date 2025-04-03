@@ -13,7 +13,7 @@
                         <h1>Error</h1>
                         <p class="text">Sorry! A problem ocurred ;(</p>
                         <p class="col-xl-8 col-lg-10 mx-auto text2" id="error-message"></p>
-                        <a href="${pageContext.request.contextPath}/views/user/home.jsp" class="back_home text-decoration-none"><i class="fa-solid fa-arrow-left"></i>Back to Home</a>
+                        <a href="${pageContext.request.contextPath}/home" class="back_home text-decoration-none"><i class="fa-solid fa-arrow-left"></i>Back to Home</a>
                     </div>
                 </div>
             </div>

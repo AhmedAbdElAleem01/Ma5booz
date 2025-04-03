@@ -22,7 +22,7 @@ public class LoginServlet extends HttpServlet {
         boolean alreadyLoggedIn = (user!=null);
 
         if(alreadyLoggedIn){
-            redirectUser(resp, user);
+            redirectUser(req ,resp, user);
             return;
         }       
         resp.sendRedirect("views/user/login.jsp");
@@ -42,17 +42,17 @@ public class LoginServlet extends HttpServlet {
                 Cookie rememberMeCookie = new Cookie( "rememberMeCookie", emailPasswordCookieString );
                 resp.addCookie( rememberMeCookie );
             }
-            redirectUser(resp, user.get());
+            redirectUser(req ,resp, user.get());
         }else{
             resp.sendRedirect("views/user/login.jsp?error-message=Invalid email or password");
         }      
     }
-    private void redirectUser(HttpServletResponse resp , UserDTO user) throws IOException{
+    private void redirectUser(HttpServletRequest request , HttpServletResponse response, UserDTO user) throws IOException{
         // redirect user based on his role
         if ("ADMIN".equals(user.getRole())) {
-            resp.sendRedirect("views/admin/admin.jsp");
+            response.sendRedirect("views/admin/home.jsp");
         } else {
-            resp.sendRedirect("views/user/shop.jsp");
+            response.sendRedirect(request.getContextPath() + "/home");
         } 
     }
 }

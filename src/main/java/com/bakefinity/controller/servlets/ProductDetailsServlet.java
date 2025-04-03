@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet(value = "/product_details")
-public class ProductDetailsController extends HttpServlet {
+public class ProductDetailsServlet extends HttpServlet {
     private ProductService productService;
 
     @Override
