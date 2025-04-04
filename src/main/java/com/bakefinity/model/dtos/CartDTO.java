@@ -1,17 +1,27 @@
 package com.bakefinity.model.dtos;
 
+import com.bakefinity.model.entities.CartItem;
+
 public class CartDTO {
     private Integer userId;
-    private String sessionId;
     private Integer productId;
     private int quantity;
 
-    public CartDTO(Integer userId, String sessionId, Integer productId, int quantity) {
+    public CartDTO(Integer userId, Integer productId, int quantity) {
         this.userId = userId;
-        this.sessionId = sessionId;
         this.productId = productId;
         this.quantity = quantity;
     }
+
+    
+
+    public CartDTO(CartItem item) {
+        this.userId = item.getProductId();
+        this.productId = item.getProductId();
+        this.quantity = item.getQuantity();
+    }
+
+
 
     public Integer getUserId() {
         return userId;
@@ -19,14 +29,6 @@ public class CartDTO {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
-    }
-
-    public String getSessionId() {
-        return sessionId;
-    }
-
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
     }
 
     public int getQuantity() {
@@ -52,7 +54,7 @@ public class CartDTO {
 
     @Override
     public String toString() {
-        return "CartDTO [userId=" + userId + ", sessionId=" + sessionId + ", productId=" + productId + ", quantity="
+        return "CartDTO [userId=" + userId + ", productId=" + productId + ", quantity="
                 + quantity + "]";
     }
 

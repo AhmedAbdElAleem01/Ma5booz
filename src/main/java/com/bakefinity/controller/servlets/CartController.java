@@ -101,9 +101,9 @@ public class CartController extends HttpServlet {
                 return;
             }
 
-            CartDTO cartItem = new CartDTO((isGuest ? null : user.getId()), session.getId(), productId, productQ);
+            CartDTO cartItem = new CartDTO((isGuest ? null : user.getId()), productId, productQ);
             cart.put(productId, cartItem);
-            System.out.println(cartItem);
+            System.out.println(cart);
             sendJsonResponse(resp, "success", "Cart updated", cart.size(), calculateTotalPrice(cart));
         } catch (NumberFormatException e) {
             sendJsonResponse(resp, "error", "Invalid input", cart.size(), calculateTotalPrice(cart));
