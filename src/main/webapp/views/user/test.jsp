@@ -16,11 +16,11 @@
                         <div class="sub_banner_content text-center" data-aos="fade-up">
                             <h1>Checkout</h1>
                             <div class="box">
-                                <a href="${pageContext.request.contextPath}/home" class="text-decoration-none">
+                                <a href="${pageContext.request.contextPath}/views/user/home.jsp" class="text-decoration-none">
                                     <span class="mb-0">Home</span>
                                 </a>
                                 <span class="mb-0 slash">/</span>
-                                <a href="${pageContext.request.contextPath}/cart" class="cart text-decoration-none">
+                                <a href="${pageContext.request.contextPath}/views/user/cart.jsp" class="cart text-decoration-none">
                                     <span class="mb-0">Cart</span>
                                 </a>
                                 <span class="mb-0 slash">/</span>
@@ -157,16 +157,7 @@
                                     </div>
                                 </div>
                             </c:forEach>
-
-                            <div class="each-item">
-                                <div class="product-items">
-                                    <span class="heading">Grand Total</span>
-                                </div>
-                                <div class="product-prices">
-                                    <span class="dollar total-price">$${totalPrice}</span>
-                                </div>
-                            </div>
-
+                            
                         </div>
                     </div>
                 </div>
@@ -179,3 +170,16 @@
     <%@ include file="footer.jsp"%>
 </body>
 </html>
+
+
+
+
+
+<div class="each-item">
+    <div class="product-items">
+        <span class="heading">Grand Total</span>
+    </div>
+    <div class="product-prices">
+        <span class="dollar total-price">$83.99</span>
+    </div>
+</div>

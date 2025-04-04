@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Product Details| IceDelights</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/productDetails.css">
 </head>
 <body>
     <%@ include file="header.jsp"%>
@@ -58,7 +59,7 @@
                         </div>
                         <c:if test="${not empty product}">
                             <h4>${product.name}</h4>
-                            <span class="price">"$" ${product.price}</span>
+                            <span class="price">$${product.price}</span>
                             <p class="text-size-16">${product.description}</p>
                             <c:choose>
                                 <c:when test="${product.stockQuantity == 0}">
@@ -68,23 +69,39 @@
                                     <p style="color: red;">Only ${product.stockQuantity} left in stock</p>
                                 </c:when>
                                 <c:otherwise>
-                                    <p>In Stock</p>
+                                    <p style="color: green;">In Stock</p>
                                 </c:otherwise>
                             </c:choose>
 
                         </c:if>
                        
                         
-                        <div class="colors">
-                            <span class="heading">Color:</span>
-                            <ul class="list-unstyled mb-0">
-                                <li class="red"></li>
-                                <li class="orange"></li>
-                                <li class="green"></li>
-                                <li class="brown"></li>
-                            </ul>
+                        <div class="sauce-picker">
+                            <h6>Extra Sauce <span style="color: rgb(126, 229, 126); font-size: medium;">+0.50$ each</span></h6>
+                            <div class="sauce-options">
+                                <!-- Strawberry -->
+                                <label class="sauce-option">
+                                    <input type="checkbox" name="sauce" class="strawberry">
+                                    <span class="colored-checkbox"></span>
+                                    <span>Strawberry</span>
+                                </label>
+                                
+                                <!-- Mint -->
+                                <label class="sauce-option">
+                                    <input type="checkbox" name="sauce" class="mint">
+                                    <span class="colored-checkbox"></span>
+                                    <span>Pistachio</span>
+                                </label>
+                                
+                                <!-- Chocolate -->
+                                <label class="sauce-option">
+                                    <input type="checkbox" name="sauce" class="chocolate">
+                                    <span class="colored-checkbox"></span>
+                                    <span>Chocolate</span>
+                                </label>
+                            </div>
                         </div>
-                        <div class="sizes">
+                        <div class="sizes" style="margin-top: 20px;">
                             <span class="heading">Size:</span>
                             <ul class="list-unstyled mb-0">
                                 <li>L</li>
@@ -94,12 +111,18 @@
                         </div>
                         <div class="quatity_button_wrapper">
                             <div class="quantity-field">
-                                <button class="value-button decrease-button" onclick="decreaseValue(this)" title="">-</button>
-                                <div class="number">1</div>
-                                <button class="value-button increase-button" onclick="increaseValue(this)" title="">+</button>
-                            </div>                        
-                            <a href="${pageContext.request.contextPath}/views/user/cart.jsp" class="text-decoration-none all_button">Add to Cart<i class="fa-solid fa-arrow-right"></i></a>
+                                <button class="value-button decrease-button" onclick="decreaseValue()" title="">-</button>
+                                <div class="number" id="productQ">1</div>
+                                <button class="value-button increase-button" onclick="increaseValue()" title="">+</button>
+                            </div>     
+                            
+                            
+                            <button  class="text-decoration-none all_button" onclick="addToCartAsync()">Add to cart<i class="fa-solid fa-arrow-right"></i></button>
+
+                            
+                
                         </div>
+                        <p id="message" style="color:red;"></p>                        
                     </div>
                 </div>
             </div>
@@ -126,7 +149,12 @@
             </div>
         </div>
     </section>
+    <script>
+        var productId = "${product.id}";
+        var stock = '${product.stockQuantity}';
+    </script>    
     <!-- Footer -->
     <%@ include file="footer.jsp"%>
+    <script src="${pageContext.request.contextPath}/static/js/productDetails.js" type="text/javascript"></script>
 </body>
 </html>

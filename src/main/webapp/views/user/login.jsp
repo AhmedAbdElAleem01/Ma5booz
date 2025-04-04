@@ -16,7 +16,7 @@
                         <div class="sub_banner_content text-center" data-aos="fade-up">
                             <h1>Sign in</h1>
                             <div class="box">
-                                <a href="${pageContext.request.contextPath}/views/user/home.jsp" class="text-decoration-none">
+                                <a href="${pageContext.request.contextPath}/views/user/home" class="text-decoration-none">
                                     <span class="mb-0">Home</span>
                                 </a>
                                 <span class="mb-0 slash">/</span>
