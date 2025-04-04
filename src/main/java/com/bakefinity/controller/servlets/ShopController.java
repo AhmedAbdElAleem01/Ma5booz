@@ -26,7 +26,7 @@ public class ShopController extends HttpServlet {
     private CategoryService categoryService;
     private ProductService productService;
     private Gson gson;
-    private final int pageSize = 1;
+    private final int pageSize = 2;
 
     @Override
     public void init() throws ServletException {
@@ -72,11 +72,11 @@ public class ShopController extends HttpServlet {
             int catID = Integer.parseInt(catIdStr);
             products = productService.getProductsByCategory(catID);
         } else {
-            products = productService.getAllProducts();
+            products = productService.getProductsByPage(1, pageSize);
         }
 
         // Calculate total pages (if you plan to paginate on non-AJAX requests)
-        int totalPages = (int) Math.ceil((double) products.size() / pageSize);
+        int totalPages = (int) Math.ceil((double) productService.getTotalProductCount() / pageSize);
         req.setAttribute("products", products);
         req.setAttribute("currentPage", 1);
         req.setAttribute("totalPages", totalPages);

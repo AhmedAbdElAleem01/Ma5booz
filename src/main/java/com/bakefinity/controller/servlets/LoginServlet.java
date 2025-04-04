@@ -52,7 +52,7 @@ public class LoginServlet extends HttpServlet {
         if ("ADMIN".equals(user.getRole())) {
             resp.sendRedirect("views/admin/admin.jsp");
         } else {
-            resp.sendRedirect("views/user/shop.jsp");
+            resp.sendRedirect(getServletContext().getContextPath()+"/shop");
         } 
     }
 }
