@@ -80,7 +80,8 @@ document.addEventListener('DOMContentLoaded', function () {
     productQInt = 1;
 
     if (decreaseBtn) { decreaseBtn.disabled = true; }
-    if (stock == 0) {
+    console.log(stock);
+    if (stock <= 0) {
         if (increaseBtn) { increaseBtn.disabled = true; }
         if(addtoCartBtn) { addtoCartBtn.disabled = true;}
         productQInt = 0;
