@@ -7,6 +7,17 @@
 </head>
 <body>
     <%@ include file="header.jsp"%>
+
+    <%
+        String error = (String) session.getAttribute("error");
+        if (error != null) {
+    %>
+        <div class="alert alert-danger"><%= error %></div>
+    <%
+            session.removeAttribute("error"); // clean up
+        }
+    %>
+
     <div class="sub_banner_outer position-relative">
         <%@ include file="navbar.jsp"%>
         <!-- Sub Banner -->

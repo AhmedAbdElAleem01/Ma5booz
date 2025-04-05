@@ -5,6 +5,8 @@ import com.bakefinity.controller.repositories.interfaces.CategoryRepo;
 import com.bakefinity.controller.services.interfaces.CategoryService;
 import com.bakefinity.model.dtos.CategoryDTO;
 import com.bakefinity.model.entities.Category;
+
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,4 +50,8 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
+    @Override
+    public CategoryDTO getCategoryByName(String categoryName) throws SQLException{
+        return categoryRepo.getCategoryByName(categoryName);
+    }
 }

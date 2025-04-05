@@ -4,6 +4,8 @@ import com.bakefinity.controller.repositories.impls.ProductRepoImpl;
 import com.bakefinity.controller.repositories.interfaces.ProductRepo;
 import com.bakefinity.controller.services.interfaces.ProductService;
 import com.bakefinity.model.dtos.ProductDTO;
+
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -120,6 +122,8 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    
-
+    @Override
+    public boolean updateStockQuantity(int productId, int newQuantity) throws SQLException{
+        return productRepo.updateStockQuantity(productId, newQuantity);
+    }
 }

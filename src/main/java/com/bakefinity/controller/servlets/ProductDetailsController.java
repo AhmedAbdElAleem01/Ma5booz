@@ -21,7 +21,7 @@ public class ProductDetailsController extends HttpServlet {
     public void init() throws ServletException {
         productService = ProductServiceImpl.getInstance();
     }
-    
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("productID");
@@ -31,7 +31,7 @@ public class ProductDetailsController extends HttpServlet {
             ProductDTO product =  productService.getProductById(productId);
             req.setAttribute("product", product);
             System.out.println(product);
-        } 
+        }
 
         RequestDispatcher dispatcher = req.getRequestDispatcher("/views/user/productDetails.jsp");
         dispatcher.forward(req, resp);

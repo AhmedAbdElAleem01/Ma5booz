@@ -47,7 +47,7 @@ public class ShopController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        
+
         if ("XMLHttpRequest".equalsIgnoreCase(req.getHeader("X-Requested-With"))) {
             if (req.getParameter("page") != null) {
                 handleAjaxPagination(req, resp);
@@ -89,14 +89,14 @@ public class ShopController extends HttpServlet {
     // AJAX: Handle initial load for category filtering or product listing
     private void handleAjaxRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String catIdStr = req.getParameter("catID");
-        int page = 1; 
+        int page = 1;
         List<ProductDTO> products;
         int totalProducts;
 
         try {
             if (catIdStr != null && !catIdStr.trim().isEmpty()){
                 int catID = Integer.parseInt(catIdStr);
-                if(catID == 0){products = productService.getAllProducts(); totalProducts = productService.getTotalProductCount();} 
+                if(catID == 0){products = productService.getAllProducts(); totalProducts = productService.getTotalProductCount();}
                 else{
                     products = productService.getProductsByCategoryPage(catID, page, pageSize);
                     totalProducts = productService.getTotalProductsByCategory(catID);

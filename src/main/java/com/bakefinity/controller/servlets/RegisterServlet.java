@@ -1,13 +1,14 @@
 package com.bakefinity.controller.servlets;
 
-import com.bakefinity.controller.repositories.impls.AddressRepoImpl;
-import com.bakefinity.controller.repositories.impls.CategoryRepoImpl;
-import com.bakefinity.controller.repositories.impls.UserInterestsRepoImpl;
-import com.bakefinity.controller.repositories.impls.UserRepoImpl;
+import com.bakefinity.controller.services.impls.AddressServiceImpl;
+import com.bakefinity.controller.services.impls.CategoryServiceImpl;
+import com.bakefinity.controller.services.impls.UserInterestsServiceImpl;
+import com.bakefinity.controller.services.impls.UserRegisterServiceImpl;
 import com.bakefinity.model.dtos.AddressDTO;
 import com.bakefinity.model.dtos.CategoryDTO;
 import com.bakefinity.model.dtos.UserDTO;
 import com.bakefinity.model.dtos.UserInterestsDTO;
+import com.bakefinity.utils.InputValidation;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,7 +16,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,57 +24,19 @@ import java.util.Date;
 
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
-    public boolean validatePhone(String phoneNumber) {
-        String phonePattern = "^01[0-2,5]\\d{8}$";
-        return phoneNumber.matches(phonePattern);
-    }
-
-    public boolean validateName(String name) {
-        String namePattern = "^[A-Za-z]+(\\s[A-Za-z]+)*$";
-        return name.matches(namePattern);
-    }
-
-    public boolean validateCityStreet(String name) {
-        String namePattern = "^[A-Za-z]+([\\s-][A-Za-z]+)*$";
-        return name.matches(namePattern);
-    }
-
-    public boolean validatePassword(String password) { // at least 5 chars
-        String passwordPattern = "^[A-Za-z\\d@#_.$%^&+=!]{5,}$";
-        return password.matches(passwordPattern);
-    }
-
-    public  boolean isUsernameAvailable(String username){
-        UserRepoImpl userRepoImpl = new UserRepoImpl();
-        try {
-            return !userRepoImpl.isFoundUsername(username);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    boolean isEmailUnique(String email){
-        UserRepoImpl obj = new UserRepoImpl();
-        try {
-            return !obj.isFoundEmail(email);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void forwardWithData(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("fname", validateName(req.getParameter("fname")) ? req.getParameter("fname") : "");
-        req.setAttribute("lname", validateName(req.getParameter("lname")) ? req.getParameter("lname") : "");
-        req.setAttribute("phoneNumber", validatePhone(req.getParameter("phoneNumber")) ? req.getParameter("phoneNumber") : "");
+    private void forwardWithData(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, SQLException {
+        req.setAttribute("fname", InputValidation.validateName(req.getParameter("fname")) ? req.getParameter("fname") : "");
+        req.setAttribute("lname", InputValidation.validateName(req.getParameter("lname")) ? req.getParameter("lname") : "");
+        req.setAttribute("phoneNumber", InputValidation.validatePhone(req.getParameter("phoneNumber")) ? req.getParameter("phoneNumber") : "");
         req.setAttribute("birthdate", req.getParameter("birthdate"));
-        req.setAttribute("job", validateName(req.getParameter("job")) ? req.getParameter("job") : "");
-        req.setAttribute("email", isEmailUnique(req.getParameter("email")) ? req.getParameter("email") : "");
-        req.setAttribute("username", isUsernameAvailable(req.getParameter("username")) ? req.getParameter("username") : "");
-        req.setAttribute("password", validatePassword(req.getParameter("password")) ? req.getParameter("password") : "");
+        req.setAttribute("job", InputValidation.validateName(req.getParameter("job")) ? req.getParameter("job") : "");
+        req.setAttribute("email", UserRegisterServiceImpl.getInstance().isEmailUnique(req.getParameter("email")) ? req.getParameter("email") : "");
+        req.setAttribute("username", UserRegisterServiceImpl.getInstance().isUsernameAvailable(req.getParameter("username")) ? req.getParameter("username") : "");
+        req.setAttribute("password", InputValidation.validatePassword(req.getParameter("password")) ? req.getParameter("password") : "");
         req.setAttribute("creditLimit", req.getParameter("creditLimit"));
         req.setAttribute("country", req.getParameter("country"));
-        req.setAttribute("city", validateCityStreet(req.getParameter("city")) ? req.getParameter("city") : "");
-        req.setAttribute("street", validateCityStreet(req.getParameter("street")) ? req.getParameter("street") : "");
+        req.setAttribute("city", InputValidation.validateCityStreet(req.getParameter("city")) ? req.getParameter("city") : "");
+        req.setAttribute("street", InputValidation.validateCityStreet(req.getParameter("street")) ? req.getParameter("street") : "");
         req.setAttribute("BNo", req.getParameter("BNo"));
         req.setAttribute("interests", req.getParameterValues("interests"));
 
@@ -88,13 +50,16 @@ public class RegisterServlet extends HttpServlet {
         String lname = req.getParameter("lname");
         String phoneNumber = req.getParameter("phoneNumber");
         String birthDateStr = req.getParameter("birthdate");
-        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
         Date birthDate = null;
-        try {
-            birthDate = sdf.parse(birthDateStr);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
+        if(birthDateStr != null && !birthDateStr.trim().isEmpty()) {
+            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+            try {
+                birthDate = sdf.parse(birthDateStr);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
         }
+
         String job = req.getParameter("job");
         String email = req.getParameter("email");
         String password = req.getParameter("password");
@@ -104,24 +69,30 @@ public class RegisterServlet extends HttpServlet {
         String city = req.getParameter("city");
         String street = req.getParameter("street");
         String buildingNo = req.getParameter("BNo");
-        if(!validateName(fname) || !validateName(lname) || !validatePhone(phoneNumber) || !validateName(job) || !validatePassword(password) || !validateCityStreet(city) || !validateCityStreet(street) || !isUsernameAvailable(username) || !isEmailUnique(email)){
-            req.setAttribute("error", "Oops.. Some data is not valid, please register with valid data");
-            forwardWithData(req, resp);
-            return;
+        try {
+            if(!InputValidation.validateName(fname) || !InputValidation.validateName(lname) || !InputValidation.validatePhone(phoneNumber) || (job != null && !job.trim().isEmpty() && !InputValidation.validateName(job)) || !InputValidation.validatePassword(password) || (city != null && !city.trim().isEmpty() && !InputValidation.validateCityStreet(city)) || (street != null && !street.trim().isEmpty() && !InputValidation.validateCityStreet(street)) || !UserRegisterServiceImpl.getInstance().isUsernameAvailable(username) || !UserRegisterServiceImpl.getInstance().isEmailUnique(email)){
+                req.setAttribute("error", "Oops.. Some data is not valid, please register with valid data");
+                try {
+                    forwardWithData(req, resp);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                return;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         UserDTO user = new UserDTO(fname + " " + lname, username, phoneNumber, email, password, Double.parseDouble(creditLimit), birthDate, job, LocalDateTime.now());
-        UserRepoImpl userRepoImpl = new UserRepoImpl();
-        int userId;
+        int userId = 0;
         try {
-            userId = userRepoImpl.createUser(user);
+            userId = UserRegisterServiceImpl.getInstance().createUser(user);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        AddressDTO address = new AddressDTO(userId, Integer.parseInt(buildingNo), street, city, country);
-        AddressRepoImpl addressRepoImpl = new AddressRepoImpl();
+        AddressDTO address = new AddressDTO(userId, (buildingNo == null || buildingNo.trim().isEmpty()) ? -1 : Integer.parseInt(buildingNo), street, city, country);
         try {
-            addressRepoImpl.createAddress(address);
+            AddressServiceImpl.getInstance().createAddress(address);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -129,12 +100,10 @@ public class RegisterServlet extends HttpServlet {
         String[] interests = req.getParameterValues("interests");
         if (interests != null) {
             for (String interest : interests) {
-                CategoryRepoImpl categoryRepoImpl = new CategoryRepoImpl();
                 try {
-                    CategoryDTO category = categoryRepoImpl.getCategoryByName(interest);
+                    CategoryDTO category = CategoryServiceImpl.getInstance().getCategoryByName(interest);
                     UserInterestsDTO userInterests = new UserInterestsDTO(userId, category.getId());
-                    UserInterestsRepoImpl obj = new UserInterestsRepoImpl();
-                    obj.createUserInterests(userInterests);
+                    UserInterestsServiceImpl.getInstance().createUserInterests(userInterests);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -144,18 +113,7 @@ public class RegisterServlet extends HttpServlet {
     }
 
     @Override
-    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException { // ensure that username is unique
-        String username = req.getParameter("username");
-        PrintWriter out = resp.getWriter();
-        if (username == null || username.trim().isEmpty()) {
-            out.print("");
-        }
-        else {
-            if (!isUsernameAvailable(username)) {
-                out.println("Not Available!!!");
-            } else {
-                out.println("");
-            }
-        }
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        resp.sendRedirect("views/user/register.jsp");
     }
 }

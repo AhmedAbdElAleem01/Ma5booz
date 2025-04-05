@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import com.bakefinity.controller.services.impls.CartServiceImpl;
+import com.bakefinity.controller.services.impls.ProfileServiceImpl;
 import com.bakefinity.controller.services.impls.UserLoginServiceImpl;
-import com.bakefinity.controller.services.interfaces.CartService;
+import com.bakefinity.controller.services.interfaces.ProfileService;
 import com.bakefinity.controller.services.interfaces.UserLoginService;
-import com.bakefinity.model.dtos.CartDTO;
-import com.bakefinity.model.dtos.UserDTO;
+import com.bakefinity.model.dtos.*;
+import com.bakefinity.controller.services.impls.CartServiceImpl;
+import com.bakefinity.controller.services.interfaces.CartService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
@@ -23,6 +23,7 @@ import jakarta.servlet.http.HttpSession;
 @WebServlet(urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
     UserLoginService userLoginService = new UserLoginServiceImpl();
+    ProfileService profileService = new ProfileServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -33,7 +34,7 @@ public class LoginServlet extends HttpServlet {
         if(alreadyLoggedIn){
             redirectUser(resp, user);
             return;
-        }       
+        }
         resp.sendRedirect("views/user/login.jsp");
     }
     @Override
@@ -45,6 +46,12 @@ public class LoginServlet extends HttpServlet {
         Optional<UserDTO> user = userLoginService.login(email, password);
         if (user.isPresent()) {
             req.getSession().setAttribute("user", user.get());
+            Optional<AddressDTO> address = profileService.getAddress(user.get().getId());
+            if (address.isPresent()) {
+                req.getSession().setAttribute("address", address.get());
+            } else {
+                resp.sendRedirect("views/user/error.jsp?error-message=Could not find user's address");
+            }
 
             loadCart(req, user);
             if ( rememberMe != null ) {
@@ -55,7 +62,7 @@ public class LoginServlet extends HttpServlet {
             redirectUser(resp, user.get());
         }else{
             resp.sendRedirect("views/user/login.jsp?error-message=Invalid email or password");
-        }      
+        }
     }
     private void redirectUser(HttpServletResponse resp , UserDTO user) throws IOException{
         // redirect user based on his role
@@ -63,19 +70,19 @@ public class LoginServlet extends HttpServlet {
             resp.sendRedirect("views/admin/admin.jsp");
         } else {
             resp.sendRedirect(getServletContext().getContextPath()+"/shop");
-        } 
+        }
     }
 
 
     private void loadCart(HttpServletRequest req, Optional<UserDTO> userOpt) {
         if (userOpt.isEmpty()) return;
-    
+
         HttpSession session = req.getSession();
         UserDTO user = userOpt.get();
-    
+
         @SuppressWarnings("unchecked")
         Map<Integer, CartDTO> cart = (Map<Integer, CartDTO>) session.getAttribute("cart");
-        
+
         if (cart != null) {
             for (CartDTO cartItem : cart.values()) {
                 if (cartItem.getUserId() == null) {
@@ -85,9 +92,9 @@ public class LoginServlet extends HttpServlet {
         } else {
             cart = new HashMap<>();
         }
-    
+
         CartService cartService = CartServiceImpl.getInstance();
-    
+
         try {
             List<CartDTO> dbCartItems = cartService.getCartItems(user.getId());
             if (dbCartItems != null) {
@@ -100,5 +107,5 @@ public class LoginServlet extends HttpServlet {
             System.err.println("Error loading cart items: " + e.getMessage());
         }
     }
-    
+
 }

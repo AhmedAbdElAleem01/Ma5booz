@@ -21,17 +21,17 @@ public class SessionDestroyListener implements HttpSessionListener {
     public void sessionDestroyed(HttpSessionEvent event) {
         System.out.println("Session destroyed: " + event.getSession().getId());
         HttpSession session = event.getSession();
-    
+
         @SuppressWarnings("unchecked")
         Map<Integer, CartDTO> cart = (Map<Integer, CartDTO>) session.getAttribute("cart");
         if (cart == null) return;
-    
+
         UserDTO user = (UserDTO) session.getAttribute("user");
         if (user == null) {
             System.out.println("No user found in session. Skipping cart persistence.");
             return;
         }
-    
+
         try {
             Integer userId = user.getId();
             cartService.clearCart(userId);

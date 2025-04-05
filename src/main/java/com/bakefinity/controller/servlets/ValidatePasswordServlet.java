@@ -1,5 +1,6 @@
 package com.bakefinity.controller.servlets;
 
+import com.bakefinity.utils.InputValidation;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -11,11 +12,6 @@ import java.io.PrintWriter;
 
 @WebServlet("/validPassword")
 public class ValidatePasswordServlet extends HttpServlet {
-    public boolean validatePassword(String password) { // at least 5 chars
-        String passwordPattern = "^[A-Za-z\\d@#_.$%^&+=!]{5,}$";
-        return password.matches(passwordPattern);
-    }
-
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String password = req.getParameter("password");
@@ -24,8 +20,8 @@ public class ValidatePasswordServlet extends HttpServlet {
             out.print("");
         }
         else{
-            if(!validatePassword(password)){
-                out.println("Your password must be at least 5 characters!!!");
+            if(!InputValidation.validatePassword(password)){
+                out.println("Your password must be at least 5 characters.");
             }
             else{
                 out.println("");

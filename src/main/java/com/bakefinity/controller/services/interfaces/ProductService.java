@@ -1,5 +1,6 @@
 package com.bakefinity.controller.services.interfaces;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.bakefinity.model.dtos.ProductDTO;
@@ -18,4 +19,6 @@ public interface ProductService {
 
     List<ProductDTO> getProductsByPage(int page, int pageSize);
     int getTotalProductCount();
+
+    boolean updateStockQuantity(int productId, int newQuantity) throws SQLException;
 }
