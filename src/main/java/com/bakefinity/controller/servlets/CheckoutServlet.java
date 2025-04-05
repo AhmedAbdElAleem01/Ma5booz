@@ -65,6 +65,16 @@ public class CheckoutServlet extends HttpServlet {
         // create order
         HttpSession session = req.getSession(false);
         Map<Integer, CartDTO> cart = (Map<Integer, CartDTO>) session.getAttribute("cart");
+        
+        for(CartDTO cartItem : cart.values()){
+            int productId = cartItem.getProductId();
+            if(productService.getProductById(productId).getStockQuantity() < cartItem.getQuantity()){
+                req.getSession().setAttribute("error", "Sorry, the requested quantity exceeds the available stock for some products. Please adjust your order accordingly.");
+                resp.sendRedirect("cart");
+                return;     
+            }
+        }
+        
         double totalCost = CartPrice.calculateTotalPrice(cart);
         UserDTO user = (UserDTO) req.getSession().getAttribute("user");
         if(user.getCreditLimit() < totalCost){
