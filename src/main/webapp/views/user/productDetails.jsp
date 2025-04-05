@@ -62,7 +62,7 @@
                             <span class="price">$${product.price}</span>
                             <p class="text-size-16">${product.description}</p>
                             <c:choose>
-                                <c:when test="${product.stockQuantity == 0}">
+                                <c:when test="${product.stockQuantity <= 0}">
                                     <p style="color: red;">Out of Stock</p>
                                 </c:when>
                                 <c:when test="${product.stockQuantity < 10}">
