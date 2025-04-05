@@ -14,44 +14,33 @@
         <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 tm-block-col">
           <div class="tm-bg-primary-dark tm-block tm-block-products">
             <div class="tm-product-table-container">
-              <table class="table table-hover tm-table-small tm-product-table">
+              <table class="table table-hover tm-table-small tm-product-table tm-block-scroll">
                   <thead>
                     <tr>
+                      <th scope="col">ID</th>
                       <th scope="col">USERNAME</th>
                       <th scope="col">EMAIL</th>
                       <th scope="col">PHONE NUMBER</th>
+                      <th scope="col">CREATED AT</th>
+                      <th scope="col">&nbsp;</th>
                     </tr>
                   </thead>
                   <tbody>
+                    <c:forEach var="customer" items="${customers}">
                       <tr>
+                        <td>${customer.id}</td>
+                        <td>${customer.username}</td>
+                        <td>${customer.email}</td>
+                        <td>${customer.phoneNumber}</td>
+                        <td>${customer.createdAt}</td>
                         <td>
-                            <a href="${pageContext.request.contextPath}/admin/customerProfile" style="color: white;">username_1</a>
+                          <a href="${pageContext.request.contextPath}/admin/customerProfile?id=${customer.id}" class="tm-user-view-link">
+                            <i class="fas fa-arrow-right tm-product-delete-icon"></i>
+                          </a>
                         </td>
-                          <td>email@example.com</td>
-                          <td>01007043501</td>
                       </tr>
-                      <tr>
-                        <td>
-                            <a href="${pageContext.request.contextPath}/admin/customerProfile" style="color: white;">username_2</a>
-                        </td>
-                          <td>email@example.com</td>
-                          <td>01007043501</td>
-                      </tr>
-                      <tr>
-                        <td>
-                            <a href="${pageContext.request.contextPath}/admin/customerProfile" style="color: white;">username_3</a>
-                        </td>
-                          <td>email@example.com</td>
-                          <td>01007043501</td>
-                      </tr>
-                      <tr>
-                        <td>
-                            <a href="${pageContext.request.contextPath}/admin/customerProfile" style="color: white;">username_4</a>
-                        </td>
-                          <td>email@example.com</td>
-                          <td>01007043501</td>
-                      </tr>
-                    </tbody>
+                    </c:forEach>
+                  </tbody>
                 </table>
             </div>
           </div>

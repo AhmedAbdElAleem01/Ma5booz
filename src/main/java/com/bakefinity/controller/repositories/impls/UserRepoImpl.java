@@ -5,10 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import com.bakefinity.controller.repositories.interfaces.UserRepo;
 import com.bakefinity.model.dtos.*;
+import com.bakefinity.model.entities.User;
 import com.bakefinity.utils.ConnectionManager;
 
 public class UserRepoImpl implements UserRepo{
@@ -129,6 +132,32 @@ public class UserRepoImpl implements UserRepo{
             System.out.println("Failed to find user: " + e.getMessage());
         }
         return Optional.empty(); 
+    }
+    public List<User> getAllUsers() throws SQLException {
+        List<User> customers = new ArrayList<>();
+        
+        String query = "SELECT * FROM user";
+        try (Connection conn = ConnectionManager.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                User customer = new User(
+                    rs.getInt("id"),
+                    rs.getString("username"),
+                    rs.getString("name"),
+                    rs.getString("email"),
+                    rs.getString("password"),
+                    rs.getString("phoneNumber"),
+                    rs.getDouble("creditLimit"),
+                    rs.getDate("birthDate").toLocalDate(),
+                    rs.getString("job"),
+                    rs.getTimestamp("createdAt").toLocalDateTime()
+                );
+                customers.add(customer);
+            }
+        }
+        return customers;
     }
     
 }

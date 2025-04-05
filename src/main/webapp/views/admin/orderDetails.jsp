@@ -22,26 +22,13 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                        <td>Product 1</td>
-                        <td>3</td>
-                        <td><b>120$</b></td>
-                    </tr>
-                    <tr>
-                        <td>Product 2</td>
-                        <td>2</td>
-                        <td><b>80$</b></td>
-                    </tr>
-                    <tr>
-                        <td>Product 3</td>
-                        <td>1</td>
-                        <td><b>90$</b></td>
-                    </tr>
-                    <tr>
-                        <td>Product 4</td>
-                        <td>3</td>
-                        <td><b>120$</b></td>
-                    </tr>
+                    <c:forEach var="orderItem" items="${orderItems}">
+                      <tr>
+                          <td>${orderItem.productName}</td>
+                          <td>${orderItem.quantity}</td>
+                          <td>${orderItem.price * orderItem.quantity}</td>
+                      </tr>
+                    </c:forEach>
                   </tbody>
                 </table>
             </div>

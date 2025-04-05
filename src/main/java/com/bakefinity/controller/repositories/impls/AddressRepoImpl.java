@@ -4,9 +4,11 @@ import com.bakefinity.controller.repositories.interfaces.AddressRepo;
 import com.bakefinity.model.dtos.AddressDTO;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
+
 import com.bakefinity.utils.ConnectionManager;
 
 public class AddressRepoImpl implements AddressRepo {
@@ -34,5 +36,28 @@ public class AddressRepoImpl implements AddressRepo {
                 }
             }
         }
+    }
+    @Override
+    public Optional<AddressDTO> findUserAddressById(int id) {
+        String query = "SELECT * FROM address WHERE userId = ?";
+        try (Connection conn = ConnectionManager.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) { 
+                AddressDTO address = new AddressDTO();
+                address.setCity(rs.getString("city"));
+                address.setCountry(rs.getString("country"));
+                address.setStreet(rs.getString("street"));
+                address.setBuildingNo(rs.getInt("buildingNo"));
+
+                return Optional.of(address); 
+            }
+        } catch (SQLException e) {
+            System.out.println("DB ERROR: Failed to find user's address: " + e.getMessage());
+        }
+        return Optional.empty();
     }
 }

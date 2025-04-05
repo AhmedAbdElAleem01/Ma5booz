@@ -2,21 +2,49 @@ package com.bakefinity.controller.services.impls;
 import java.util.Optional;
 
 import com.bakefinity.controller.repositories.impls.*;
+import com.bakefinity.controller.repositories.interfaces.AddressRepo;
 import com.bakefinity.controller.repositories.interfaces.ProfileRepo;
 import com.bakefinity.controller.repositories.interfaces.UserRepo;
 import com.bakefinity.controller.services.interfaces.ProfileService;
 import com.bakefinity.model.dtos.*;
 
 public class ProfileServiceImpl implements ProfileService {
-    ProfileRepo profileRepo = new ProfileRepoImpl();
-    UserRepo userRepo = new UserRepoImpl();
+    ProfileRepo profileRepo;
+    AddressRepo addressRepo;
+    UserRepo userRepo;
+    private static ProfileServiceImpl instance;
 
+    private ProfileServiceImpl(){
+        profileRepo = new ProfileRepoImpl();
+        addressRepo = new AddressRepoImpl();
+        userRepo = new UserRepoImpl();
+    }
+    public static ProfileService getInstance() {
+        if (instance == null) {
+            synchronized (ProfileServiceImpl.class) {
+                if (instance == null) {
+                    instance = new ProfileServiceImpl();
+                }
+            }
+        }
+        return instance;
+    }
+
+    @Override
+    public Optional<UserDTO> getUserProfile(int userId) {
+        if(userId<-1)
+            return Optional.empty();
+        Optional<UserDTO> user = userRepo.findById(userId);
+        if(user.isEmpty())
+            return Optional.empty();
+        return user;
+    }
     @Override
     public Optional<AddressDTO> getAddress(int userId) {
         if(userId<-1)
             return Optional.empty();
 
-        Optional<AddressDTO> address = profileRepo.findUserAddressById(userId);
+        Optional<AddressDTO> address = addressRepo.findUserAddressById(userId);
         
         if (address.isPresent()) {
             return address;
@@ -47,7 +75,7 @@ public class ProfileServiceImpl implements ProfileService {
 
         // validation
         Optional<UserDTO> retrievedUser = userRepo.findById(user.getId());
-        Optional <AddressDTO> retrievedAddress = profileRepo.findUserAddressById(user.getId());
+        Optional <AddressDTO> retrievedAddress = addressRepo.findUserAddressById(user.getId());
 
         if(country.isBlank() || city.isBlank() || street.isBlank() || BNo.isBlank()
             || mobile.isBlank() || retrievedUser.isEmpty() || retrievedAddress.isEmpty()){

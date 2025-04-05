@@ -11,30 +11,6 @@ import com.bakefinity.utils.ConnectionManager;
 
 public class ProfileRepoImpl implements ProfileRepo{    
     @Override
-    public Optional<AddressDTO> findUserAddressById(int id) {
-        String query = "SELECT * FROM address WHERE userId = ?";
-        try (Connection conn = ConnectionManager.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(query)) {
-
-            pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) { 
-                AddressDTO address = new AddressDTO();
-                address.setCity(rs.getString("city"));
-                address.setCountry(rs.getString("country"));
-                address.setStreet(rs.getString("street"));
-                address.setBuildingNo(rs.getInt("buildingNo"));
-
-                return Optional.of(address); 
-            }
-        } catch (SQLException e) {
-            System.out.println("DB ERROR: Failed to find user's address: " + e.getMessage());
-        }
-        return Optional.empty();
-    }
-
-    @Override
     public Optional<UserDTO> updateCreditLimit(UserDTO user, double creditLimit) {
         String query = "UPDATE user SET creditLimit = ? WHERE id = ?";
         

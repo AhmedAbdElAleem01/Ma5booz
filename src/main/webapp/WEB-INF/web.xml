@@ -6,6 +6,11 @@
     metadata-complete= "false">
     <display-name>Ma5booz Ecommerce</display-name>
 
+    <context-param>
+        <param-name>upload.location</param-name>
+        <param-value>images/products</param-value> 
+    </context-param>
+
     <welcome-file-list>
         <welcome-file>views/user/login.jsp</welcome-file>
     </welcome-file-list>

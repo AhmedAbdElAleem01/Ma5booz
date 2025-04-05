@@ -15,7 +15,12 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet(urlPatterns = "/profile")
 public class ProfileServlet extends HttpServlet {
-    ProfileService profileService = new ProfileServiceImpl();
+    ProfileService profileService;
+
+    @Override
+    public void init() throws ServletException {
+        profileService = ProfileServiceImpl.getInstance();
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

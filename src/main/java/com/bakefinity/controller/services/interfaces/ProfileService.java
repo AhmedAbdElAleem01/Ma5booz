@@ -4,6 +4,7 @@ import java.util.Optional;
 import com.bakefinity.model.dtos.*;
 
 public interface ProfileService {
+    public Optional<UserDTO> getUserProfile(int userId);
     public Optional<AddressDTO> getAddress(int userId);
     public Optional<UserDTO> updateCreditLimit(UserDTO user , Double newCreditLimit);
     public Optional<UserDTO> updateShippingInfo(UserDTO user , String country , String city , String street ,String BNo ,String mobile);

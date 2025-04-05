@@ -2,10 +2,11 @@ package com.bakefinity.controller.repositories.interfaces;
 
 import java.util.List;
 
+import com.bakefinity.model.dtos.ProductDTO;
 import com.bakefinity.model.entities.Product;
 
 public interface ProductRepo extends BaseRepo<Product>{
-
+    List<ProductDTO> getAllProducts() throws Exception;
     List<Product> getByCategory(int categoryId) throws Exception;
 
     List<Product> getTopInStock(int limit) throws Exception;

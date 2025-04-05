@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.bakefinity.controller.services.impls.ProductServiceImpl;
 import com.bakefinity.controller.services.interfaces.ProductService;
 import com.bakefinity.model.dtos.ProductDTO;
+import com.bakefinity.model.entities.Product;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -14,7 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet(value = "/product_details")
-public class ProductDetailsServlet extends HttpServlet {
+public class ProductDetailsController extends HttpServlet {
     private ProductService productService;
 
     @Override
