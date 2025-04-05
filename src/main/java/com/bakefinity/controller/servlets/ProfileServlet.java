@@ -26,14 +26,13 @@ public class ProfileServlet extends HttpServlet {
         }
         String username = req.getParameter("username");
         if(username!=null){
-            boolean isTaken = profileService.isUsernameTaken(username); 
+            boolean isTaken = profileService.isUsernameTaken(username);
             resp.setContentType("text/plain");
             resp.getWriter().write(isTaken ? "taken" : "available");
             return;
         }
-        Optional<AddressDTO> address = profileService.getAddress(user.getId());
-        if (address.isPresent()) {
-            req.getSession().setAttribute("address", address.get());  
+        AddressDTO address = (AddressDTO)req.getSession().getAttribute("address");
+        if (address != null) {
             req.getRequestDispatcher("views/user/profile.jsp").forward(req, resp);
         } else {
             resp.sendRedirect("views/user/error.jsp?error-message=Could not find user's address");
@@ -74,7 +73,7 @@ public class ProfileServlet extends HttpServlet {
                 resp.sendRedirect("views/user/error.jsp?error-message=Could not find user's updated address");
                 return;
             }
-            if (updatedUser.isPresent()) 
+            if (updatedUser.isPresent())
                 req.getSession().setAttribute("user", updatedUser.get()); //update user
             else{
                 resp.sendRedirect("views/user/error.jsp?error-message=Could not update user's shipping information. Try again.");
@@ -115,7 +114,7 @@ public class ProfileServlet extends HttpServlet {
         }
         resp.sendRedirect("views/user/profile.jsp");
     }
-        
+
     private void deleteOldCookie(HttpServletRequest req, HttpServletResponse resp) {
         Cookie[] cookies = req.getCookies();
         for(Cookie cookie : cookies){

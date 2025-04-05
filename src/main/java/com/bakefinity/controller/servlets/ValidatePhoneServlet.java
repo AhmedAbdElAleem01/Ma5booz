@@ -1,5 +1,6 @@
 package com.bakefinity.controller.servlets;
 
+import com.bakefinity.utils.InputValidation;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -11,11 +12,6 @@ import java.io.PrintWriter;
 
 @WebServlet("/validPhone")
 public class ValidatePhoneServlet extends HttpServlet {
-    public boolean validatePhone(String phoneNumber) {
-        String phonePattern = "^01[0-2,5]\\d{8}$";
-        return phoneNumber.matches(phonePattern);
-    }
-
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String phone = req.getParameter("phone");
@@ -24,8 +20,8 @@ public class ValidatePhoneServlet extends HttpServlet {
             out.print("");
         }
         else{
-            if(!validatePhone(phone)){
-                out.println("Invalid Phone Number!!!");
+            if(!InputValidation.validatePhone(phone)){
+                out.println("Invalid Phone Number.");
             }
             else{
                 out.println("");

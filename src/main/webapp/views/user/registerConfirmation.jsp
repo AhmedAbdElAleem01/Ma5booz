@@ -17,7 +17,7 @@
                             </figure>
                             <h1>Thank You!</h1>
                             <p> Your account has been successfully created. You can now log in and start exploring our services. </p>
-                            <a href="${pageContext.request.contextPath}/views/user/login.jsp" class="text-decoration-none all_button">Login Now?</a>
+                            <a href="${pageContext.request.contextPath}/login" class="text-decoration-none all_button">Log in Now?</a>
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,6 @@
 package com.bakefinity.controller.repositories.interfaces;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.bakefinity.model.entities.Product;
@@ -18,4 +19,6 @@ public interface ProductRepo extends BaseRepo<Product>{
     int getTotalCount() throws Exception;
     int getTotalCountByCategory(int categoryId) throws Exception;
 
+    boolean updateStockQuantity(int productId, int newQuantity) throws SQLException;
+    Product getById(int productId) throws SQLException;
 }

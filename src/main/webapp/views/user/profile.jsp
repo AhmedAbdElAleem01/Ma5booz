@@ -107,7 +107,7 @@
                                                             </div>
                                                             <div class="col-6 mt-3">
                                                                 <label for="BNo">Building Number</label>
-                                                                <input type="text" class="form_style w-100" name="BNo" id="BNo" value="${sessionScope.address.buildingNo}" disabled>
+                                                                <input type="text" class="form_style w-100" name="BNo" id="BNo" value="${sessionScope.address.buildingNo == -1 ? "" : sessionScope.address.buildingNo}" disabled>
                                                             </div>
                                                         </div>      
                                                         <br><br>                            

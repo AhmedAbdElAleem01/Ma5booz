@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryRepoImpl implements CategoryRepo {
-
     @Override
     public Category get(int id) throws Exception {
         try (Connection conn = ConnectionManager.getConnection();

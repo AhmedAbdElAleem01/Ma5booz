@@ -10,6 +10,7 @@ import com.bakefinity.model.dtos.CartDTO;
 import com.bakefinity.model.dtos.ProductDTO;
 import com.bakefinity.model.dtos.UserDTO;
 
+import com.bakefinity.utils.CartPrice;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -32,14 +33,14 @@ public class CartController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             HttpSession session = req.getSession(true);
-            
+
             @SuppressWarnings("unchecked")
             Map<Integer, CartDTO> cart = (Map<Integer, CartDTO>) session.getAttribute("cart");
             if (cart == null) {
                 cart = new HashMap<>();
                 session.setAttribute("cart", cart);
             }
-    
+
             Map<Integer, ProductDTO> products = new HashMap<>();
             for (CartDTO cartItem : cart.values()) {
                 ProductDTO product = productService.getProductById(cartItem.getProductId());
@@ -47,15 +48,16 @@ public class CartController extends HttpServlet {
                     products.put(cartItem.getProductId(), product);
                 }
             }
-    
+
             req.setAttribute("products", products);
-            req.setAttribute("totalPrice", calculateTotalPrice(cart));
-    
-            String path = "/order-summary".equals(req.getServletPath()) 
-                ? "/views/user/checkout.jsp" 
-                : "/views/user/cart.jsp";
-            
+            req.setAttribute("totalPrice", CartPrice.calculateTotalPrice(cart));
+
+            String path = "/order-summary".equals(req.getServletPath())
+                    ? "/checkout"
+                    : "/views/user/cart.jsp";
+
             req.getRequestDispatcher(path).forward(req, resp);
+
         } catch (Exception e) {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
@@ -80,8 +82,8 @@ public class CartController extends HttpServlet {
 
         if (productID == null || productQuantity == null) {
             System.out.println("product"+productID);
-            
-            sendJsonResponse(resp, "error", "Missing parameters", cart.size(), calculateTotalPrice(cart));
+
+            sendJsonResponse(resp, "error", "Missing parameters", cart.size(), CartPrice.calculateTotalPrice(cart));
             return;
         }
 
@@ -91,42 +93,31 @@ public class CartController extends HttpServlet {
 
             ProductDTO product = productService.getProductById(productId);
             if (product == null) {
-                sendJsonResponse(resp, "error", "Product not found", cart.size(), calculateTotalPrice(cart));
+                sendJsonResponse(resp, "error", "Product not found", cart.size(), CartPrice.calculateTotalPrice(cart));
                 return;
             }
 
             if (productQ == 0) {
                 cart.remove(productId);
-                sendJsonResponse(resp, "success", "Item removed from cart", cart.size(), calculateTotalPrice(cart));
+                sendJsonResponse(resp, "success", "Item removed from cart", cart.size(), CartPrice.calculateTotalPrice(cart));
                 return;
             }
 
             CartDTO cartItem = new CartDTO((isGuest ? null : user.getId()), productId, productQ);
             cart.put(productId, cartItem);
-            System.out.println(cart);
-            sendJsonResponse(resp, "success", "Cart updated", cart.size(), calculateTotalPrice(cart));
-        } catch (NumberFormatException e) {
-            sendJsonResponse(resp, "error", "Invalid input", cart.size(), calculateTotalPrice(cart));
-        }
-    }
 
-    private double calculateTotalPrice(Map<Integer, CartDTO> cart) {
-        double totalPrice = 0;
-        for (CartDTO cartItem : cart.values()) {
-            ProductDTO product = productService.getProductById(cartItem.getProductId());
-            if (product != null) {
-                totalPrice += product.getPrice() * cartItem.getQuantity();
-            }
+            sendJsonResponse(resp, "success", "Cart updated", cart.size(), CartPrice.calculateTotalPrice(cart));
+        } catch (NumberFormatException e) {
+            sendJsonResponse(resp, "error", "Invalid input", cart.size(), CartPrice.calculateTotalPrice(cart));
         }
-        return Math.round(totalPrice * 100.0) / 100.0; 
     }
 
     private void sendJsonResponse(HttpServletResponse resp, String status, String message, int cartSize, double total) throws IOException {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         resp.getWriter().write(String.format(
-            "{\"status\": \"%s\", \"message\": \"%s\", \"cartSize\": \"%d\", \"totalPrice\": \"%.2f\"}",
-            status, message, cartSize, total
+                "{\"status\": \"%s\", \"message\": \"%s\", \"cartSize\": \"%d\", \"totalPrice\": \"%.2f\"}",
+                status, message, cartSize, total
         ));
     }
 

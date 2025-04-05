@@ -1,9 +1,8 @@
-package com.bakefinity.controller.repositories.interfaces;
+package com.bakefinity.controller.services.interfaces;
 
 import com.bakefinity.model.dtos.UserInterestsDTO;
-
 import java.sql.SQLException;
 
-public interface UserInterestsRepo {
+public interface UserInterestsService {
     boolean createUserInterests(UserInterestsDTO userInterests) throws SQLException;
 }

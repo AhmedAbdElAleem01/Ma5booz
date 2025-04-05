@@ -1,7 +1,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <html>
 <head>
-    <title>Checkout | IceDelights</title>
+    <title>Checkout</title>
 </head>
 <body>
     <%@ include file="header.jsp"%>
@@ -38,98 +40,63 @@
             <div class="row">
                 <div class="col-lg-8 col-12">
                     <div class="product-detail-box">
-                        <form id="contactpage" method="post" action="${pageContext.request.contextPath}/views/user/confirmation.jsp" class="position-relative">
+                        <form id="contactpage" method="post" action="${pageContext.request.contextPath}/checkout" class="position-relative">
                             <div class="upper-form" data-aos="fade-up">
-                                <span class="address">Billing Address:</span>
+                                <span class="address">Billing Details:</span>
                                 <div class="form-group input1 float-left">
-                                    <label for="fname">First name</label>
-                                    <input type="text" class="form_style" name="fname" id="fname">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form_style" name="name" id="name" value="${sessionScope.user.name}" disabled>
                                 </div>
                                 <div class="form-group float-left">
-                                    <label for="lname">Last name</label>
-                                    <input type="text" class="form_style" name="lname" id="lname">
-                                </div>
-                                <div class="form-group input1 float-left">
-                                    <label for="email">Email address</label>
-                                    <input type="email" class="form_style" name="email" id="email">
-                                </div>
-                                <div class="form-group float-left">
-                                    <label>State</label>
-                                    <select class="form-control" required="">
-                                        <option value="" disabled="" selected="" hidden="">Select State</option>
-                                        <option value="California">California</option>
-                                        <option value="Texas">Texas</option>
-                                        <option value="Florida">Florida</option>
-                                    </select>
+                                    <label for="email">Email Address</label>
+                                    <input type="email" class="form_style" name="email" id="email" value="${sessionScope.user.email}" disabled>
                                 </div>
                                 <div class="form-group input1 float-left">
-                                    <label>City</label>
-                                    <select class="form-control" required="">
-                                        <option value="" disabled="" selected="" hidden="">Select City</option>
-                                        <option value="Los Angeles">Los Angeles</option>
-                                        <option value="San Francisco">San Francisco</option>
-                                        <option value="San Diego">San Diego</option>
-                                    </select>
+                                    <label for="phoneNumber">Phone Number</label>
+                                    <input type="tel" class="form_style" name="phoneNumber" id="phoneNumber" value="${sessionScope.user.phoneNumber}">
                                 </div>
                                 <div class="form-group float-left">
-                                    <label for="code">Zip/ postal code</label>
-                                    <input type="text" class="form_style" name="code" id="code">
-                                </div>
-                            </div>
-                            <div class="lower-form" data-aos="fade-up">
-                                <span class="address">Payment Method:</span>
-                                <div class="form-group float-left checkbox">
-                                    <input type="checkbox" id="card">
-                                    <label for="card">Credit card</label>
-                                    <img src="${pageContext.request.contextPath}/static/img/checkout-cardimage.png" alt="image" class="img-fluid card">
-                                </div>
-                                <div class="form-group input2">
-                                    <label for="cnumber">Card number</label>
-                                    <input type="number" class="form_style" name="cnumber" id="cnumber">
-                                </div>
-                                <div class="form-group dates input1 float-left">
-                                    <label>Expiration date</label>
-                                    <select class="form-control input3 float-left" required="">
-                                        <option value="" disabled="" selected="" hidden="">Month</option>
-                                        <option value="January">January</option>
-                                        <option value="February">February</option>
-                                        <option value="March">March</option>
-                                        <option value="April">April</option>
-                                        <option value="May">May</option>
-                                        <option value="June">June</option>
-                                        <option value="July">July</option>
-                                        <option value="August">August</option>
-                                        <option value="September">September</option>
-                                        <option value="October">October</option>
-                                        <option value="November">November</option>
-                                        <option value="December">December</option>
+                                    <label>Country</label>
+                                    <select class="form-control" name="country">
+                                        <option value="" disabled selected hidden>Select country</option>
+                                        <option value="Cairo" ${"Cairo".equals(sessionScope.address.country) ? "selected" : ""}>Cairo</option>
+                                        <option value="Giza" ${"Giza".equals(sessionScope.address.country) ? "selected" : ""}>Giza</option>
+                                        <option value="Alexandria" ${"Alexandria".equals(sessionScope.address.country) ? "selected" : ""}>Alexandria</option>
+                                        <option value="Dakahlia" ${"Dakahlia".equals(sessionScope.address.country) ? "selected" : ""}>Dakahlia</option>
+                                        <option value="Sharqia" ${"Sharqia".equals(sessionScope.address.country) ? "selected" : ""}>Sharqia</option>
+                                        <option value="Qalyubia" ${"Qalyubia".equals(sessionScope.address.country) ? "selected" : ""}>Qalyubia</option>
+                                        <option value="Menofia" ${"Menofia".equals(sessionScope.address.country) ? "selected" : ""}>Menofia</option>
+                                        <option value="Minya" ${"Minya".equals(sessionScope.address.country) ? "selected" : ""}>Minya</option>
+                                        <option value="Sohag" ${"Sohag".equals(sessionScope.address.country) ? "selected" : ""}>Sohag</option>
+                                        <option value="Fayoum" ${"Fayoum".equals(sessionScope.address.country) ? "selected" : ""}>Fayoum</option>
+                                        <option value="Asyut" ${"Asyut".equals(sessionScope.address.country) ? "selected" : ""}>Asyut</option>
+                                        <option value="Ismailia" ${"Ismailia".equals(sessionScope.address.country) ? "selected" : ""}>Ismailia</option>
+                                        <option value="Suez" ${"Suez".equals(sessionScope.address.country) ? "selected" : ""}>Suez</option>
+                                        <option value="Luxor" ${"Luxor".equals(sessionScope.address.country) ? "selected" : ""}>Luxor</option>
+                                        <option value="Aswan" ${"Aswan".equals(sessionScope.address.country) ? "selected" : ""}>Aswan</option>
+                                        <option value="Port Said" ${"Port Said".equals(sessionScope.address.country) ? "selected" : ""}>Port Said</option>
+                                        <option value="Beheira" ${"Beheira".equals(sessionScope.address.country) ? "selected" : ""}>Beheira</option>
+                                        <option value="Beni Suef" ${"Beni Suef".equals(sessionScope.address.country) ? "selected" : ""}>Beni Suef</option>
+                                        <option value="Kafr El Sheikh" ${"Kafr El Sheikh".equals(sessionScope.address.country) ? "selected" : ""}>Kafr El Sheikh</option>
+                                        <option value="Red Sea" ${"Red Sea".equals(sessionScope.address.country) ? "selected" : ""}>Red Sea</option>
+                                        <option value="New Valley" ${"New Valley".equals(sessionScope.address.country) ? "selected" : ""}>New Valley</option>
+                                        <option value="Matrouh" ${"Matrouh".equals(sessionScope.address.country) ? "selected" : ""}>Matrouh</option>
+                                        <option value="North Sinai" ${"North Sinai".equals(sessionScope.address.country) ? "selected" : ""}>North Sinai</option>
+                                        <option value="South Sinai" ${"South Sinai".equals(sessionScope.address.country) ? "selected" : ""}>South Sinai</option>
                                     </select>
-                                    <select class="form-control input4 float-left" required="">
-                                        <option value="" disabled="" selected="" hidden="">Year</option>
-                                        <option value="2013">2013</option>
-                                        <option value="2014">2014</option>
-                                        <option value="2015">2015</option>
-                                        <option value="2016">2016</option>
-                                        <option value="2017">2017</option>
-                                        <option value="2018">2018</option>
-                                        <option value="2019">2019</option>
-                                        <option value="2020">2020</option>
-                                        <option value="2021">2021</option>
-                                        <option value="2022">2022</option>
-                                        <option value="2023">2023</option>
-                                        <option value="2024">2024</option>
-                                    </select>
+                                </div>
+                                <div class="form-group input1 float-left">
+                                     <label for="city">City</label>
+                                     <input type="text" class="form-control" name="city" id="city" value="${sessionScope.address.city}">
                                 </div>
                                 <div class="form-group float-left">
-                                    <label for="scord">Security Code</label>
-                                    <input type="text" class="form_style" name="scord" id="scord">
+                                    <label for="street">Street</label>
+                                    <input type="text" class="form-control" name="street" id="street" value="${sessionScope.address.street}">
                                 </div>
-                                <div class="form-group float-left dates checkbox">
-                                    <input type="checkbox" id="cash">
-                                    <label for="cash">Cash on Delivery</label>
-                                    <i class="fa-solid fa-money-bill-wave"></i>
+                                <div class="form-group input1 float-left">
+                                    <label for="BNo">Building Number</label>
+                                    <input type="number" class="form-control" name="BNo" id="BNo" min="1" value="${sessionScope.address.buildingNo == -1 ? "" : sessionScope.address.buildingNo}">
                                 </div>
-                                <p class="text-center text-size-14">By clicking the button, you agree to the <a href="terms-of-conditions.html" class="text-decoration-none terms-btn">Terms and Conditions</a></p>
                             </div>
                             <button data-aos="fade-up" type="submit" id="submit" class="submit_now text-decoration-none">Place Order<i class="fa-solid fa-arrow-right"></i></button>
                         </form>
@@ -144,7 +111,6 @@
                             <span class="product-prices">Price</span>
                         </div>
                         <div class="list-items">
-
                             <c:forEach var="cartItem" items="${cart}">
                                 <c:set var="product" value="${products[cartItem.value.productId]}"/>
                                 <div class="each-item">
@@ -152,9 +118,9 @@
                                         <span class="heading">${cartItem.value.quantity} x ${product.name}</span>
                                         <p class="text-size-14 mb-0">${product.description}</p>
                                     </div>
-                                    <div class="product-prices">
-                                        <span class="dollar">$${cartItem.value.quantity * product.price}</span>
-                                    </div>
+                                   <div class="product-prices">
+                                       <fmt:formatNumber value="${cartItem.value.quantity * product.price}" type="number" minFractionDigits="2" maxFractionDigits="2" />
+                                   </div>
                                 </div>
                             </c:forEach>
 
