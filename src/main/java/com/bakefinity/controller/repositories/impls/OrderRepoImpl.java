@@ -6,11 +6,11 @@ import java.util.List;
 import com.bakefinity.controller.repositories.interfaces.OrderRepo;
 import com.bakefinity.model.dtos.OrderItemDTO;
 import com.bakefinity.model.entities.Order;
-import com.bakefinity.model.entities.OrderItem;
 import com.bakefinity.model.enums.OrderStatus;
 import com.bakefinity.utils.ConnectionManager;
 
 public class OrderRepoImpl implements OrderRepo{
+    
     @Override
     public int create(Order order) throws SQLException {
         if (order == null) {
