@@ -23,18 +23,10 @@ import jakarta.servlet.http.HttpSession;
 @WebServlet(urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
     UserLoginService userLoginService = new UserLoginServiceImpl();
-    ProfileService profileService = new ProfileServiceImpl();
+    ProfileService profileService = ProfileServiceImpl.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UserDTO user = (UserDTO)req.getSession().getAttribute("user");
-        boolean alreadyLoggedIn = (user!=null);
-
-
-        if(alreadyLoggedIn){
-            redirectUser(resp, user);
-            return;
-        }
         resp.sendRedirect("views/user/login.jsp");
     }
     @Override
@@ -45,35 +37,32 @@ public class LoginServlet extends HttpServlet {
 
         Optional<UserDTO> user = userLoginService.login(email, password);
         if (user.isPresent()) {
-            req.getSession().setAttribute("user", user.get());
-            Optional<AddressDTO> address = profileService.getAddress(user.get().getId());
-            if (address.isPresent()) {
-                req.getSession().setAttribute("address", address.get());
-            } else {
-                resp.sendRedirect("views/user/error.jsp?error-message=Could not find user's address");
+            if ("ADMIN".equals(user.get().getRole())) {
+                req.getSession().setAttribute("user", user.get());
+                resp.sendRedirect("views/admin/home.jsp");
+                return;                
+            }else{
+                req.getSession().setAttribute("user", user.get());
+                Optional<AddressDTO> address = profileService.getAddress(user.get().getId());
+                if (address.isPresent()) {
+                    req.getSession().setAttribute("address", address.get());
+                } else {
+                    resp.sendRedirect("views/user/error.jsp?error-message=Could not find user's address");
+                    return;
+                }
+    
+                loadCart(req, user);
+                if ( rememberMe != null ) {
+                    String emailPasswordCookieString = user.get().getEmail() + "+" + user.get().getPassword();
+                    Cookie rememberMeCookie = new Cookie( "rememberMeCookie", emailPasswordCookieString );
+                    resp.addCookie( rememberMeCookie );
+                }
+                resp.sendRedirect(getServletContext().getContextPath()+"/shop");
             }
-
-            loadCart(req, user);
-            if ( rememberMe != null ) {
-                String emailPasswordCookieString = user.get().getEmail() + "+" + user.get().getPassword();
-                Cookie rememberMeCookie = new Cookie( "rememberMeCookie", emailPasswordCookieString );
-                resp.addCookie( rememberMeCookie );
-            }
-            redirectUser(resp, user.get());
         }else{
             resp.sendRedirect("views/user/login.jsp?error-message=Invalid email or password");
         }
     }
-    private void redirectUser(HttpServletResponse resp , UserDTO user) throws IOException{
-        // redirect user based on his role
-        if ("ADMIN".equals(user.getRole())) {
-            resp.sendRedirect("views/admin/admin.jsp");
-        } else {
-            resp.sendRedirect(getServletContext().getContextPath()+"/shop");
-        }
-    }
-
-
     private void loadCart(HttpServletRequest req, Optional<UserDTO> userOpt) {
         if (userOpt.isEmpty()) return;
 

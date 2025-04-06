@@ -95,7 +95,7 @@
                                 <div class="classic-box">
                                     <div class="classic_image_box box1">
                                         <figure class="mb-0">
-                                            <img src="${pageContext.request.contextPath}/static/img/${product.imageUrl}" alt="image" class="img-fluid">
+                                            <img src="${pageContext.request.contextPath}/product-image/${product.imageUrl}" alt="image" class="img-fluid">
                                         </figure>
                                         <i class="fa-regular fa-heart"></i>
                                     </div>

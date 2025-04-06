@@ -1,13 +1,14 @@
 package com.bakefinity.model.dtos;
 
+import java.time.LocalDateTime;
+
 import com.bakefinity.model.enums.OrderStatus;
 import com.bakefinity.model.enums.PaymentMethod;
-import java.time.LocalDateTime;
 
 public class OrderDTO {
     private int id;
     private int userId;
-    private double totalCost;
+    private Double totalCost;
     private PaymentMethod paymentMethod;
     private LocalDateTime orderedAt;
     private OrderStatus status;
@@ -22,43 +23,16 @@ public class OrderDTO {
         this.status = status;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public double getTotalCost() {
-        return totalCost;
-    }
-
-    public void setTotalCost(double totalCost) {
-        this.totalCost = totalCost;
-    }
-
-    public PaymentMethod getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
-    public LocalDateTime getOrderedAt() {
-        return orderedAt;
-    }
-
-    public void setOrderedAt(LocalDateTime orderedAt) {
-        this.orderedAt = orderedAt;
-    }
-
-    public OrderStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(OrderStatus status) {
-        this.status = status;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+    public int getUserId() { return userId; }
+    public void setUserId(int userId) { this.userId = userId; }
+    public Double getTotalCost() { return totalCost; }
+    public void setTotalCost(Double totalCost) { this.totalCost = totalCost; }
+    public PaymentMethod getPaymentMethod() { return paymentMethod; }
+    public void setPaymentMethod(PaymentMethod paymentMethod) { this.paymentMethod = paymentMethod; }
+    public LocalDateTime getOrderedAt() { return orderedAt; }
+    public void setOrderedAt(LocalDateTime orderedAt) { this.orderedAt = orderedAt; }
+    public OrderStatus getStatus() { return status; }
+    public void setStatus(OrderStatus status) { this.status = status; }
 }

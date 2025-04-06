@@ -41,7 +41,7 @@
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane tab-pane2 fade active show" id="first" role="tabpanel" aria-labelledby="first-tab">
                                 <figure class="auction-img mb-0">
-                                    <img class="img-fluid" src="${pageContext.request.contextPath}/static/img/${product.imageUrl}" alt="${product.name}">
+                                    <img class="img-fluid" src="${pageContext.request.contextPath}/product-image/${product.imageUrl}" alt="${product.name}">
                                 </figure>
                             </div>
                         </div>
@@ -140,7 +140,7 @@
                         <div class="row" data-aos="fade-up">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="description_content">
-                                    <p class="text-size-16">${product.description}</p>
+                                    <p class="text-size-16">${product.ingredients}</p>
                                 </div>
                             </div>
                         </div>

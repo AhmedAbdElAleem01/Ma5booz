@@ -51,7 +51,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDTO getCategoryByName(String categoryName) throws SQLException{
-        return categoryRepo.getCategoryByName(categoryName);
+    public CategoryDTO getCategoryByName(String name) {
+        try {
+            return categoryRepo.getCategoryByName(name);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to retrieve category with name: " + name, e);
+        }
     }
+
 }

@@ -13,7 +13,6 @@ public class User {
     private Double creditLimit;
     private LocalDate birthDate;
     private String job;
-    private String Role;
 
     private LocalDateTime createdAt;
 
@@ -58,8 +57,6 @@ public class User {
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
     public String getName() { return name; }
-    public String getRole() {return this.Role;}
-	public void setRole(String Role) {this.Role = Role;	}
     public void setName(String name) { this.name = name; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }

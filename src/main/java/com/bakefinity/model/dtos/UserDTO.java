@@ -120,14 +120,14 @@ public class UserDTO {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", username='" + username + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
+                ", name='" + name + 
+                ", username='" + username +
+                ", phoneNumber='" + phoneNumber +
+                ", email='" + email + 
+                ", password='" + password + 
                 ", creditLimit=" + creditLimit +
                 ", birthDate=" + birthDate +
-                ", job='" + job + '\'' +
+                ", job='" + job +  
                 ", createdAt=" + createdAt +
                 '}';
     }

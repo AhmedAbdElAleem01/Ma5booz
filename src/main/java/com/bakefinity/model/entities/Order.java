@@ -23,6 +23,8 @@ public class Order {
         this.status = status;
     }
 
+    public int getId() {return this.id;}
+    public void setId(int id) {this.id = id; }
     public int getUserId() { return userId; }
     public void setUserId(int userId) { this.userId = userId; }
     public double getTotalCost() { return totalCost; }

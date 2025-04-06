@@ -2,7 +2,6 @@
 <html>
 <head>
     <title>Sign in | IceDelights</title>
-    <link rel="stylesheet" href="<c:url value='/static/css/login.css' />">
 </head>
 <body>
     <%@ include file="header.jsp"%>

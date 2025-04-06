@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bakefinity.controller.repositories.interfaces.ProductRepo;
+import com.bakefinity.model.dtos.ProductDTO;
 import com.bakefinity.model.entities.Product;
 import com.bakefinity.utils.ConnectionManager;
 
@@ -53,6 +54,34 @@ public class ProductRepoImpl implements ProductRepo {
         return products;
     }
 
+    // returns all products with the name of the category they belong in
+    @Override
+    public List<ProductDTO> getAllProducts() throws Exception {
+        List<ProductDTO> products = new ArrayList<>();
+        
+        String query = "SELECT p.*, c.name AS categoryName " +
+                    "FROM product p " +
+                    "JOIN category c ON p.categoryId = c.id";
+        
+        try (Connection conn = ConnectionManager.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query)) {
+            
+            while (rs.next()) {
+                ProductDTO product = new ProductDTO();
+                product.setId(rs.getInt("id"));
+                product.setCategoryName(rs.getString("categoryName"));
+                product.setName(rs.getString("name"));
+                product.setDescription(rs.getString("description"));
+                product.setPrice(rs.getDouble("price"));
+                product.setImageUrl(rs.getString("imageUrl"));
+                product.setStockQuantity(rs.getInt("stockQuantity"));
+                
+                products.add(product);
+            }
+        }
+        return products;
+    }
     @Override
     public void add(Product product) throws Exception {
         try (Connection conn = ConnectionManager.getConnection();

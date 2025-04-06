@@ -41,7 +41,7 @@ public class CheckoutServlet extends HttpServlet {
     public void init(){
         orderItemService = OrderItemServiceImpl.getInstance();
         orderService = OrderServiceImpl.getInstance();
-        profileService = new ProfileServiceImpl();
+        profileService = ProfileServiceImpl.getInstance();
         productService = ProductServiceImpl.getInstance();
     }
 
