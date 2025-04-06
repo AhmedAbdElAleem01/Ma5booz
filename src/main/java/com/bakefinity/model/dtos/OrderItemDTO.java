@@ -1,8 +1,8 @@
 package com.bakefinity.model.dtos;
 
-
 public class OrderItemDTO {
     private int id;
+    private int userId;
     private int orderId;
     private Integer productId;
     private String productName;
@@ -11,8 +11,16 @@ public class OrderItemDTO {
 
     public OrderItemDTO() {}
 
+    public OrderItemDTO(int userId, int productId, int quantity) {
+        this.userId = userId;
+        this.productId = productId;
+        this.quantity = quantity;
+    }
+
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
+    public int getUserId() { return userId; }
+    public void setUserId(int userId) { this.userId = userId; }
     public int getOrderId() { return orderId; }
     public void setOrderId(int orderId) { this.orderId = orderId; }
     public Integer getProductId() { return productId; }

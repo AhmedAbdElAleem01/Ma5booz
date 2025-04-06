@@ -4,7 +4,7 @@ function isUsernameAvailable(){
         req = new XMLHttpRequest();
     }
     req.onreadystatechange = handleReq;
-    req.open("GET", "http://localhost:9090/Ma5booz/register?username=" + document.getElementById("username").value, true);
+    req.open("GET", "http://localhost:9090/Ma5booz/uniqueUsername?username=" + document.getElementById("username").value, true);
     req.send(null);
 }
 function handleReq(){

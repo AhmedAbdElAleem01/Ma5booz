@@ -44,25 +44,25 @@
                                 <span class="address">Personal Information:</span>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label for="fname">First Name</label>
+                                        <label for="fname">First Name*</label>
                                         <input type="text" class="form-control" name="fname" id="fname" value="<%= request.getAttribute("fname") != null ? request.getAttribute("fname") : "" %>" required onblur="validateFName()">
                                         <span id="validFName"></span>
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="lname">Last Name</label>
+                                        <label for="lname">Last Name*</label>
                                         <input type="text" class="form-control" name="lname" id="lname" value="<%= request.getAttribute("lname") != null ? request.getAttribute("lname") : "" %>" required onblur="validateLName()">
                                         <span id="validLName"></span>
                                     </div>
                                 </div>
                                 <div class="row mt-5">
                                     <div class="col-md-6">
-                                        <label for="phoneNumber">Phone Number</label>
+                                        <label for="phoneNumber">Phone Number*</label>
                                         <input type="tel" class="form-control" name="phoneNumber" id="phoneNumber" value="<%= request.getAttribute("phoneNumber") != null ? request.getAttribute("phoneNumber") : "" %>" required onblur="validatePhone()">
                                         <span id="validPhone"></span>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="birthdate">Birth Date</label>
-                                        <input type="date" class="form-control" name="birthdate" id="birthdate" value="<%= request.getAttribute("birthdate") != null ? request.getAttribute("birthdate") : "" %>" required>
+                                        <input type="date" class="form-control" name="birthdate" id="birthdate" value="<%= request.getAttribute("birthdate") != null ? request.getAttribute("birthdate") : "" %>">
                                     </div>
                                 </div>
                                 <div class="row mt-5">
@@ -77,24 +77,24 @@
                                 <div class="column">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <label for="email">Email Address</label>
+                                            <label for="email">Email Address*</label>
                                             <input type="email" class="form-control" name="email" id="email" placeholder="example@gmail.com" value="<%= request.getAttribute("email") != null ? request.getAttribute("email") : "" %>" required onblur="isEmailUnique()">
                                             <span id="uniqueEmail"></span>
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="username">Username</label>
+                                            <label for="username">Username*</label>
                                             <input type="text" class="form-control" name="username" id="username" value="<%= request.getAttribute("username") != null ? request.getAttribute("username") : "" %>" required onblur="isUsernameAvailable()">
                                             <span id="valid"></span>
                                         </div>
                                     </div>
                                      <div class="row mt-5">
                                         <div class="col-md-6">
-                                            <label for="password">Password</label>
-                                            <input type="password" class="form-control" name="password" id="password" placeholder="Your password must be at least 5 characters" value="<%= request.getAttribute("password") != null ? request.getAttribute("password") : "" %>" required onblur="validatePassword()">
+                                            <label for="password">Password*</label>
+                                            <input type="password" class="form-control" name="password" id="password" placeholder="Your password must be at least 5 characters." value="<%= request.getAttribute("password") != null ? request.getAttribute("password") : "" %>" required onblur="validatePassword()">
                                             <span id="validPassword"></span>
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="creditLimit">Credit Limit</label>
+                                            <label for="creditLimit">Credit Limit*</label>
                                             <input type="number" class="form-control" name="creditLimit" id="creditLimit" min="0" step="any" value="<%= request.getAttribute("creditLimit") != null ? request.getAttribute("creditLimit") : "" %>" required>
                                         </div>
                                      </div>
@@ -106,7 +106,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label>Country</label>
-                                        <select class="form-control" name="country" required>
+                                        <select class="form-control" name="country">
                                             <option value="" disabled selected hidden>Select country</option>
                                             <option value="Cairo" <%= "Cairo".equals(request.getAttribute("country")) ? "selected" : "" %>>Cairo</option>
                                             <option value="Giza" <%= "Giza".equals(request.getAttribute("country")) ? "selected" : "" %>>Giza</option>
@@ -114,6 +114,7 @@
                                             <option value="Dakahlia" <%= "Dakahlia".equals(request.getAttribute("country")) ? "selected" : "" %>>Dakahlia</option>
                                             <option value="Sharqia" <%= "Sharqia".equals(request.getAttribute("country")) ? "selected" : "" %>>Sharqia</option>
                                             <option value="Qalyubia" <%= "Qalyubia".equals(request.getAttribute("country")) ? "selected" : "" %>>Qalyubia</option>
+                                            <option value="Menofia" <%= "Menofia".equals(request.getAttribute("country")) ? "selected" : "" %>>Menofia</option>
                                             <option value="Minya" <%= "Minya".equals(request.getAttribute("country")) ? "selected" : "" %>>Minya</option>
                                             <option value="Sohag" <%= "Sohag".equals(request.getAttribute("country")) ? "selected" : "" %>>Sohag</option>
                                             <option value="Fayoum" <%= "Fayoum".equals(request.getAttribute("country")) ? "selected" : "" %>>Fayoum</option>
@@ -147,7 +148,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="BNo">Building Number</label>
-                                        <input type="number" class="form-control" name="BNo" id="BNo" min="1" value="<%= request.getAttribute("BNo") != null ? request.getAttribute("BNo") : "" %>" >
+                                        <input type="number" class="form-control" name="BNo" id="BNo" min="1" value="<%= (request.getAttribute("BNo") != null && !request.getAttribute("BNo").equals(-1)) ? request.getAttribute("BNo") : "" %>">
                                     </div>
                                 </div>
                                 <%

@@ -36,7 +36,7 @@ public class HomeController extends HttpServlet {
 
         req.setAttribute("classicProducts", classicProducts);
         req.setAttribute("homeCategories", homeCategories);
-        
+
         RequestDispatcher dispatcher = req.getRequestDispatcher("/views/user/home.jsp");
         dispatcher.forward(req, resp);
     }

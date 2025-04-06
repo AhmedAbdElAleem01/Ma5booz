@@ -59,7 +59,7 @@
                                     </li>
                                 </c:forEach>
                                 <li class="cat-item">
-                                    <a href="#" onclick="fetchProducts(event, `${pageContext.request.contextPath}`)" class="category-link">all</a>
+                                    <a href="#" onclick="fetchProductsPerPage(event, 1, 0)" class="category-link">all</a>
                                 </li>
                             </ul>
                         </div>
@@ -72,8 +72,8 @@
                                 <div id="toolbar">
                                     <select class="form-control">
                                         <option value="">Default Sorting</option>
-                                        <option value="all">Cakes</option>
-                                        <option value="selected">Shakes</option>
+                                        <option value="all">lowest to heighst</option>
+                                        <option value="selected">heighst to lowest </option>
                                     </select>
                                 </div>
                             </div>
@@ -112,7 +112,6 @@
                                         <p class="text-size-16">${product.description}</p>
                                         <div class="price_wrapper position-relative">
                                             <span class="dollar">$<span class="counter">${product.price}</span>
-                                            <a href="${pageContext.request.contextPath}/views/user/cart.jsp"><img src="${pageContext.request.contextPath}/static/img/cart.png" alt="image" class="img-fluid"></a>
                                         </div>
                                     </div>
                                 </div>

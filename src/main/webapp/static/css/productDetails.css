@@ -1,0 +1,69 @@
+.sauce-picker {
+    font-family: sans-serif;
+ 
+    max-width: 400px;
+}
+
+.sauce-options {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.sauce-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+input[type="checkbox"] {
+    display: none; /* Hide default checkbox */
+}
+
+.colored-checkbox {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    display: inline-block;
+    position: relative;
+    transition: all 0.3s;
+}
+
+/* Checked state - color fill */
+.strawberry:checked ~ .colored-checkbox {
+    background: #ff6b6b;
+    border-color: #ff6b6b;
+}
+.mint:checked ~ .colored-checkbox {
+    background: #6bffb4;
+    border-color: #6bffb4;
+}
+.chocolate:checked ~ .colored-checkbox {
+    background: #8d5524;
+    border-color: #8d5524;
+}
+
+/* White checkmark */
+.colored-checkbox:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 5px;
+    top: 1px;
+    width: 4px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+input:checked ~ .colored-checkbox:after {
+    display: block;
+}
+
+#message {
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    transform: translateY(-10px);
+}

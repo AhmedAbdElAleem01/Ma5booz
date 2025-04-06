@@ -74,9 +74,6 @@ function renderProducts(response, path) {
                         <p class="text-size-16">${product.description}</p>
                         <div class="price_wrapper position-relative">
                             <span class="dollar">$<span class="counter">${product.price}</span></span>
-                            <a href="${contextPath}/views/user/cart.jsp?id=${product.id}">
-                                <img src="${contextPath}/static/img/cart.png" alt="Cart" class="img-fluid">
-                            </a>
                         </div>
                     </div>
                 </div>
@@ -88,8 +85,9 @@ function renderProducts(response, path) {
 }
 
 
-function fetchProductsPerPage(event, page) {
+function fetchProductsPerPage(event, page, cat) {
     event.preventDefault();
+    if(cat !== undefined) currentCatID = cat;
     $.ajax({
         url: "shop",
         type: "POST",

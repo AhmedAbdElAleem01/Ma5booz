@@ -14,6 +14,7 @@ import com.bakefinity.model.dtos.OrderDTO;
 import com.bakefinity.model.dtos.OrderItemDTO;
 import com.bakefinity.model.dtos.UserDTO;
 import com.bakefinity.model.entities.Order;
+import com.bakefinity.model.enums.OrderStatus;
 
 public class OrderServiceImpl implements OrderService{
     private static OrderServiceImpl instance;
@@ -33,6 +34,15 @@ public class OrderServiceImpl implements OrderService{
             }
         }
         return instance;
+    }
+    @Override
+    public int create(Order order) throws SQLException {
+        return orderRepo.create(order);
+    }
+
+    @Override
+    public boolean updateStatus(int orderId, OrderStatus orderStatus) throws SQLException{
+        return orderRepo.updateStatus(orderId, orderStatus);
     }
     @Override
     public List<OrderDTO> getAllOrdersByCustomerId(int customerId){

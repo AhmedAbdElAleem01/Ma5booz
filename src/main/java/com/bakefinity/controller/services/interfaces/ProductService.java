@@ -24,4 +24,6 @@ public interface ProductService {
             String quantity, String ingredients) throws Exception;
     boolean deleteProduct(int productId);
     boolean updateProduct(ProductDTO product) throws Exception;
+
+    boolean updateStockQuantity(int productId, int newQuantity) throws SQLException;
 }

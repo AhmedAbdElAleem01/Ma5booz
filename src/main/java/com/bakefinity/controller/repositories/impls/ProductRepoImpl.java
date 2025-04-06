@@ -257,4 +257,37 @@ public class ProductRepoImpl implements ProductRepo {
         }
         return 0;
     }
+
+    @Override
+    public boolean updateStockQuantity(int productId, int newQuantity) throws SQLException {
+        String query = "UPDATE Product SET stockQuantity = ? WHERE id = ?";
+        try(Connection connection = ConnectionManager.getConnection();) {
+            try(PreparedStatement statement = connection.prepareStatement(query);) {
+                statement.setInt(1, newQuantity);
+                statement.setInt(2, productId);
+                int rowsAffected = statement.executeUpdate();
+                if (rowsAffected > 0) {
+                    System.out.println("stock quantity is updated successfully");
+                    return true;
+                }
+                return false;
+            }
+        }
+    }
+
+    @Override
+    public Product getById(int productId) throws SQLException{
+        String query = "SELECT * FROM Product WHERE id = ?";
+        try(Connection connection = ConnectionManager.getConnection();) {
+            try(PreparedStatement statement = connection.prepareStatement(query);) {
+                statement.setInt(1, productId);
+                try(ResultSet resultSet = statement.executeQuery();) {
+                    if (resultSet.next()) {
+                        return new Product(resultSet.getInt(1), resultSet.getInt(2), resultSet.getString(3), resultSet.getString(4), resultSet.getDouble(5), resultSet.getString(6), resultSet.getInt(7), resultSet.getString(8));
+                    }
+                    return null;
+                }
+            }
+        }
+    }
 }

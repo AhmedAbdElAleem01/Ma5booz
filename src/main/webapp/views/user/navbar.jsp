@@ -49,8 +49,19 @@
                     </ul>
                 <div class="last_list">
                     <a class="text-decoration-none search-box search icon" href="#search"><img src="${pageContext.request.contextPath}/static/img/header-magnifyingglass.png" alt="image" class="img-fluid"></a>
-                    <a class="text-decoration-none cart icon position-relative" href="${pageContext.request.contextPath}/views/user/cart.jsp"><img src="${pageContext.request.contextPath}/static/img/header-cart.png" alt="image" class="img-fluid"><span>0</span></a>
-                    <a class="text-decoration-none contact_us" href="${pageContext.request.contextPath}/views/user/login.jsp">Sign in<i class="fa-solid fa-arrow-right"></i></a>
+                    <a class="text-decoration-none cart icon position-relative" href="${pageContext.request.contextPath}/cart"><img src="${pageContext.request.contextPath}/static/img/header-cart.png" alt="image" class="img-fluid"><span id="cartIcon">${cart.size()}</span></a>
+                    <%
+                        Object user = session.getAttribute("user");
+                        if (user != null) {
+                    %>
+                        <a class="text-decoration-none contact_us" href="${pageContext.request.contextPath}/logout">Log out<i class="fa-solid fa-arrow-right"></i></a>
+                    <%
+                        } else {
+                    %>
+                       <a class="text-decoration-none contact_us" href="${pageContext.request.contextPath}/views/user/login.jsp">Sign in<i class="fa-solid fa-arrow-right"></i></a>
+                    <%
+                        }
+                    %>
                 </div>
             </div>
         </nav>

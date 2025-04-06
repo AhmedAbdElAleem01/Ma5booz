@@ -129,6 +129,10 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    @Override
+    public boolean updateStockQuantity(int productId, int newQuantity) throws SQLException{
+        return productRepo.updateStockQuantity(productId, newQuantity);
+    }
     // returns all products with the name of the category they belong in
     @Override
     public List<ProductDTO> getAllProductsWithCategoryName() {
@@ -246,4 +250,5 @@ public class ProductServiceImpl implements ProductService {
             return false;
         }
     }
+
 }
