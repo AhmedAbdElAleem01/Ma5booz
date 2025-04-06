@@ -13,7 +13,7 @@
                         <h1 style="color: white;">Error</h1>
                         <h2 class="text" style="color: white;"><b>Sorry! A problem ocurred ;(</b></h2>
                         <h3 class="col-xl-8 col-lg-10 mx-auto text2" id="error-message" style="color: white;"></h3>
-                        <a href="${pageContext.request.contextPath}/views/admin/home" class="back_home text-decoration-none" style="color: white;"><i class="fas fa-arrow-left"></i>Back to Home</a>
+                        <a href="${pageContext.request.contextPath}/views/admin/home.jsp" class="back_home text-decoration-none" style="color: white;"><i class="fas fa-arrow-left"></i>Back to Home</a>
                     </div>
                 </div>
             </div>

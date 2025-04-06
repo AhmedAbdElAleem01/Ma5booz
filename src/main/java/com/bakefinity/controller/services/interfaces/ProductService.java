@@ -23,7 +23,8 @@ public interface ProductService {
     boolean addNewProduct(String category, String name, String description, String price, String imageName,
             String quantity, String ingredients) throws Exception;
     boolean deleteProduct(int productId);
-    boolean updateProduct(ProductDTO product) throws Exception;
+    boolean updateProduct(ProductDTO product,String category, String name, String description, String price, String imageName,
+    String quantity, String ingredients) throws Exception;
 
     boolean updateStockQuantity(int productId, int newQuantity) throws SQLException;
 }

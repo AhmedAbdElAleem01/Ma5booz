@@ -37,20 +37,10 @@ public class AdminEditProductController extends HttpServlet{
         String category = req.getParameter("category");
         String price = req.getParameter("price");
         String quantity = req.getParameter("stock");
-
-        ProductDTO newProduct = new ProductDTO();
-        newProduct.setId(product.getId());
-        newProduct.setName(name);
-        newProduct.setCategoryName(category);
-        newProduct.setDescription(description);
-        newProduct.setIngredients(ingredients);
-        newProduct.setImageUrl(product.getImageUrl());
-        newProduct.setPrice(Double.parseDouble(price));
-        newProduct.setStockQuantity(Integer.parseInt(quantity));
-        
+       
         boolean updated;
         try {
-            updated = productService.updateProduct(newProduct);
+            updated = productService.updateProduct(product ,category, name, description, price,product.getImageUrl(), quantity, ingredients);
         } catch (Exception e) {
             resp.sendRedirect("/views/admin/error.jsp?error-message=" + URLEncoder.encode(e.getMessage(), "UTF-8"));
             return;

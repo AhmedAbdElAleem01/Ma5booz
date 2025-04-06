@@ -207,7 +207,28 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean updateProduct(ProductDTO product){
+    public boolean updateProduct(ProductDTO product ,String category, String name, String description, String price, String imageName,
+    String quantity, String ingredients) throws SQLException{
+            if (name == null || name.trim().isEmpty()) {
+                System.out.println("Product name is required.");
+                return false;
+            }
+            if (price == null || !price.matches("\\d+(\\.\\d{1,2})?")) {
+                System.out.println("Invalid price format.");
+                return false;
+            }
+            if (quantity == null || !quantity.matches("\\d+")) {
+                System.out.println("Quantity must be a number.");
+                return false;
+            }
+            CategoryDTO inputCategory = categoryRepo.getCategoryByName(category);
+            if(inputCategory==null){
+                System.out.println("Input category does not exist");
+                return false;
+            }
+            int categoryId = inputCategory.getId();
+            Double doublePrice = Double.parseDouble(price);
+            int intQuantity = Integer.parseInt(quantity);
         try {
             if(productRepo.get(product.getId())==null){
                 System.out.println("Product does not exist");
@@ -217,31 +238,7 @@ public class ProductServiceImpl implements ProductService {
             System.out.println("Database error while retreiving product: " + e.getMessage());
             return false;
         }
-        if (product.getName() == null || product.getName().trim().isEmpty()) {
-            System.out.println("Product name is required.");
-            return false;
-        }
-        if (product.getPrice() == null || product.getPrice() <0 || !String.valueOf(product.getPrice()).matches("\\d+(\\.\\d{1,2})?")) {
-            System.out.println("Invalid price format.");
-            return false;
-        }
-        if (String.valueOf(product.getStockQuantity()) == null || product.getStockQuantity()<0 || !String.valueOf(product.getStockQuantity()).matches("\\d+")) {
-            System.out.println("Quantity must be a number.");
-            return false;
-        }
-        CategoryDTO category;
-        try {
-            category = categoryRepo.getCategoryByName(product.getCategoryName());
-            if(category==null){
-                System.out.println("Input category does not exist");
-                return false;
-            }
-        } catch (SQLException e) {
-            System.out.println("Database Error while validating the input category");
-            return false;
-        }
-        Product newProduct = new Product(product.getId(), category.getId() ,product.getName()
-        ,product.getDescription(),product.getPrice(),product.getImageUrl(),product.getStockQuantity(),product.getIngredients());
+        Product newProduct = new Product(product.getId(), categoryId ,name,description,doublePrice,imageName,intQuantity,ingredients);
         try {
             productRepo.update(newProduct);
             return true;
