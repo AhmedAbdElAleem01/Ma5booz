@@ -5,7 +5,6 @@ import java.io.IOException;
 import com.bakefinity.controller.services.impls.ProductServiceImpl;
 import com.bakefinity.controller.services.interfaces.ProductService;
 import com.bakefinity.model.dtos.ProductDTO;
-import com.bakefinity.model.entities.Product;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;

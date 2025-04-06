@@ -59,7 +59,7 @@
                       <th scope="col">&nbsp;</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody id="orders-body">
                     <c:forEach var="order" items="${orders}">
                       <tr>
                           <td><b>${order.id}</b></td>
@@ -81,5 +81,6 @@
       <%-- End Customer Profile --%>
     </div>
     <%@ include file="footer.jsp" %>
+    <script src="${pageContext.request.contextPath}/static/js/customerProfile.js"></script> 
   </body>
 </html>
