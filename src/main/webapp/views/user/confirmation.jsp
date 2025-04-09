@@ -17,7 +17,7 @@
                             </figure>
                             <h1>Thank You!</h1>
                             <p>We're delighted you've decided to treat yourself to our delectable products.
-                                Your order has been received and is now being prepared with care.
+                                Your order has been received and is now being prepared with care. We've also sent you an email with your order details, be sure to check it out.
                             </p>
                             <a href="${pageContext.request.contextPath}/home" class="text-decoration-none all_button"><i class="fa-solid fa-arrow-left"></i>Back to Home</a>
                         </div>

@@ -8,6 +8,13 @@
 <body>
     <%@ include file="header.jsp"%>
 
+    <% String error = (String) request.getAttribute("error"); %>
+    <% if (error != null) { %>
+        <div class="alert alert-danger">
+            <%= error %>
+        </div>
+    <% } %>
+
     <div class="sub_banner_outer position-relative">
         <%@ include file="navbar.jsp"%>
         <%-- Sub Banner  --%>
@@ -44,20 +51,21 @@
                             <div class="upper-form" data-aos="fade-up">
                                 <span class="address">Billing Details:</span>
                                 <div class="form-group input1 float-left">
-                                    <label for="name">Name</label>
+                                    <label for="name">Name*</label>
                                     <input type="text" class="form_style" name="name" id="name" value="${sessionScope.user.name}" disabled>
                                 </div>
                                 <div class="form-group float-left">
-                                    <label for="email">Email Address</label>
+                                    <label for="email">Email Address*</label>
                                     <input type="email" class="form_style" name="email" id="email" value="${sessionScope.user.email}" disabled>
                                 </div>
                                 <div class="form-group input1 float-left">
-                                    <label for="phoneNumber">Phone Number</label>
-                                    <input type="tel" class="form_style" name="phoneNumber" id="phoneNumber" value="${sessionScope.user.phoneNumber}">
+                                    <label for="phoneNumber">Phone Number*</label>
+                                    <input type="tel" class="form_style" name="phoneNumber" id="phoneNumber" value="${sessionScope.user.phoneNumber}" required onblur="validatePhone()">
+                                    <span id="validPhone"></span>
                                 </div>
                                 <div class="form-group float-left">
-                                    <label>Country</label>
-                                    <select class="form-control" name="country">
+                                    <label>Country*</label>
+                                    <select class="form-control" name="country" required>
                                         <option value="" disabled selected hidden>Select country</option>
                                         <option value="Cairo" ${"Cairo".equals(sessionScope.address.country) ? "selected" : ""}>Cairo</option>
                                         <option value="Giza" ${"Giza".equals(sessionScope.address.country) ? "selected" : ""}>Giza</option>
@@ -86,16 +94,18 @@
                                     </select>
                                 </div>
                                 <div class="form-group input1 float-left">
-                                     <label for="city">City</label>
-                                     <input type="text" class="form-control" name="city" id="city" value="${sessionScope.address.city}">
+                                     <label for="city">City*</label>
+                                     <input type="text" class="form-control" name="city" id="city" value="${sessionScope.address.city}" required onblur="validateCity()">
+                                     <span id="validCity"></span>
                                 </div>
                                 <div class="form-group float-left">
-                                    <label for="street">Street</label>
-                                    <input type="text" class="form-control" name="street" id="street" value="${sessionScope.address.street}">
+                                    <label for="street">Street*</label>
+                                    <input type="text" class="form-control" name="street" id="street" value="${sessionScope.address.street}" required onblur="validateStreet()">
+                                    <span id="validStreet"></span>
                                 </div>
                                 <div class="form-group input1 float-left">
-                                    <label for="BNo">Building Number</label>
-                                    <input type="number" class="form-control" name="BNo" id="BNo" min="1" value="${sessionScope.address.buildingNo == -1 ? "" : sessionScope.address.buildingNo}">
+                                    <label for="BNo">Building Number*</label>
+                                    <input type="number" class="form-control" name="BNo" id="BNo" min="1" value="${sessionScope.address.buildingNo == -1 ? "" : sessionScope.address.buildingNo}" required>
                                 </div>
                             </div>
                             <button data-aos="fade-up" type="submit" id="submit" class="submit_now text-decoration-none">Place Order<i class="fa-solid fa-arrow-right"></i></button>
@@ -143,5 +153,6 @@
     <%-- End Checkout --%>
 
     <%@ include file="footer.jsp"%>
+    <script src="${pageContext.request.contextPath}/static/js/checkout.js"> </script>
 </body>
 </html>

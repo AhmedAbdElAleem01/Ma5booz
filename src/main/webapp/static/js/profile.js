@@ -4,6 +4,7 @@ document.getElementById("edit").addEventListener("click", function() {
     document.getElementById("submit").removeAttribute("disabled"); 
 });
 document.getElementById("editAddress").addEventListener("click", function() {
+    document.getElementById("country").disabled = false;
     let inputs = document.querySelectorAll("#addressForm input");
     inputs.forEach(input => input.removeAttribute("disabled")); 
     document.getElementById("saveAddress").removeAttribute("disabled"); 
