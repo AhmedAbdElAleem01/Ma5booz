@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -142,6 +144,7 @@ public class UserRepoImpl implements UserRepo{
              ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
+                LocalDate bd = rs.getDate("birthDate") != null ? rs.getDate("birthDate").toLocalDate() : null;
                 User customer = new User(
                     rs.getInt("id"),
                     rs.getString("username"),
@@ -150,7 +153,7 @@ public class UserRepoImpl implements UserRepo{
                     rs.getString("password"),
                     rs.getString("phoneNumber"),
                     rs.getDouble("creditLimit"),
-                    rs.getDate("birthDate").toLocalDate(),
+                    bd,
                     rs.getString("job"),
                     rs.getTimestamp("createdAt").toLocalDateTime()
                 );

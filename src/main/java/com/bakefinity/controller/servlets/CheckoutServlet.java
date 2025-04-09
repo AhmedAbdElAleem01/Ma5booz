@@ -17,6 +17,7 @@ import com.bakefinity.model.enums.OrderStatus;
 import com.bakefinity.model.enums.PaymentMethod;
 import com.bakefinity.utils.CartPrice;
 import com.bakefinity.utils.EmailUtil;
+import com.bakefinity.utils.InputValidation;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -27,6 +28,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -62,10 +64,30 @@ public class CheckoutServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        // create order
+        // check billing details:
+        String phoneNumber = req.getParameter("phoneNumber");
+        String city = req.getParameter("city");
+        String street = req.getParameter("street");
         HttpSession session = req.getSession(false);
+        @SuppressWarnings("unchecked")
         Map<Integer, CartDTO> cart = (Map<Integer, CartDTO>) session.getAttribute("cart");
-        
+        if(!InputValidation.validatePhone(phoneNumber) || !InputValidation.validateCityStreet(city) || !InputValidation.validateCityStreet(street)){
+            Map<Integer, ProductDTO> products = new HashMap<>();
+            for (CartDTO cartItem : cart.values()) {
+                ProductDTO product = productService.getProductById(cartItem.getProductId());
+                if (product != null) {
+                    products.put(cartItem.getProductId(), product);
+                }
+            }
+            req.setAttribute("products", products);
+            req.setAttribute("totalPrice", CartPrice.calculateTotalPrice(cart));
+            req.setAttribute("error", "Oops.. Some of billing details are not valid, please enter valid data and try again.");
+            RequestDispatcher rd = req.getRequestDispatcher("/views/user/checkout.jsp");
+            rd.forward(req, resp);
+            return;
+        }
+
+        // create order
         for(CartDTO cartItem : cart.values()){
             int productId = cartItem.getProductId();
             if(productService.getProductById(productId).getStockQuantity() < cartItem.getQuantity()){
@@ -74,7 +96,6 @@ public class CheckoutServlet extends HttpServlet {
                 return;     
             }
         }
-        
         double totalCost = CartPrice.calculateTotalPrice(cart);
         UserDTO user = (UserDTO) req.getSession().getAttribute("user");
         if(user.getCreditLimit() < totalCost){
@@ -158,7 +179,7 @@ public class CheckoutServlet extends HttpServlet {
             ProductDTO curProduct = productService.getProductById(productId);
             orderDetails.append("Product Name: " + curProduct.getName() + "\nPrice: " + curProduct.getPrice() + "\nQuantity: " + cartItem.getQuantity() + "\n");
         }
-        orderDetails.append("Total Cost: $" + totalCost);
+        orderDetails.append("Total Cost: " + totalCost + " EGP");
         EmailUtil.sendOrderConfirmationEmail(user.getEmail(), user.getName(), orderDetails.toString());
 
         // clear the cart map
