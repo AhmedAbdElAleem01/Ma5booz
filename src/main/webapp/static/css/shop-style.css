@@ -1,0 +1,55 @@
+.classic-box {
+    height: 100%; /* Ensure cards take full height of their column */
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box; /* Include padding in height calculations */
+}
+
+.classic_box_content {
+    flex: 1; /* Take remaining space */
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+}
+
+.text_wrapper {
+    margin-bottom: 10px;
+}
+
+
+.price_wrapper {
+    margin-top: auto; /* Push price to bottom */
+    padding-top: 10px;
+} 
+
+.price-filter {
+  border: 1px solid #e0e0e0;
+  transition: all 0.3s ease;
+  margin-bottom: 30px;
+}
+
+.price-filter:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+.price-filter button {
+    background-color: #ff69b4; /* Pink background */
+    color: white; /* White text */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .price-filter button:hover {
+    background-color: #ff1493; /* Darker pink on hover */
+  }
+  
+  /* .shop-products-con {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+/* Optional: adds space between items */
+  

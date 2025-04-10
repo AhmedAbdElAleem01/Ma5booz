@@ -1,5 +1,7 @@
 package com.bakefinity.model.dtos;
 
+import com.bakefinity.model.entities.Category;
+
 public class CategoryDTO {
     private int id;
     private String name;
@@ -15,6 +17,12 @@ public class CategoryDTO {
         this.imageUrl = imageUrl;
     }
 
+    public CategoryDTO(Category c) {
+        this.id = c.getId();
+        this.name = c.getName();
+        this.description = c.getDescription();
+        this.imageUrl = c.getImageUrl();
+    }
 
     public int getId() {
         return id;

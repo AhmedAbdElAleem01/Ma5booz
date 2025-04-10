@@ -6,6 +6,7 @@ import com.bakefinity.controller.services.interfaces.UserInterestsService;
 import com.bakefinity.model.dtos.UserInterestsDTO;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class UserInterestsServiceImpl implements UserInterestsService {
     UserInterestsRepo userInterestsRepo = new UserInterestsRepoImpl();
@@ -22,4 +23,15 @@ public class UserInterestsServiceImpl implements UserInterestsService {
     public boolean createUserInterests(UserInterestsDTO userInterests) throws SQLException {
         return userInterestsRepo.createUserInterests(userInterests);
     }
+    
+    @Override
+    public List<UserInterestsDTO> getUserInterests(int userId){
+        try {
+            return userInterestsRepo.getUserInterests(userId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }

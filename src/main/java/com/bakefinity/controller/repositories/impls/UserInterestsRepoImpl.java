@@ -7,7 +7,10 @@ import com.bakefinity.utils.ConnectionManager;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserInterestsRepoImpl implements UserInterestsRepo {
     @Override
@@ -31,5 +34,24 @@ public class UserInterestsRepoImpl implements UserInterestsRepo {
                 }
             }
         }
+    }
+
+    public List<UserInterestsDTO> getUserInterests(int userId) throws SQLException {
+        List<UserInterestsDTO> userInterestsList = new ArrayList<>();
+        
+        try (Connection connection = ConnectionManager.getConnection()) {
+            String query = "SELECT userId, categoryId FROM UserInterests WHERE userId = ?";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setInt(1, userId);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        int categoryId = resultSet.getInt("categoryId");
+                        UserInterestsDTO userInterests = new UserInterestsDTO(userId, categoryId);
+                        userInterestsList.add(userInterests);
+                    }
+                }
+            }
+        }
+        return userInterestsList;
     }
 }

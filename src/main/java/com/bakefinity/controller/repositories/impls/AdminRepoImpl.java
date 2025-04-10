@@ -8,7 +8,12 @@ import java.util.Optional;
 
 import com.bakefinity.controller.repositories.interfaces.AdminRepo;
 import com.bakefinity.model.dtos.UserDTO;
+import com.bakefinity.model.entities.Admin;
 import com.bakefinity.utils.ConnectionManager;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 
 public class AdminRepoImpl implements AdminRepo{
 

@@ -26,7 +26,7 @@ public class ShopController extends HttpServlet {
     private CategoryService categoryService;
     private ProductService productService;
     private Gson gson;
-    private final int pageSize = 2;
+    private final int pageSize = 8;
 
     @Override
     public void init() throws ServletException {

@@ -9,8 +9,13 @@ import com.bakefinity.controller.services.interfaces.ProductService;
 import com.bakefinity.model.dtos.CartDTO;
 import com.bakefinity.model.dtos.ProductDTO;
 import com.bakefinity.model.dtos.UserDTO;
-
+import com.bakefinity.model.entities.Admin;
 import com.bakefinity.utils.CartPrice;
+import com.bakefinity.utils.EntityManagerFactorySingleton;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -34,6 +39,8 @@ public class CartController extends HttpServlet {
         try {
             HttpSession session = req.getSession(true);
 
+            EntityManager em = EntityManagerFactorySingleton.getInstance().createEntityManager();
+            System.out.println(em.find(Admin.class, 1L));
             @SuppressWarnings("unchecked")
             Map<Integer, CartDTO> cart = (Map<Integer, CartDTO>) session.getAttribute("cart");
             if (cart == null) {
