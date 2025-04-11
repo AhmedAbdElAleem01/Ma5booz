@@ -248,4 +248,30 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    public List<ProductDTO> getProductsByCategoryAndPriceRange(int categoryId, double minPrice, double maxPrice, int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        try {
+            return productRepo.getProductsByCategoryAndPriceRange(categoryId, minPrice, maxPrice, offset, pageSize)
+                    .stream()
+                    .map(ProductDTO::new)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to retrieve products by category and price range: " + e.getMessage());
+        }
+    }
+
+    public List<ProductDTO> getProductsByPriceRange(double minPrice, double maxPrice, int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        try {
+            return productRepo.getProductsByPriceRange(offset, pageSize, minPrice, maxPrice)
+                    .stream()
+                    .map(ProductDTO::new)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to retrieve products by price range: " + e.getMessage());
+        }
+    }
+    
+    
+
 }

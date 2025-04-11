@@ -5,6 +5,8 @@
     <script>
         window.contextPath = "${pageContext.request.contextPath}";
     </script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/shop-style.css">
+
 </head>
 <body>
     <%@ include file="header.jsp"%>
@@ -50,6 +52,22 @@
                                 </div>
                             </form>
                         </div>
+                        <div>
+                            <div class="widget" data-aos="fade-up">
+                                <div class="widget-title font_weight_600 mb-3">Filter by Price</div>
+                                <div class="price-filter bg-white p-4 rounded shadow-sm">
+                                  <div class="mb-3">
+                                    <label for="minPrice" class="form-label">Min Price (EGP)</label>
+                                    <input name="minPrice" type="number" id="minPrice" class="form-control" value="0" min="0" max="10000" step="10" />
+                                  </div>
+                                  <div class="mb-3">
+                                    <label for="maxPrice" class="form-label">Max Price (EGP)</label>
+                                    <input name="maxPrice" type="number" id="maxPrice" class="form-control" value="1000" min="0" max="10000" step="10" />
+                                  </div>
+                                  <button class="btn btn-outline-primary mt-3 w-100" onclick="applyPriceFilter(event,1)">Apply Filter</button>
+                                </div>
+                              </div>
+                        </div>
                         <div class="widget widget-categories" data-aos="fade-up">
                             <div class="widget-title font_weight_600">Categories</div>
                             <ul class="list-unstyled mb-0">
@@ -68,25 +86,19 @@
                 <div class="col-lg-9">
                     <div class="row default-sorting-con">
                         <div class="col-12">
-                            <div class="top-icons" data-aos="fade-up">
-                                <div id="toolbar">
-                                    <select class="form-control">
-                                        <option value="">Default Sorting</option>
-                                        <option value="all">lowest to heighst</option>
-                                        <option value="selected">heighst to lowest </option>
-                                    </select>
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
-                    <ul class="pagination" id="pagination" data-aos="fade-up">
-                        <c:forEach var="i" begin="1" end="${totalPages}">
-                            <li class="page-item">
-                                <a href="#" class="page-link" onclick="fetchProductsPerPage(event, `${i}`)">${i}</a>
-                            </li>
-                            
-                        </c:forEach>
-                    </ul>
+                    <div class="d-flex justify-content-center mt-4 mb-4">
+                        <ul class="pagination" id="pagination" data-aos="fade-up">
+                            <c:forEach var="i" begin="1" end="${totalPages}">
+                                <li class="page-item">
+                                    <a href="#" class="page-link" onclick="fetchProductsPerPage(event, `${i}`)">${i}</a>
+                                </li>
+                                
+                            </c:forEach>
+                        </ul>
+                    </div>
                     <div class="row shop-products-con" data-aos="fade-up">
                         <c:forEach var="product" items="${products}">
                             <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
@@ -111,12 +123,12 @@
                                         </div>
                                         <p class="text-size-16">${product.description}</p>
                                         <div class="price_wrapper position-relative">
-                                            <span class="dollar">$<span class="counter">${product.price}</span>
+                                            <span class="dollar">EGP <span class="counter">${product.price}</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                    </c:forEach>
+                        </c:forEach>
                         
                     </div>
                 </div>

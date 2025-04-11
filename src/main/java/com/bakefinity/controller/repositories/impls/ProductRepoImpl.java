@@ -290,4 +290,58 @@ public class ProductRepoImpl implements ProductRepo {
             }
         }
     }
+
+
+    public List<Product> getProductsByCategoryAndPriceRange(int categoryId, double minPrice, double maxPrice, int offset, int limit) {
+        String sql = "SELECT * FROM product WHERE categoryId = ? AND price BETWEEN ? AND ? ORDER BY price ASC LIMIT ? OFFSET ?";
+        List<Product> products = new ArrayList<>();
+    
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    
+            stmt.setInt(1, categoryId);
+            stmt.setDouble(2, minPrice);
+            stmt.setDouble(3, maxPrice);
+            stmt.setInt(4, limit);
+            stmt.setInt(5, offset);
+    
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    products.add(extractProduct(rs));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    
+        return products;
+    }
+    
+
+    public List<Product> getProductsByPriceRange(int offset, int limit, double minPrice, double maxPrice) {
+        String sql = "SELECT * FROM product WHERE price BETWEEN ? AND ? ORDER BY price ASC LIMIT ? OFFSET ?";
+        List<Product> products = new ArrayList<>();
+    
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    
+            stmt.setDouble(1, minPrice);
+            stmt.setDouble(2, maxPrice);
+            stmt.setInt(3, limit);
+            stmt.setInt(4, offset);
+    
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    products.add(extractProduct(rs));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    
+        return products;
+    }
+    
+    
+    
 }

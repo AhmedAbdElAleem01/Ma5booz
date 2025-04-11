@@ -26,7 +26,7 @@ public class ShopController extends HttpServlet {
     private CategoryService categoryService;
     private ProductService productService;
     private Gson gson;
-    private final int pageSize = 8;
+    private final int pageSize = 6;
 
     @Override
     public void init() throws ServletException {
@@ -92,6 +92,7 @@ public class ShopController extends HttpServlet {
         int page = 1;
         List<ProductDTO> products;
         int totalProducts;
+        System.out.println("i know");
 
         try {
             if (catIdStr != null && !catIdStr.trim().isEmpty()){
@@ -127,6 +128,15 @@ public class ShopController extends HttpServlet {
         int page = 1;
         int catID = 0;
 
+        Double minPrice = null;
+        Double maxPrice  = null;
+
+        System.out.println("here");
+        System.out.println(req.getParameter("minPrice"));
+        System.out.println(req.getParameter("maxPrice"));
+        System.out.println(req.getParameter("catID"));
+        System.out.println(req.getParameter("page"));
+
         try {
             if (req.getParameter("page") != null) {
                 page = Integer.parseInt(req.getParameter("page"));
@@ -134,14 +144,33 @@ public class ShopController extends HttpServlet {
             if (req.getParameter("catID") != null && !req.getParameter("catID").trim().isEmpty()) {
                 catID = Integer.parseInt(req.getParameter("catID"));
             }
+            if(req.getParameter("minPrice") != null){
+                minPrice = Double.parseDouble(req.getParameter("minPrice"));
+            }
+
+            if(req.getParameter("maxPrice") != null){
+                maxPrice = Double.parseDouble(req.getParameter("maxPrice"));
+            }
+
 
             List<ProductDTO> products;
             int totalProducts;
             if (catID > 0) {
-                products = productService.getProductsByCategoryPage(catID, page, pageSize);
+                if(minPrice != null && maxPrice != null){
+                    products = productService.getProductsByCategoryAndPriceRange(catID, minPrice, maxPrice, page, pageSize);
+                } else {
+                    products = productService.getProductsByCategoryPage(catID, page, pageSize);
+                }
+            
                 totalProducts = productService.getTotalProductsByCategory(catID);
-            } else {
-                products = productService.getProductsByPage(page, pageSize);
+            } 
+            else {
+                if(minPrice != null && maxPrice != null){
+                    products = productService.getProductsByPriceRange(minPrice, maxPrice, page, pageSize);
+                } else {
+                    products = productService.getProductsByPage(page, pageSize);
+                }
+
                 totalProducts = productService.getTotalProductCount();
             }
 

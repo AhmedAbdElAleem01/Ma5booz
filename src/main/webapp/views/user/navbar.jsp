@@ -2,7 +2,7 @@
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light p-0">
             <a class="navbar-brand" href="${pageContext.request.contextPath}/home">
-                <figure class="logo mb-0"><img src="${pageContext.request.contextPath}/static/img/logo.png" alt="image" class="img-fluid"></figure>
+                <figure class="logo mb-0"><img src="${pageContext.request.contextPath}/static/img/testlogo.png" alt="image" class="img-fluid"></figure>
             </a>
             <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">

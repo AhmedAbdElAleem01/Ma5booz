@@ -70,7 +70,7 @@ function updateCartAsync(id, quantity) {
         headers: { "X-Requested-With": "XMLHttpRequest" },
         success: function (response) {
             let data = typeof response === "string" ? JSON.parse(response) : response;
-
+            document.getElementById("totalItems").textContent = parseInt(data.cartSize);
             document.getElementById("totalOrderPrice").textContent = parseFloat(data.totalPrice).toFixed(2);
             document.getElementById("grandTotal").textContent = (parseFloat(data.totalPrice)).toFixed(2);
             console.log("Cart updated:", response);
