@@ -55,7 +55,7 @@ function renderProducts(response, path) {
     const productsHTML = products.map(product => {
         return `
             <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
-                <div class="classic-box">
+                <div class="classic-box fixed_height">
                     <a href="${contextPath}/product_details?productID=${product.id}">
                         <div class="classic_image_box box6">
                             <figure class="mb-0">
@@ -73,7 +73,7 @@ function renderProducts(response, path) {
                         </div>
                         <p class="text-size-16">${product.description}</p>
                         <div class="price_wrapper position-relative">
-                            <span class="dollar">$<span class="counter">${product.price}</span></span>
+                            <span class="dollar">EGP <span class="counter">${product.price}</span></span>
                         </div>
                     </div>
                 </div>
@@ -125,9 +125,62 @@ function updatePagination(currentPage, totalPages) {
     if (currentPage < totalPages) {
         pagination.innerHTML += `
             <li class="page-item next">
-                <a class="page-link" onclick="fetchProductsPerPage(event, ${currentPage + 1})">
-                    <i class="fas fa-angle-right"></i>
+                <a class="page-link d-flex justify-content-center align-items-center"
+                onclick="fetchProductsPerPage(event, ${currentPage + 1})">
+                    next
                 </a>
             </li>`;
+
     }
+}
+
+function updatePagination2(currentPage, totalPages) {
+    let pagination = document.querySelector(".pagination");
+    if (!pagination) {
+        console.error("Pagination container not found.");
+        return;
+    }
+    pagination.innerHTML = "";
+    
+
+    for (let i = 1; i <= totalPages; i++) {
+        pagination.innerHTML += `
+            <li class="page-item ${i === currentPage ? 'active' : ''}">
+                <a class="page-link" onclick="applyPriceFilter(event, ${i})">${i}</a>
+            </li>`;
+    }
+    
+    if (currentPage < totalPages) {
+        pagination.innerHTML += `
+            <li class="page-item next">
+                <a class="page-link d-flex justify-content-center align-items-center"
+                onclick="applyPriceFilter(event, ${currentPage + 1})">
+                    next
+                </a>
+            </li>`;
+
+    }
+}
+
+
+function applyPriceFilter(event, page , cat) {
+    event.preventDefault();
+    if(cat !== undefined) currentCatID = cat;
+    min = parseFloat(document.getElementById('minPrice').value);
+    max = parseFloat(document.getElementById('maxPrice').value);
+    $.ajax({
+        url: "shop",
+        type: "POST",
+        data: { page: page, catID: currentCatID , minPrice: min, maxPrice:max},
+        dataType: "json",
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+        success: function(response) {
+            renderProducts(response, window.contextPath);
+            updatePagination2(response.currentPage, response.totalPages);
+            console.log("Pagination response:", response);
+        },
+        error: function(xhr, status, error) {
+            console.error("Error fetching products:", error);
+        }
+    });
 }

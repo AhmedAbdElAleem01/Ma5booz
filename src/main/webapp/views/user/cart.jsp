@@ -47,7 +47,7 @@
                         <div class="product-detail-box" data-aos="fade-up">
                             <div class="heading">
                                 <span>Shopping Cart</span>
-                                <span>${cart.size()}(Items)</span>
+                               <span><span id="totalItems">${cart.size()}</span>(Items)</span> 
                             </div>
                             <div class="shopping-cart">
                                 <div class="column-labels">

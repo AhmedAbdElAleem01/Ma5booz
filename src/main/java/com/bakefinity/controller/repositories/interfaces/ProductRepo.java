@@ -22,4 +22,7 @@ public interface ProductRepo extends BaseRepo<Product>{
 
     boolean updateStockQuantity(int productId, int newQuantity) throws SQLException;
     Product getById(int productId) throws SQLException;
+
+    List<Product> getProductsByPriceRange(int offset, int limit, double minPrice, double maxPrice)throws Exception;
+    List<Product> getProductsByCategoryAndPriceRange(int categoryId, double minPrice, double maxPrice, int offset, int limit)throws Exception;
 }
