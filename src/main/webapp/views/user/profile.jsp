@@ -57,7 +57,7 @@
                                                     <div class="upper-form" data-aos="fade-up">
                                                         <div class="form-group input1 float-left w-100">
                                                             <label for="creditLimit">Credit Limit</label>
-                                                            <input type="number" class="form_style w-100" name="creditLimit" id="creditLimit" value="${sessionScope.user.creditLimit}" disabled>
+                                                            <input type="number" class="form_style w-100" name="creditLimit" id="creditLimit" value="${sessionScope.user.creditLimit}" step="0.01" disabled>
                                                         </div>
                                                     </div>
                             
@@ -93,9 +93,35 @@
                                                 <form id="addressForm" method="post" action="${pageContext.request.contextPath}/profile?form=addressForm" class="position-relative">
                                                     <div class="upper-form" data-aos="fade-up">
                                                         <div class="row">
-                                                            <div class="col-6">
+                                                            <div class="col-6 mt-3">
                                                                 <label for="country">Country</label>
-                                                                <input type="text" class="form_style w-100" name="country" id="country" value="${sessionScope.address.country}" disabled>
+                                                                <select class="form_style w-100" name="country" id="country" disabled>
+                                                                    <option value="" disabled selected hidden>Select country</option>
+                                                                    <option value="Cairo" ${"Cairo".equals(sessionScope.address.country) ? "selected" : ""}>Cairo</option>
+                                                                    <option value="Giza" ${"Giza".equals(sessionScope.address.country) ? "selected" : ""}>Giza</option>
+                                                                    <option value="Alexandria" ${"Alexandria".equals(sessionScope.address.country) ? "selected" : ""}>Alexandria</option>
+                                                                    <option value="Dakahlia" ${"Dakahlia".equals(sessionScope.address.country) ? "selected" : ""}>Dakahlia</option>
+                                                                    <option value="Sharqia" ${"Sharqia".equals(sessionScope.address.country) ? "selected" : ""}>Sharqia</option>
+                                                                    <option value="Qalyubia" ${"Qalyubia".equals(sessionScope.address.country) ? "selected" : ""}>Qalyubia</option>
+                                                                    <option value="Menofia" ${"Menofia".equals(sessionScope.address.country) ? "selected" : ""}>Menofia</option>
+                                                                    <option value="Minya" ${"Minya".equals(sessionScope.address.country) ? "selected" : ""}>Minya</option>
+                                                                    <option value="Sohag" ${"Sohag".equals(sessionScope.address.country) ? "selected" : ""}>Sohag</option>
+                                                                    <option value="Fayoum" ${"Fayoum".equals(sessionScope.address.country) ? "selected" : ""}>Fayoum</option>
+                                                                    <option value="Asyut" ${"Asyut".equals(sessionScope.address.country) ? "selected" : ""}>Asyut</option>
+                                                                    <option value="Ismailia" ${"Ismailia".equals(sessionScope.address.country) ? "selected" : ""}>Ismailia</option>
+                                                                    <option value="Suez" ${"Suez".equals(sessionScope.address.country) ? "selected" : ""}>Suez</option>
+                                                                    <option value="Luxor" ${"Luxor".equals(sessionScope.address.country) ? "selected" : ""}>Luxor</option>
+                                                                    <option value="Aswan" ${"Aswan".equals(sessionScope.address.country) ? "selected" : ""}>Aswan</option>
+                                                                    <option value="Port Said" ${"Port Said".equals(sessionScope.address.country) ? "selected" : ""}>Port Said</option>
+                                                                    <option value="Beheira" ${"Beheira".equals(sessionScope.address.country) ? "selected" : ""}>Beheira</option>
+                                                                    <option value="Beni Suef" ${"Beni Suef".equals(sessionScope.address.country) ? "selected" : ""}>Beni Suef</option>
+                                                                    <option value="Kafr El Sheikh" ${"Kafr El Sheikh".equals(sessionScope.address.country) ? "selected" : ""}>Kafr El Sheikh</option>
+                                                                    <option value="Red Sea" ${"Red Sea".equals(sessionScope.address.country) ? "selected" : ""}>Red Sea</option>
+                                                                    <option value="New Valley" ${"New Valley".equals(sessionScope.address.country) ? "selected" : ""}>New Valley</option>
+                                                                    <option value="Matrouh" ${"Matrouh".equals(sessionScope.address.country) ? "selected" : ""}>Matrouh</option>
+                                                                    <option value="North Sinai" ${"North Sinai".equals(sessionScope.address.country) ? "selected" : ""}>North Sinai</option>
+                                                                    <option value="South Sinai" ${"South Sinai".equals(sessionScope.address.country) ? "selected" : ""}>South Sinai</option>
+                                                                </select>
                                                             </div>
                                                             <div class="col-6 mt-3">
                                                                 <label for="city">City</label>

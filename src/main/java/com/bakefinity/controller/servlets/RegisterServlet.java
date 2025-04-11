@@ -71,7 +71,7 @@ public class RegisterServlet extends HttpServlet {
         String buildingNo = req.getParameter("BNo");
         try {
             if(!InputValidation.validateName(fname) || !InputValidation.validateName(lname) || !InputValidation.validatePhone(phoneNumber) || (job != null && !job.trim().isEmpty() && !InputValidation.validateName(job)) || !InputValidation.validatePassword(password) || (city != null && !city.trim().isEmpty() && !InputValidation.validateCityStreet(city)) || (street != null && !street.trim().isEmpty() && !InputValidation.validateCityStreet(street)) || !UserRegisterServiceImpl.getInstance().isUsernameAvailable(username) || !UserRegisterServiceImpl.getInstance().isEmailUnique(email)){
-                req.setAttribute("error", "Oops.. Some data is not valid, please register with valid data");
+                req.setAttribute("error", "Oops.. Some data is not valid, please register with valid data and try again.");
                 try {
                     forwardWithData(req, resp);
                 } catch (SQLException e) {
