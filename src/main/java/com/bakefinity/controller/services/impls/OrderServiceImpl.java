@@ -36,7 +36,7 @@ public class OrderServiceImpl implements OrderService{
         return instance;
     }
     @Override
-    public int create(Order order) throws SQLException {
+    public int create(OrderDTO order) throws SQLException {
         return orderRepo.create(order);
     }
 

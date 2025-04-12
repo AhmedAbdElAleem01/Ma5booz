@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <title>Sign in | IceDelights</title>
+    <title>Sign in | Ma5booz</title>
 </head>
 <body>
     <%@ include file="header.jsp"%>

@@ -19,8 +19,8 @@ public class OrderItemRepoImpl implements OrderItemRepo {
         try(Connection connection = ConnectionManager.getConnection();) {
             String query = "INSERT INTO OrderItem (orderId, productId, quantity) VALUES (?, ?, ?)";
             try(PreparedStatement statement = connection.prepareStatement(query);) {
-                statement.setInt(1, orderItem.getOrderId());
-                statement.setInt(2, orderItem.getProductId());
+                statement.setInt(1, orderItem.getId().getOrderId());
+                statement.setInt(2, orderItem.getId().getProductId());
                 statement.setInt(3, orderItem.getQuantity());
                 int rowsAffected = statement.executeUpdate();
                 if (rowsAffected <= 0) {

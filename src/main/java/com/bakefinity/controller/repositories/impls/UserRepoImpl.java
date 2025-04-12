@@ -144,7 +144,7 @@ public class UserRepoImpl implements UserRepo{
              ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
-                LocalDate bd = rs.getDate("birthDate") != null ? rs.getDate("birthDate").toLocalDate() : null;
+                Date bd = rs.getDate("birthDate") != null ? rs.getDate("birthDate") : null;
                 User customer = new User(
                     rs.getInt("id"),
                     rs.getString("username"),

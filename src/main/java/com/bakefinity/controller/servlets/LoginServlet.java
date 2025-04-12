@@ -1,6 +1,7 @@
 package com.bakefinity.controller.servlets;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class LoginServlet extends HttpServlet {
         String password = req.getParameter("password");
         String rememberMe = req.getParameter("rememberMe");
 
-        Optional<UserDTO> user = userLoginService.login(email, password);
+        Optional<UserDTO> user = user = userLoginService.login(email, password);
         if (user.isPresent()) {
             if ("ADMIN".equals(user.get().getRole())) {
                 req.getSession().setAttribute("user", user.get());

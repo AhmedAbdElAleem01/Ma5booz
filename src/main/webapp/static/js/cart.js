@@ -18,6 +18,7 @@ var maxPerOrder = 5;
 // }
 
 function increaseValue(id, stock) {
+    console.log("in cart.js ==> ");
     let productQEle = document.getElementById(`quantity-${id}`);
     let increaseBtn = document.getElementById(`increase-${id}`);
     let decreaseBtn = document.getElementById(`decrease-${id}`);
