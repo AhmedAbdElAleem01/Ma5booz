@@ -35,8 +35,8 @@
                       <option selected>Select category</option>
                       <option value="Cakes">Cakes</option>
                       <option value="Cupcakes">Cupcakes</option>
-                      <option value="Ice cream">Ice cream</option>
-                      <option value="Seasonal Flavours">Seasonal Flavours</option>
+                      <option value="Donuts">Donuts</option>
+                      <option value="Bakery">Bakery</option>
                     </select>
                   </div>
                   <div class="row">

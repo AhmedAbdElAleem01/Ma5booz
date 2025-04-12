@@ -1,0 +1,10 @@
+a.all_button.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* if you remove href instead of using # */
+a:not([href]) {
+    pointer-events: none;
+    cursor: default;
+}

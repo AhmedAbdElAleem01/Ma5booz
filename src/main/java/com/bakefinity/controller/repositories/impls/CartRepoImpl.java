@@ -2,6 +2,7 @@ package com.bakefinity.controller.repositories.impls;
 
 import com.bakefinity.controller.repositories.interfaces.CartRepo;
 import com.bakefinity.model.entities.CartItem;
+import com.bakefinity.model.entities.CartItemId;
 import com.bakefinity.utils.ConnectionManager;
 import java.sql.*;
 import java.util.ArrayList;
@@ -51,8 +52,8 @@ public class CartRepoImpl implements CartRepo {
                      "VALUES (?, ?, ?) " +
                      "ON DUPLICATE KEY UPDATE quantity = VALUES(quantity)")) {
     
-            stmt.setInt(1, cartItem.getUserId());
-            stmt.setInt(2, cartItem.getProductId());
+            stmt.setInt(1, cartItem.getId().getUserId());
+            stmt.setInt(2, cartItem.getId().getProductId());
             stmt.setInt(3, cartItem.getQuantity());
     
             stmt.executeUpdate();
@@ -67,8 +68,8 @@ public class CartRepoImpl implements CartRepo {
                      "UPDATE cartitem SET quantity = ? WHERE userId = ? AND productId = ?")) {
 
             stmt.setInt(1, cartItem.getQuantity());
-            stmt.setInt(2, cartItem.getUserId());
-            stmt.setInt(3, cartItem.getProductId());
+            stmt.setInt(2, cartItem.getId().getUserId());
+            stmt.setInt(3, cartItem.getId().getProductId());
 
             stmt.executeUpdate();
         }
@@ -98,8 +99,7 @@ public class CartRepoImpl implements CartRepo {
     
     private CartItem extractCartItem(ResultSet rs) throws SQLException {
         CartItem cartItem = new CartItem();
-        cartItem.setUserId(rs.getInt("userId"));
-        cartItem.setProductId(rs.getInt("productId"));
+        cartItem.setId(new CartItemId(rs.getInt("productId"), rs.getInt("userId")));
         cartItem.setQuantity(rs.getInt("quantity"));
         return cartItem;
     }

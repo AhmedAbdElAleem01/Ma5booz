@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import com.bakefinity.controller.repositories.interfaces.OrderRepo;
+import com.bakefinity.model.dtos.OrderDTO;
 import com.bakefinity.model.dtos.OrderItemDTO;
 import com.bakefinity.model.entities.Order;
 import com.bakefinity.model.enums.OrderStatus;
@@ -12,7 +13,7 @@ import com.bakefinity.utils.ConnectionManager;
 public class OrderRepoImpl implements OrderRepo{
     
     @Override
-    public int create(Order order) throws SQLException {
+    public int create(OrderDTO order) throws SQLException {
         if (order == null) {
             System.err.println("Error creating order: order is null");
             return -1;
@@ -121,7 +122,7 @@ public class OrderRepoImpl implements OrderRepo{
             
             while (rs.next()) {
                 OrderItemDTO orderItem = new OrderItemDTO();
-                orderItem.setId(rs.getInt("id"));
+//                orderItem.setId(rs.getInt("id"));
                 orderItem.setOrderId(rs.getInt("orderId"));
                 orderItem.setProductId(rs.getInt("productId"));
                 orderItem.setProductName(rs.getString("productName"));

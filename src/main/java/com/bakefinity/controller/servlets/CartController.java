@@ -10,6 +10,7 @@ import com.bakefinity.model.dtos.CartDTO;
 import com.bakefinity.model.dtos.ProductDTO;
 import com.bakefinity.model.dtos.UserDTO;
 import com.bakefinity.model.entities.Admin;
+import com.bakefinity.model.entities.CartItemId;
 import com.bakefinity.utils.CartPrice;
 import com.bakefinity.utils.EntityManagerFactorySingleton;
 
@@ -39,8 +40,8 @@ public class CartController extends HttpServlet {
         try {
             HttpSession session = req.getSession(true);
 
-            EntityManager em = EntityManagerFactorySingleton.getInstance().createEntityManager();
-            System.out.println(em.find(Admin.class, 1L));
+//            EntityManager em = EntityManagerFactorySingleton.getInstance().createEntityManager();
+//            System.out.println(em.find(Admin.class, 1L));
             @SuppressWarnings("unchecked")
             Map<Integer, CartDTO> cart = (Map<Integer, CartDTO>) session.getAttribute("cart");
             if (cart == null) {
@@ -103,14 +104,12 @@ public class CartController extends HttpServlet {
                 sendJsonResponse(resp, "error", "Product not found", cart.size(), CartPrice.calculateTotalPrice(cart));
                 return;
             }
-
             if (productQ == 0) {
                 cart.remove(productId);
                 sendJsonResponse(resp, "success", "Item removed from cart", cart.size(), CartPrice.calculateTotalPrice(cart));
                 return;
             }
-
-            CartDTO cartItem = new CartDTO((isGuest ? null : user.getId()), productId, productQ);
+            CartDTO cartItem = new CartDTO(new CartItemId(productId, (isGuest ? null : user.getId())), productQ);
             cart.put(productId, cartItem);
 
             sendJsonResponse(resp, "success", "Cart updated", cart.size(), CartPrice.calculateTotalPrice(cart));

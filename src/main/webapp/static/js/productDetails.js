@@ -44,6 +44,7 @@ function decreaseValue() {
 }
 
 function addToCartAsync() {
+console.log("in add to cart action");
     $.ajax({
         url: "cart",
         type: "POST",

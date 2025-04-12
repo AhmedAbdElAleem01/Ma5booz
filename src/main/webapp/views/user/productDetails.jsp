@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
-    <title>Product Details| IceDelights</title>
+    <title>Product Details | Ma5booz</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/productDetails.css">
 </head>
 <body>
@@ -59,7 +59,7 @@
                         </div>
                         <c:if test="${not empty product}">
                             <h4>${product.name}</h4>
-                            <span class="price">$${product.price}</span>
+                            <span class="price">EGP ${product.price}</span>
                             <p class="text-size-16">${product.description}</p>
                             <c:choose>
                                 <c:when test="${product.stockQuantity <= 0}">
@@ -77,7 +77,7 @@
                        
                         
                         <div class="sauce-picker">
-                            <h6>Extra Sauce <span style="color: rgb(126, 229, 126); font-size: medium;">+0.50$ each</span></h6>
+                            <h6>Extra Sauce <span style="color: rgb(126, 229, 126); font-size: medium;">+EGP 0.50 each</span></h6>
                             <div class="sauce-options">
                                 <!-- Strawberry -->
                                 <label class="sauce-option">

@@ -30,9 +30,30 @@ public class ProductDTO {
         this.imageUrl = imageUrl;
     }
 
+    public ProductDTO(int categoryId, String description, Double price, String imageUrl, int stockQuantity, String ingredients, String name) {
+        this.categoryId = categoryId;
+        this.description = description;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.stockQuantity = stockQuantity;
+        this.ingredients = ingredients;
+        this.name = name;
+    }
+
+    public ProductDTO(int id, String name, int categoryId, String description, Double price, String imageUrl, int stockQuantity, String ingredients) {
+        this.id = id;
+        this.name = name;
+        this.categoryId = categoryId;
+        this.description = description;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.stockQuantity = stockQuantity;
+        this.ingredients = ingredients;
+    }
+
     public ProductDTO(Product product) {
         this.id = product.getId();
-        this.categoryId = product.getCategoryId();
+        this.categoryId = product.getCategory().getId();
         this.name = product.getName();
         this.description = product.getDescription();
         this.price = product.getPrice();
