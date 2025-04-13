@@ -15,8 +15,16 @@ import com.bakefinity.controller.repositories.interfaces.UserRepo;
 import com.bakefinity.model.dtos.*;
 import com.bakefinity.model.entities.User;
 import com.bakefinity.utils.ConnectionManager;
+import com.bakefinity.utils.EntityManagerFactorySingleton;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
 
 public class UserRepoImpl implements UserRepo{
+    private EntityManagerFactory emf = EntityManagerFactorySingleton.getInstance();
+
     @Override
     public int createUser(UserDTO user) throws SQLException {
         if (user == null) {
@@ -81,60 +89,56 @@ public class UserRepoImpl implements UserRepo{
     }
 
    public Optional<UserDTO> findByEmailAndPassword(String email, String pass) { 
-        String query = "SELECT * FROM user WHERE email = ? AND password = ?";
-        try (Connection conn = ConnectionManager.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(query)) {
-
-            pstmt.setString(1, email);
-            pstmt.setString(2, pass);
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) { 
-                UserDTO user = new UserDTO();
-                user.setId(rs.getInt("id"));
-                user.setName(rs.getString("name"));
-                user.setUsername(rs.getString("username"));
-                user.setEmail(rs.getString("email"));
-                user.setPassword(rs.getString("password"));
-                user.setBirthDate(rs.getDate("birthDate"));
-                user.setCreditLimit(rs.getDouble("creditLimit"));
-                user.setPhoneNumber(rs.getString("phoneNumber"));
-                user.setJob(rs.getString("job"));
-
-                return Optional.of(user); 
-            }
-        } catch (SQLException e) {
-            System.out.println("Failed to find user: " + e.getMessage());
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<User> query = em.createQuery(
+                "SELECT u FROM User u WHERE u.email = :email AND u.password = :password", User.class
+            );
+            query.setParameter("email", email);
+            query.setParameter("password", pass);
+            UserDTO user = new UserDTO();
+            user.setId(query.getSingleResult().getId());
+            user.setName(query.getSingleResult().getName());
+            user.setEmail(query.getSingleResult().getEmail());
+            user.setPassword(query.getSingleResult().getPassword());
+            user.setPhoneNumber(query.getSingleResult().getPhoneNumber());
+            user.setCreditLimit(query.getSingleResult().getCreditLimit());
+            user.setBirthDate(query.getSingleResult().getBirthDate());
+            user.setJob(query.getSingleResult().getJob());
+            user.setCreatedAt(query.getSingleResult().getCreatedAt());
+            user.setUsername(query.getSingleResult().getUsername());
+            return Optional.of(user);
+        } catch (NoResultException e) {
+            return Optional.empty();
+        } finally {
+            em.close(); 
         }
-        return Optional.empty();
     }    
     public Optional<UserDTO> findById(int id) {
-        String query = "SELECT * FROM user WHERE id = ?";
-        
-        try (Connection conn = ConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-    
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-    
-            if (rs.next()) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            User userEntity = em.find(User.class, id);
+            if (userEntity != null) {
                 UserDTO user = new UserDTO();
-                user.setId(rs.getInt("id"));
-                user.setName(rs.getString("name"));
-                user.setUsername(rs.getString("username"));
-                user.setEmail(rs.getString("email"));
-                user.setPassword(rs.getString("password"));
-                user.setBirthDate(rs.getDate("birthDate"));
-                user.setCreditLimit(rs.getDouble("creditLimit"));
-                user.setPhoneNumber(rs.getString("phoneNumber"));
-                user.setJob(rs.getString("job"));
+                user.setId(userEntity.getId());
+                user.setName(userEntity.getName());
+                user.setUsername(userEntity.getUsername());
+                user.setEmail(userEntity.getEmail());
+                user.setPassword(userEntity.getPassword());
+                user.setBirthDate(userEntity.getBirthDate());
+                user.setCreditLimit(userEntity.getCreditLimit());
+                user.setPhoneNumber(userEntity.getPhoneNumber());
+                user.setJob(userEntity.getJob());
                 return Optional.of(user);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.out.println("Failed to find user: " + e.getMessage());
+        } finally {
+            em.close();
         }
-        return Optional.empty(); 
+        return Optional.empty();
     }
+    
     public List<User> getAllUsers() throws SQLException {
         List<User> customers = new ArrayList<>();
         

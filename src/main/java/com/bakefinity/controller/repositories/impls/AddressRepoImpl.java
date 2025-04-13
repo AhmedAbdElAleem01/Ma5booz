@@ -2,6 +2,7 @@ package com.bakefinity.controller.repositories.impls;
 
 import com.bakefinity.controller.repositories.interfaces.AddressRepo;
 import com.bakefinity.model.dtos.AddressDTO;
+import com.bakefinity.model.entities.Address;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,8 +11,16 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 import com.bakefinity.utils.ConnectionManager;
+import com.bakefinity.utils.EntityManagerFactorySingleton;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
 
 public class AddressRepoImpl implements AddressRepo {
+    private EntityManagerFactory emf = EntityManagerFactorySingleton.getInstance();
+
     @Override
     public boolean createAddress(AddressDTO address) throws SQLException {
         if (address == null) {
@@ -39,25 +48,28 @@ public class AddressRepoImpl implements AddressRepo {
     }
     @Override
     public Optional<AddressDTO> findUserAddressById(int id) {
-        String query = "SELECT * FROM address WHERE userId = ?";
-        try (Connection conn = ConnectionManager.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(query)) {
+        EntityManager em = emf.createEntityManager();
+    
+        try {
+            TypedQuery<Address> query = em.createQuery(
+                "SELECT a FROM Address a WHERE a.user.id = :userId", Address.class
+            );
+            query.setParameter("userId", id);
 
-            pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) { 
-                AddressDTO address = new AddressDTO();
-                address.setCity(rs.getString("city"));
-                address.setCountry(rs.getString("country"));
-                address.setStreet(rs.getString("street"));
-                address.setBuildingNo(rs.getInt("buildingNo"));
-
-                return Optional.of(address); 
-            }
-        } catch (SQLException e) {
+            Address addressEntity = query.getSingleResult();
+            AddressDTO addressDTO = new AddressDTO();
+            addressDTO.setCity(addressEntity.getCity());
+            addressDTO.setCountry(addressEntity.getCountry());
+            addressDTO.setStreet(addressEntity.getStreet());
+            addressDTO.setBuildingNo(Integer.parseInt(addressEntity.getBuildingNo()));
+            return Optional.of(addressDTO);
+        } catch (NoResultException e) {
+            return Optional.empty();
+        } catch (Exception e) {
             System.out.println("DB ERROR: Failed to find user's address: " + e.getMessage());
+            return Optional.empty();
+        } finally {
+            em.close();
         }
-        return Optional.empty();
     }
 }
