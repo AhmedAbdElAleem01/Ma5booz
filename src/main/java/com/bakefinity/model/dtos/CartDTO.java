@@ -1,27 +1,17 @@
 package com.bakefinity.model.dtos;
 
-import com.bakefinity.model.entities.CartItem;
+import com.bakefinity.model.entities.CartItemId;
 
 public class CartDTO {
     private Integer userId;
     private Integer productId;
     private int quantity;
 
-    public CartDTO(Integer userId, Integer productId, int quantity) {
-        this.userId = userId;
-        this.productId = productId;
+    public CartDTO(CartItemId cartItemId, int quantity) {
+        this.userId = cartItemId.getUserId();
+        this.productId = cartItemId.getProductId();
         this.quantity = quantity;
     }
-
-    
-
-    public CartDTO(CartItem item) {
-        this.userId = item.getProductId();
-        this.productId = item.getProductId();
-        this.quantity = item.getQuantity();
-    }
-
-
 
     public Integer getUserId() {
         return userId;

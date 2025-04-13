@@ -3,7 +3,7 @@
 
 <html>
 <head>
-    <title>Checkout</title>
+    <title>Checkout | Ma5booz</title>
 </head>
 <body>
     <%@ include file="header.jsp"%>
@@ -139,7 +139,7 @@
                                     <span class="heading">Grand Total</span>
                                 </div>
                                 <div class="product-prices">
-                                    <span class="dollar total-price">$${totalPrice}</span>
+                                    <span class="dollar total-price">EGP ${totalPrice}</span>
                                 </div>
                             </div>
 

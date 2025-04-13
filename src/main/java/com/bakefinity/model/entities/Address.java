@@ -1,34 +1,93 @@
 package com.bakefinity.model.entities;
 
-public class Address {
-    private int id;
-    private int userId;
-    private int buildingNo;
+import jakarta.persistence.*;
+
+import java.io.Serializable;
+
+@Entity
+@Table(name = "address")
+public class Address implements Serializable {
+    private Integer id;
+    private User user;
+    private String buildingNo;
     private String street;
     private String city;
     private String country;
 
-    public Address() {}
+    public Address() {
+    }
 
-    public Address(int userId, int buildingNo, String street, String city, String country) {
-        this.userId = userId;
+    public Address(Integer id, User user, String buildingNo, String street, String city, String country) {
+        this.id = id;
+        this.user = user;
         this.buildingNo = buildingNo;
         this.street = street;
         this.city = city;
         this.country = country;
     }
 
-    
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-    public int getUserId() { return userId; }
-    public void setUserId(int userId) { this.userId = userId; }
-    public int getBuildingNo() { return buildingNo; }
-    public void setBuildingNo(int buildingNo) { this.buildingNo = buildingNo; }
-    public String getStreet() { return street; }
-    public void setStreet(String street) { this.street = street; }
-    public String getCity() { return city; }
-    public void setCity(String city) { this.city = city; }
-    public String getCountry() { return country; }
-    public void setCountry(String country) { this.country = country; }
+    public Address(User user, String buildingNo, String street, String city, String country) {
+        this.user = user;
+        this.buildingNo = buildingNo;
+        this.street = street;
+        this.city = city;
+        this.country = country;
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
+    public Integer getId() {
+        return this.id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId", nullable = false)
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @Column(name = "buildingNo", length = 255)
+    public String getBuildingNo() {
+        return this.buildingNo;
+    }
+
+    public void setBuildingNo(String buildingNo) {
+        this.buildingNo = buildingNo;
+    }
+
+    @Column(name = "street", length = 255)
+    public String getStreet() {
+        return this.street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    @Column(name = "city", length = 255)
+    public String getCity() {
+        return this.city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    @Column(name = "country", length = 255)
+    public String getCountry() {
+        return this.country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
 }

@@ -9,10 +9,12 @@ import com.bakefinity.controller.services.interfaces.OrderService;
 import com.bakefinity.controller.services.interfaces.ProductService;
 import com.bakefinity.controller.services.interfaces.ProfileService;
 import com.bakefinity.model.dtos.CartDTO;
+import com.bakefinity.model.dtos.OrderDTO;
 import com.bakefinity.model.dtos.ProductDTO;
 import com.bakefinity.model.dtos.UserDTO;
 import com.bakefinity.model.entities.Order;
 import com.bakefinity.model.entities.OrderItem;
+import com.bakefinity.model.entities.OrderItemId;
 import com.bakefinity.model.enums.OrderStatus;
 import com.bakefinity.model.enums.PaymentMethod;
 import com.bakefinity.utils.CartPrice;
@@ -103,7 +105,7 @@ public class CheckoutServlet extends HttpServlet {
             resp.sendRedirect("cart");
             return;
         }
-        Order order = new Order(user.getId(), totalCost, PaymentMethod.CREDIT_CARD, LocalDateTime.now(), OrderStatus.SHIPPED);
+        OrderDTO order = new OrderDTO(user.getId(), totalCost, PaymentMethod.CREDIT_CARD, LocalDateTime.now(), OrderStatus.SHIPPED);
         int newOrderId = 0;
         try {
             newOrderId = orderService.create(order);
@@ -158,7 +160,7 @@ public class CheckoutServlet extends HttpServlet {
         // create row in orderItems table
         for(CartDTO cartItem : cart.values()){
             try {
-                orderItemService.create(new OrderItem(newOrderId, cartItem.getProductId(), cartItem.getQuantity()));
+                orderItemService.create(new OrderItem(new OrderItemId(cartItem.getProductId(), newOrderId), cartItem.getQuantity()));
             } catch (SQLException e) {
                 try {
                     orderService.updateStatus(newOrderId, OrderStatus.FAILED);
@@ -177,9 +179,9 @@ public class CheckoutServlet extends HttpServlet {
         for(CartDTO cartItem : cart.values()){
             int productId = cartItem.getProductId();
             ProductDTO curProduct = productService.getProductById(productId);
-            orderDetails.append("Product Name: " + curProduct.getName() + "\nPrice: " + curProduct.getPrice() + "\nQuantity: " + cartItem.getQuantity() + "\n");
+            orderDetails.append("Product Name: " + curProduct.getName() + "\nPrice: EGP " + curProduct.getPrice() + "\nQuantity: " + cartItem.getQuantity() + "\n");
         }
-        orderDetails.append("Total Cost: " + totalCost + " EGP");
+        orderDetails.append("Total Cost: EGP " + totalCost);
         EmailUtil.sendOrderConfirmationEmail(user.getEmail(), user.getName(), orderDetails.toString());
 
         // clear the cart map

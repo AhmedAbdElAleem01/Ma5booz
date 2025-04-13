@@ -6,24 +6,26 @@ import java.util.List;
 import com.bakefinity.model.dtos.ProductDTO;
 import com.bakefinity.model.entities.Product;
 
-public interface ProductRepo extends BaseRepo<Product>{
+public interface ProductRepo extends BaseRepo<ProductDTO>{
     List<ProductDTO> getAllProducts() throws Exception;
-    List<Product> getByCategory(int categoryId) throws Exception;
+    List<ProductDTO> getByCategory(int categoryId) throws Exception;
 
-    List<Product> getTopInStock(int limit) throws Exception;
+    List<ProductDTO> getTopInStock(int limit) throws Exception;
 
-    List<Product> searchByName(String name) throws Exception;
+    List<ProductDTO> searchByName(String name) throws Exception;
 
-    List<Product> getProductsByPage(int offset, int limit) throws Exception;
-    List<Product> getProductsByCategoryPage(int categoryId, int offset, int limit) throws Exception;
+    List<ProductDTO> getProductsByPage(int offset, int limit) throws Exception;
+    List<ProductDTO> getProductsByCategoryPage(int categoryId, int offset, int limit) throws Exception;
 
     int getTotalCount() throws Exception;
     int getTotalCountByCategory(int categoryId) throws Exception;
 
     boolean updateStockQuantity(int productId, int newQuantity) throws SQLException;
-    Product getById(int productId) throws SQLException;
+    ProductDTO getById(int productId) throws SQLException;
 
-    List<Product> getProductsByPriceRange(int offset, int limit, double minPrice, double maxPrice)throws Exception;
-    List<Product> getProductsByCategoryAndPriceRange(int categoryId, double minPrice, double maxPrice, int offset, int limit)throws Exception;
+    //List<Product> getProductsByPriceRange(int offset, int limit, double minPrice, double maxPrice)throws Exception;
+    //List<Product> getProductsByCategoryAndPriceRange(int categoryId, double minPrice, double maxPrice, int offset, int limit)throws Exception;
     int getTotalProductsByPrice(Double minPrice, Double maxPrice, Integer categoryId) throws Exception;
+    List<ProductDTO> getProductsByPriceRange(int offset, int limit, double minPrice, double maxPrice)throws Exception;
+    List<ProductDTO> getProductsByCategoryAndPriceRange(int categoryId, double minPrice, double maxPrice, int offset, int limit)throws Exception;
 }

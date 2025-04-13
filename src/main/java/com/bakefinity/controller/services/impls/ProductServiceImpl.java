@@ -37,10 +37,7 @@ public class ProductServiceImpl implements ProductService {
 
     public List<ProductDTO> getAllProducts() {
         try {
-            return productRepo.getAll()
-                    .stream()
-                    .map(p -> new ProductDTO(p))
-                    .collect(Collectors.toList());
+            return productRepo.getAll();
         } catch (Exception e) {
             throw new RuntimeException("Failed to retrieve products", e);
         }
@@ -48,10 +45,7 @@ public class ProductServiceImpl implements ProductService {
   
     public List<ProductDTO> getProductsByCategory(int categoryId) {
         try {
-            return productRepo.getByCategory(categoryId)
-                    .stream()
-                    .map(p -> new ProductDTO(p))
-                    .collect(Collectors.toList());
+            return productRepo.getByCategory(categoryId);
         } catch (Exception e) {
             throw new RuntimeException("Failed to retrieve products for category ID: " + categoryId, e);
         }
@@ -60,10 +54,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDTO> getProductsByCategoryPage(int categoryId, int page, int pageSize) {
         int offset = (page - 1) * pageSize;
         try {
-            return productRepo.getProductsByCategoryPage(categoryId, offset, pageSize)
-                    .stream()
-                    .map(p -> new ProductDTO(p))
-                    .collect(Collectors.toList());
+            return productRepo.getProductsByCategoryPage(categoryId, offset, pageSize);
         } catch (Exception e) {
             throw new RuntimeException("Failed to retrieve products for category ID: " + categoryId, e);
         }
@@ -80,10 +71,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDTO> getProductsByPage(int page, int pageSize) {
         int offset = (page - 1) * pageSize;
         try {
-            return productRepo.getProductsByPage(offset, pageSize).
-                    stream()
-                    .map(p->new ProductDTO(p))
-                    .collect(Collectors.toList());
+            return productRepo.getProductsByPage(offset, pageSize);
         } catch (Exception e) {
             throw new RuntimeException("Failed to retrieve products by page: " +  e);
         }
@@ -98,10 +86,7 @@ public class ProductServiceImpl implements ProductService {
     }
     public List<ProductDTO> getClassicProducts(int limit) {
         try {
-           return productRepo.getTopInStock(limit)
-                .stream()
-                .map(p -> new ProductDTO(p.getName(), p.getDescription(),  p.getPrice(), p.getImageUrl()))
-                .collect(Collectors.toList());
+           return productRepo.getTopInStock(limit);
         } catch (Exception e) {
             throw new RuntimeException("failed to obtain classic Products"+ e);
         }
@@ -109,10 +94,7 @@ public class ProductServiceImpl implements ProductService {
 
     public List<ProductDTO> searchProductsByName(String name) {
         try {
-           return productRepo.searchByName(name)
-                .stream()
-                .map(p -> new ProductDTO(p))
-                .collect(Collectors.toList());
+           return productRepo.searchByName(name);
         } catch (Exception e) {
             throw new RuntimeException("failed to obtain searched Products"+ e);
         }
@@ -120,7 +102,7 @@ public class ProductServiceImpl implements ProductService {
 
     public ProductDTO getProductById(int id){
         try {
-            ProductDTO product = new ProductDTO(productRepo.get(id));
+            ProductDTO product = productRepo.get(id);
             Category category = categoryRepo.get(product.getCategoryId());
             product.setCategoryName(category.getName());
             return product;
@@ -172,7 +154,7 @@ public class ProductServiceImpl implements ProductService {
                     return false;
                 }
 
-                Product product = new Product(categoryId, name, description, doublePrice, imageName, intQuantity, ingredients);
+                ProductDTO product = new ProductDTO(categoryId, description, doublePrice, imageName, intQuantity, ingredients, name);
                 try {
                     productRepo.add(product);
                     return true;
@@ -238,7 +220,7 @@ public class ProductServiceImpl implements ProductService {
             System.out.println("Database error while retreiving product: " + e.getMessage());
             return false;
         }
-        Product newProduct = new Product(product.getId(), categoryId ,name,description,doublePrice,imageName,intQuantity,ingredients);
+        ProductDTO newProduct = new ProductDTO(product.getId(), name, categoryId, description, doublePrice, imageName, intQuantity, ingredients);
         try {
             productRepo.update(newProduct);
             return true;
@@ -251,10 +233,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDTO> getProductsByCategoryAndPriceRange(int categoryId, double minPrice, double maxPrice, int page, int pageSize) {
         int offset = (page - 1) * pageSize;
         try {
-            return productRepo.getProductsByCategoryAndPriceRange(categoryId, minPrice, maxPrice, offset, pageSize)
-                    .stream()
-                    .map(ProductDTO::new)
-                    .collect(Collectors.toList());
+            return productRepo.getProductsByCategoryAndPriceRange(categoryId, minPrice, maxPrice, offset, pageSize);
         } catch (Exception e) {
             throw new RuntimeException("Failed to retrieve products by category and price range: " + e.getMessage());
         }
@@ -263,10 +242,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDTO> getProductsByPriceRange(double minPrice, double maxPrice, int page, int pageSize) {
         int offset = (page - 1) * pageSize;
         try {
-            return productRepo.getProductsByPriceRange(offset, pageSize, minPrice, maxPrice)
-                    .stream()
-                    .map(ProductDTO::new)
-                    .collect(Collectors.toList());
+            return productRepo.getProductsByPriceRange(offset, pageSize, minPrice, maxPrice);
         } catch (Exception e) {
             throw new RuntimeException("Failed to retrieve products by price range: " + e.getMessage());
         }

@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
-    <title>Product Details| IceDelights</title>
+    <title>Product Details | Ma5booz</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/productDetails.css">
 </head>
 <body>
@@ -52,10 +52,7 @@
                         
                         <c:if test="${not empty product}">
                             <h4>${product.name}</h4>
-                            
                             <span class="price">EGP ${product.price}</span>
-
-
                             <p class="text-size-16">${product.description}</p>
                             <c:choose>
                                 <c:when test="${product.stockQuantity <= 0}">

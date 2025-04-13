@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Thank You</title>
+    <title>Thank You | Ma5booz</title>
 </head>
 <body>
     <%@ include file="header.jsp"%>

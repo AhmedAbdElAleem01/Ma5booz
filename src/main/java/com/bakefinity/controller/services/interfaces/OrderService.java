@@ -8,7 +8,7 @@ import com.bakefinity.model.entities.Order;
 import com.bakefinity.model.enums.OrderStatus;
 
 public interface OrderService {
-    int create(Order order) throws SQLException;
+    int create(OrderDTO order) throws SQLException;
     boolean updateStatus(int orderId, OrderStatus orderStatus) throws SQLException;
     List<OrderDTO> getAllOrdersByCustomerId(int customerId);
     List<OrderItemDTO> getOrderItemByOrderId(int orderId);

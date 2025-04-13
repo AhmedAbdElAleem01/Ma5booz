@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>My Profile | IceDelights</title>
+    <title>My Profile | Ma5booz </title>
 </head>
 <body>
     <%@ include file="header.jsp"%>

@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Sign up</title>
+    <title>Sign up | Ma5booz</title>
 </head>
 <body>
     <%@ include file="header.jsp"%>
@@ -164,28 +164,28 @@
                                     <label for="category1">Cakes</label>
                                 </div>
                                 <div class="form-group float-left dates checkbox">
-                                    <input type="checkbox" id="category2" name="interests" value="Ice Cream"
-                                         <% if (selectedInterests != null && java.util.Arrays.asList(selectedInterests).contains("Ice Cream")) { %>
+                                    <input type="checkbox" id="category2" name="interests" value="Cupcakes"
+                                         <% if (selectedInterests != null && java.util.Arrays.asList(selectedInterests).contains("Cupcakes")) { %>
                                             checked
                                          <% } %>
                                     >
-                                    <label for="category2">Ice Cream</label>
+                                    <label for="category2">Cupcakes</label>
                                 </div>
                                 <div class="form-group float-left dates checkbox">
-                                    <input type="checkbox" id="category3" name="interests" value="Seasonal Flavors"
-                                         <% if (selectedInterests != null && java.util.Arrays.asList(selectedInterests).contains("Seasonal Flavors")) { %>
+                                    <input type="checkbox" id="category3" name="interests" value="Donuts"
+                                         <% if (selectedInterests != null && java.util.Arrays.asList(selectedInterests).contains("Donuts")) { %>
                                             checked
                                          <% } %>
                                     >
-                                    <label for="category3">Seasonal Flavors</label>
+                                    <label for="category3">Donuts</label>
                                 </div>
                                 <div class="form-group float-left dates checkbox">
-                                    <input type="checkbox" id="category4" name="interests" value="Cupcakes"
-                                        <% if (selectedInterests != null && java.util.Arrays.asList(selectedInterests).contains("Cupcakes")) { %>
+                                    <input type="checkbox" id="category4" name="interests" value="Bakery"
+                                        <% if (selectedInterests != null && java.util.Arrays.asList(selectedInterests).contains("Bakery")) { %>
                                             checked
                                         <% } %>
                                     >
-                                    <label for="category4">Cupcakes</label>
+                                    <label for="category4">Bakery</label>
                                 </div>
                             </div>
                             <button data-aos="fade-up" type="submit" id="submit" class="submit_now text-decoration-none">Sign up</button>

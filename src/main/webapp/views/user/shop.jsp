@@ -1,9 +1,9 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <title>Shop | IceDelights</title>
+    <title>Shop | Ma5booz</title>
     <script>
-        window.contextPath = "${pageContext.request.contextPath}";
+        var windowPath= "${pageContext.request.contextPath}";
     </script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/shop-style.css">
 
@@ -42,7 +42,7 @@
                         <div class="widget widget-newsletter" data-aos="fade-up">
                             <form id="widget-search-form-sidebar" class="form-inline" action="${pageContext.request.contextPath}/shop" method="get">
                                 <div class="input-group">
-                                    <input type="text" aria-required="true" id="query" name="q" oninput="getSearchResultAsync(`${pageContext.request.contextPath}`)" 
+                                    <input type="text" aria-required="true" id="query" name="q" oninput="getSearchResultAsync(`${pageContext.request.contextPath}`)"
                                         class="form-control widget-search-form" placeholder="Search">
                                     <div class="input-group-append">
                                         <span class="input-group-btn">
@@ -87,7 +87,7 @@
                 <div class="col-lg-9">
                     <div class="row default-sorting-con">
                         <div class="col-12">
-                            
+
                         </div>
                     </div>
                     <div class="d-flex justify-content-center mt-4 mb-4">
@@ -96,7 +96,7 @@
                                 <li class="page-item">
                                     <a href="#" class="page-link" onclick="fetchProductsPerPage(event, `${i}`)">${i}</a>
                                 </li>
-                                
+
                             </c:forEach>
                         </ul>
                     </div>
@@ -130,13 +130,13 @@
                                 </div>
                             </div>
                         </c:forEach>
-                        
+
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://c...content-available-to-author-only...y.com/jquery-3.6.4.min.js"></script>
     <script src="${pageContext.request.contextPath}/static/js/shop.js"></script>
     <script>
 

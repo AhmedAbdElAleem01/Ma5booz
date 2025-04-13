@@ -1,7 +1,21 @@
+let pageRefreshIntervalID = null;
+let currentPage = 1;
 var currentCatID = 0;
 
+function startPageAutoRefresh(page , cat) {
+    // Clear previous interval
+    if (pageRefreshIntervalID !== null) {
+        clearInterval(pageRefreshIntervalID);
+    }
+    currentPage = page;
+    if (cat !== undefined) currentCatID = cat;
+    console.log("Auto-refreshing page:", currentPage, "category:", currentCatID);
+    pageRefreshIntervalID = setInterval(() => {
+        fetchProductsPerPage({ preventDefault: () => {} }, currentPage, currentCatID);
+    }, 2000); // refresh every 2 seconds
+}
 
-function fetchProducts(e, path, catID) {
+function fetchProducts(e,path, catID) {
     e.preventDefault();
     markCategory(e);
     if(!catID) catID = 0;
@@ -30,7 +44,7 @@ function getSearchResultAsync(path) {
     let query = document.getElementById("query").value;
 
     currentCatID = 0;
-    
+
     request.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
             let response = JSON.parse(this.responseText);
@@ -51,7 +65,7 @@ function renderProducts(response, path) {
     const contextPath = path;
 
     console.log("Rendering products:", products);
-    
+
     // Build HTML for each product
     const productsHTML = products.map(product => {
         return `
@@ -60,7 +74,7 @@ function renderProducts(response, path) {
                     <a href="${contextPath}/product_details?productID=${product.id}">
                         <div class="classic_image_box box6">
                             <figure class="mb-0">
-                                <img src="${contextPath}/static/img/${product.imageUrl}" alt="${product.name}" class="img-fluid" loading="lazy">
+                                <img src="${contextPath}/product-image/${product.imageUrl}" alt="${product.name}" class="img-fluid" loading="lazy">
                             </figure>
                         </div>
                     </a>
@@ -81,14 +95,14 @@ function renderProducts(response, path) {
             </div>
         `;
     }).join('');
-    
+
     container.innerHTML = productsHTML;
 }
 
-
 function fetchProductsPerPage(event, page, cat) {
-    event.preventDefault();
-
+    if (event && typeof event.preventDefault === "function") {
+        event.preventDefault();
+    }
     if(cat !== undefined) currentCatID = cat;
     $.ajax({
         url: "shop",
@@ -97,9 +111,11 @@ function fetchProductsPerPage(event, page, cat) {
         dataType: "json",
         headers: { "X-Requested-With": "XMLHttpRequest" },
         success: function(response) {
-            renderProducts(response, window.contextPath);
+            renderProducts(response, windowPath);
             updatePagination(response.currentPage, response.totalPages);
             console.log("Pagination response:", response);
+
+            startPageAutoRefresh(page, currentCatID);
         },
         error: function(xhr, status, error) {
             console.error("Error fetching products:", error);

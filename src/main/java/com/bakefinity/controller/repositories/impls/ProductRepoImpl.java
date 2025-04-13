@@ -12,7 +12,7 @@ import com.bakefinity.utils.ConnectionManager;
 public class ProductRepoImpl implements ProductRepo {
 
     @Override
-    public Product get(int productId) throws Exception {
+    public ProductDTO get(int productId) throws Exception {
         try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement("SELECT * FROM product WHERE id=?")) {
             
@@ -26,11 +26,11 @@ public class ProductRepoImpl implements ProductRepo {
         }
     }
 
-    private Product extractProduct(ResultSet rs) throws SQLException {
-        return new Product(
+    private ProductDTO extractProduct(ResultSet rs) throws SQLException {
+        return new ProductDTO(
             rs.getInt("id"),
-            rs.getInt("categoryId"),
             rs.getString("name"),
+            rs.getInt("categoryId"),
             rs.getString("description"),
             rs.getDouble("price"),
             rs.getString("imageUrl"),
@@ -40,8 +40,8 @@ public class ProductRepoImpl implements ProductRepo {
     }
 
     @Override
-    public List<Product> getAll() throws Exception {
-        List<Product> products = new ArrayList<>();
+    public List<ProductDTO> getAll() throws Exception {
+        List<ProductDTO> products = new ArrayList<>();
         
         try (Connection conn = ConnectionManager.getConnection();
              Statement stmt = conn.createStatement();
@@ -83,7 +83,7 @@ public class ProductRepoImpl implements ProductRepo {
         return products;
     }
     @Override
-    public void add(Product product) throws Exception {
+    public void add(ProductDTO product) throws Exception {
         try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(
                  "INSERT INTO product (categoryId, name, description, price, " +
@@ -107,7 +107,7 @@ public class ProductRepoImpl implements ProductRepo {
     }
 
     @Override
-    public void update(Product product) throws Exception {
+    public void update(ProductDTO product) throws Exception {
         try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(
                  "UPDATE product SET categoryId=?, name=?, description=?, price=?, " +
@@ -137,8 +137,8 @@ public class ProductRepoImpl implements ProductRepo {
     }
 
     @Override
-    public List<Product> getByCategory(int categoryId) throws Exception {
-        List<Product> products = new ArrayList<>();
+    public List<ProductDTO> getByCategory(int categoryId) throws Exception {
+        List<ProductDTO> products = new ArrayList<>();
         
         try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement("SELECT * FROM product WHERE categoryId=?")) {
@@ -154,8 +154,8 @@ public class ProductRepoImpl implements ProductRepo {
     }
 
     @Override
-    public List<Product> getTopInStock(int limit) throws Exception {
-        List<Product> products = new ArrayList<>();
+    public List<ProductDTO> getTopInStock(int limit) throws Exception {
+        List<ProductDTO> products = new ArrayList<>();
         
         try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement("SELECT * FROM product ORDER BY stockQuantity DESC LIMIT ?")) {
@@ -171,8 +171,8 @@ public class ProductRepoImpl implements ProductRepo {
     }
 
     @Override
-    public List<Product> searchByName(String name) throws Exception {
-        List<Product> products = new ArrayList<>();
+    public List<ProductDTO> searchByName(String name) throws Exception {
+        List<ProductDTO> products = new ArrayList<>();
     
         try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement("SELECT * FROM product WHERE LOWER(name) LIKE LOWER(?)")) {
@@ -188,9 +188,9 @@ public class ProductRepoImpl implements ProductRepo {
         return products;
     }
 
-    public List<Product> getProductsByCategoryPage(int categoryId, int offset, int limit) {
+    public List<ProductDTO> getProductsByCategoryPage(int categoryId, int offset, int limit) {
         String sql = "SELECT * FROM product WHERE categoryId = ? LIMIT ? OFFSET ?";
-        List<Product> products = new ArrayList<>();
+        List<ProductDTO> products = new ArrayList<>();
 
         try (Connection conn = ConnectionManager.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -224,9 +224,9 @@ public class ProductRepoImpl implements ProductRepo {
     }
 
     @Override
-    public List<Product> getProductsByPage(int offset, int limit) {
+    public List<ProductDTO> getProductsByPage(int offset, int limit) {
         String sql = "SELECT * FROM product LIMIT ? OFFSET ?";
-        List<Product> products = new ArrayList<>();
+        List<ProductDTO> products = new ArrayList<>();
     
         try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -276,14 +276,14 @@ public class ProductRepoImpl implements ProductRepo {
     }
 
     @Override
-    public Product getById(int productId) throws SQLException{
+    public ProductDTO getById(int productId) throws SQLException{
         String query = "SELECT * FROM Product WHERE id = ?";
         try(Connection connection = ConnectionManager.getConnection();) {
             try(PreparedStatement statement = connection.prepareStatement(query);) {
                 statement.setInt(1, productId);
                 try(ResultSet resultSet = statement.executeQuery();) {
                     if (resultSet.next()) {
-                        return new Product(resultSet.getInt(1), resultSet.getInt(2), resultSet.getString(3), resultSet.getString(4), resultSet.getDouble(5), resultSet.getString(6), resultSet.getInt(7), resultSet.getString(8));
+                        return new ProductDTO(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getInt("categoryId"), resultSet.getString("description"), resultSet.getDouble("price"), resultSet.getString("imageUrl"), resultSet.getInt("stockQuantity"), resultSet.getString("ingredients"));
                     }
                     return null;
                 }
@@ -292,9 +292,9 @@ public class ProductRepoImpl implements ProductRepo {
     }
 
 
-    public List<Product> getProductsByCategoryAndPriceRange(int categoryId, double minPrice, double maxPrice, int offset, int limit) {
+    public List<ProductDTO> getProductsByCategoryAndPriceRange(int categoryId, double minPrice, double maxPrice, int offset, int limit) {
         String sql = "SELECT * FROM product WHERE categoryId = ? AND price BETWEEN ? AND ? ORDER BY price ASC LIMIT ? OFFSET ?";
-        List<Product> products = new ArrayList<>();
+        List<ProductDTO> products = new ArrayList<>();
     
         try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -318,9 +318,9 @@ public class ProductRepoImpl implements ProductRepo {
     }
     
 
-    public List<Product> getProductsByPriceRange(int offset, int limit, double minPrice, double maxPrice) {
+    public List<ProductDTO> getProductsByPriceRange(int offset, int limit, double minPrice, double maxPrice) {
         String sql = "SELECT * FROM product WHERE price BETWEEN ? AND ? ORDER BY price ASC LIMIT ? OFFSET ?";
-        List<Product> products = new ArrayList<>();
+        List<ProductDTO> products = new ArrayList<>();
     
         try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

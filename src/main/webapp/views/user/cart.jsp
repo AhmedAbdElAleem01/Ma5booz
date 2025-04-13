@@ -3,7 +3,7 @@
 
 <html>
 <head>
-    <title>Shopping Cart | IceDelights</title>
+    <title>Shopping Cart | Ma5booz</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/cart.css">
 </head>
 <body>
@@ -18,7 +18,6 @@
             session.removeAttribute("error"); // clean up
         }
     %>
-
     <div class="sub_banner_outer position-relative">
         <%@ include file="navbar.jsp"%>
         <!-- Sub Banner -->
@@ -83,7 +82,7 @@
                                             </div>
 
                                             <div class="product-line-price">
-                                                <span id="totalPrice-${cartItem.key}" data-price="${product.price}">
+                                                <span id="totalPrice-${cartItem.key}" data-price="EGP ${product.price}">
                                                     <fmt:formatNumber value="${cartItem.value.quantity * product.price}" type="number" maxFractionDigits="2"/>
                                                 </span>
                                             </div>
@@ -112,15 +111,21 @@
                             <div class="detail">
                                 <span class="heading">Product Details:</span>
                                 <ul class="list-unstyled mb-0">
-                                    <li><span>Sub Total</span><span class="dollar" id="totalOrderPrice">$${totalPrice}</span></li>
+                                    <li><span>Sub Total</span><span class="dollar" id="totalOrderPrice">EGP ${totalPrice}</span></li>
                                 </ul>
                                 <div class="all-total">
                                     <div class="total">
                                         <span class="text" >Grand Total</span><span class="dollar" id="grandTotal">
-                                            $<fmt:formatNumber value="${totalPrice}" type="number" maxFractionDigits="2"/>
+                                            EGP <fmt:formatNumber value="${totalPrice}" type="number" maxFractionDigits="2"/>
                                         </span>
                                     </div>
-                                    <a href="${pageContext.request.contextPath}/order-summary" class="text-decoration-none all_button">Proceed to checkout<i class="fa-solid fa-arrow-right"></i></a>
+
+                                  <a href="${not empty sessionScope.cart ? pageContext.request.contextPath.concat('/order-summary') : '#'}"
+                                     class="text-decoration-none all_button ${empty sessionScope.cart ? 'disabled' : ''}"
+                                     ${empty sessionScope.cart ? 'onclick="return false;" style="pointer-events: none;"' : ''}>
+                                     Proceed to checkout <i class="fa-solid fa-arrow-right"></i>
+                                  </a>
+
                                 </div>
                                 <div class="note">
                                     <i class="fa-solid fa-shield-halved"></i>

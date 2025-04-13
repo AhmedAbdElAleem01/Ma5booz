@@ -34,7 +34,7 @@
                                 <div class="text">
                                     <span>Address:</span>
                                     <a href="https://www.google.com/maps/place/121+King+St,+Melbourne+VIC+3000,+Australia/@-37.8172467,144.9532001,17z/data=!3m1!4b1!4m6!3m5!1s0x6ad65d4dd5a05d97:0x3e64f855a564844d!8m2!3d-37.817251!4d144.955775!16s%2Fg%2F11g0g8c54h?entry=ttu"
-                                        class="text-decoration-none address mb-0">Smart village ITI
+                                        class="text-decoration-none address mb-0">ITI, Smart Village-Egypt
                                     </a>
                                 </div>
                             </li>
@@ -53,14 +53,14 @@
                         <div class="phone_wrapper">
                             <i class="fa-solid fa-phone phone"></i>
                             <div class="phone_content">
-                                <a href="tel:+568925896325" class="text-decoration-none d-block">+5689 2589 6325</a>
+                                <a href="tel:+568925896325" class="text-decoration-none d-block">17002</a>
                                 <span>Got Questions? Call us available 24/7</span>
                             </div>
                         </div>
                         <ul class="list-unstyled mb-0 social-icons">
-                            <li><a href="https://www.facebook.com/"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a></li>
-                            <li><a href="https://twitter.com/"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a></li>
-                            <li><a href="https://www.instagram.com/"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a></li>
+                            <li><a href="https://w...content-available-to-author-only...k.com/"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a></li>
+                            <li><a href="https://t...content-available-to-author-only...r.com/"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a></li>
+                            <li><a href="https://w...content-available-to-author-only...m.com/"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a></li>
                         </ul>
                     </div>
                 </div>

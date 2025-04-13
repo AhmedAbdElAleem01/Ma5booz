@@ -3,7 +3,7 @@
 
 <html>
 <head>
-    <title>Home | IceDelights</title>
+    <title>Home | Ma5booz</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/shop-style.css">
 </head>
 <body>

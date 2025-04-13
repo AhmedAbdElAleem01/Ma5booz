@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -71,7 +72,7 @@ public class RegisterServlet extends HttpServlet {
         String buildingNo = req.getParameter("BNo");
         try {
             if(!InputValidation.validateName(fname) || !InputValidation.validateName(lname) || !InputValidation.validatePhone(phoneNumber) || (job != null && !job.trim().isEmpty() && !InputValidation.validateName(job)) || !InputValidation.validatePassword(password) || (city != null && !city.trim().isEmpty() && !InputValidation.validateCityStreet(city)) || (street != null && !street.trim().isEmpty() && !InputValidation.validateCityStreet(street)) || !UserRegisterServiceImpl.getInstance().isUsernameAvailable(username) || !UserRegisterServiceImpl.getInstance().isEmailUnique(email)){
-                req.setAttribute("error", "Oops.. Some data is not valid, please register with valid data and try again.");
+                req.setAttribute("error", "Oops.. Some data are not valid, please register with valid data and try again.");
                 try {
                     forwardWithData(req, resp);
                 } catch (SQLException e) {
@@ -83,6 +84,7 @@ public class RegisterServlet extends HttpServlet {
             throw new RuntimeException(e);
         }
         UserDTO user = new UserDTO(fname + " " + lname, username, phoneNumber, email, password, Double.parseDouble(creditLimit), birthDate, job, LocalDateTime.now());
+
         int userId = 0;
         try {
             userId = UserRegisterServiceImpl.getInstance().createUser(user);

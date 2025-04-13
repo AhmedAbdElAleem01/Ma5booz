@@ -1,66 +1,93 @@
 package com.bakefinity.model.entities;
 
-public class Category {
-    private int id;
+
+import jakarta.persistence.*;
+
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "category")
+public class Category implements Serializable {
+    private Integer id;
     private String name;
     private String description;
     private String imageUrl;
+    private Set<User> users = new HashSet<User>(0);
+    private Set<Product> products = new HashSet<Product>(0);
 
     public Category() {
     }
 
-    public Category(String name, String description, String imageUrl) {
-        this.name = name;
-        this.description = description;
-        this.imageUrl = imageUrl;
-    }
-
-    public Category(int id, String name, String description, String imageUrl) {
+    public Category(Integer id, String name, String description, String imageUrl) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.imageUrl = imageUrl;
     }
 
-    public int getId() {
-        return id;
+    public Category(String name, String description, String imageUrl, Set<User> users, Set<Product> products) {
+        this.name = name;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.users = users;
+        this.products = products;
     }
 
-    public void setId(int id) {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
+    public Integer getId() {
+        return this.id;
+    }
+
+    public void setId(Integer id) {
         this.id = id;
     }
 
+    @Column(name = "name", nullable = false, length = 255)
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    @Column(name = "description", length = 255)
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
+    @Column(name = "imageUrl", nullable = false, length = 255)
     public String getImageUrl() {
-        return imageUrl;
+        return this.imageUrl;
     }
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
-    @Override
-    public String toString() {
-        return "Category{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", imageUrl='" + imageUrl + '\'' +
-                '}';
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
+    public Set<User> getUsers() {
+        return this.users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
+    public Set<Product> getProducts() {
+        return this.products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
     }
 }

@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Error Page | IceDelights</title>
+    <title>Error Page | Ma5booz</title>
 </head>
 <body>
     <%@ include file="header.jsp"%>
