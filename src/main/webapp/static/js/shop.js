@@ -17,6 +17,7 @@ function startPageAutoRefresh(page , cat) {
 
 function fetchProducts(e,path, catID) {
     e.preventDefault();
+    markCategory(e);
     if(!catID) catID = 0;
     currentCatID = catID;
 
@@ -201,3 +202,15 @@ function applyPriceFilter(event, page , cat) {
         }
     });
 }
+
+function markCategory(event) {
+    const categories = document.querySelectorAll('.category-link');
+    categories.forEach(category => {
+        category.classList.remove('selected-category');
+    });
+
+    event.preventDefault();
+    event.currentTarget.classList.add('selected-category');
+    console.log(event.currentTarget);
+}
+

@@ -23,6 +23,9 @@ public interface ProductRepo extends BaseRepo<ProductDTO>{
     boolean updateStockQuantity(int productId, int newQuantity) throws SQLException;
     ProductDTO getById(int productId) throws SQLException;
 
+    //List<Product> getProductsByPriceRange(int offset, int limit, double minPrice, double maxPrice)throws Exception;
+    //List<Product> getProductsByCategoryAndPriceRange(int categoryId, double minPrice, double maxPrice, int offset, int limit)throws Exception;
+    int getTotalProductsByPrice(Double minPrice, Double maxPrice, Integer categoryId) throws Exception;
     List<ProductDTO> getProductsByPriceRange(int offset, int limit, double minPrice, double maxPrice)throws Exception;
     List<ProductDTO> getProductsByCategoryAndPriceRange(int categoryId, double minPrice, double maxPrice, int offset, int limit)throws Exception;
 }

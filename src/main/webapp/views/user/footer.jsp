@@ -2,11 +2,14 @@
 
 <%-- Footer Section --%>
 <section class="footer-con position-relative">
+    <figure class="footer-image mb-0">
+        <img class="img-fluid" src="${pageContext.request.contextPath}/static/img/left4.png" alt="image">
+    </figure>
     <div class="container">
         <div class="middle_portion">
             <div class="row">
                 <div class="col-lg-2 col-md-12 col-sm-6 col-12 order-md-1 order-sm-1 order-1">
-                    <a href="${pageContext.request.contextPath}/views/user/home.jsp">
+                    <a href="${pageContext.request.contextPath}/home">
                         <figure class="footer-logo mb-0">
                             <img class="img-fluid" src="${pageContext.request.contextPath}/static/img/testlogo.png" alt="image">
                         </figure>
@@ -17,8 +20,8 @@
                         <h5 class="heading">Navigation</h5>
                         <div class="pages">
                             <ul class="list-unstyled mb-0 list1">
-                                <li><i class="fas fa-circle"></i><a href="${pageContext.request.contextPath}/views/user/home.jsp">Home</a></li>
-                                <li><i class="fas fa-circle"></i><a href="${pageContext.request.contextPath}/views/user/shop.jsp">Shop</a></li>
+                                <li><i class="fas fa-circle"></i><a href="${pageContext.request.contextPath}/home">Home</a></li>
+                                <li><i class="fas fa-circle"></i><a href="${pageContext.request.contextPath}/shop">Shop</a></li>
                             </ul>
                         </div>
                     </div>
@@ -39,7 +42,7 @@
                                 <i class="fas fa-envelope-open-text"></i>
                                 <div class="text">
                                     <span>Email:</span>
-                                    <a href="mailto:info@icedelights.com" class="text-decoration-none">ma5boozbakeryshop@gmail.com</a>
+                                    <a href="mailto:info@icedelights.com" class="text-decoration-none">Ma5boozBakery@gmail.com</a>
                                 </div>
                             </li>
                         </ul>

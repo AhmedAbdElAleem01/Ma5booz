@@ -96,11 +96,11 @@
     padding-left: 18px;
 }
 .cart-con .shopping-cart-info .product-content .product-title{
-    font-size: 16px;
+    font-size: 13px;
     line-height: 16px;
     font-weight: 700;
     display: block;
-    margin-bottom: 16px;
+    /* margin-bottom: px; */
     color: var(--e-global-color-secondary);
 }
 .cart-con .shopping-cart-info .product-content .text{
@@ -1140,7 +1140,7 @@
     position: absolute;
     text-align: center;
     border-radius: 10px;
-    background-color: #fffaf4;
+    /* background-color: #fffaf4; */
 }
 .types-con .product-tab .tab-pane figure img {
     width: 100%;

@@ -45,7 +45,30 @@
   .price-filter button:hover {
     background-color: #ff1493; /* Darker pink on hover */
   }
-  
+
+ .category-link {
+    color: #ff69b4;
+    font-size: 16px;
+    text-decoration: none;
+    padding: 8px 12px;
+    display: block;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.category-link:hover {
+    background-color: #ff69b4;
+    color: #fff;
+}
+
+.selected-category {
+    background-color: #ff69b4;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+
   /* .shop-products-con {
     display: flex;
     flex-wrap: wrap;

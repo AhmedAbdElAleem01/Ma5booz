@@ -21,7 +21,7 @@
     <div class="sub_banner_outer position-relative">
         <%@ include file="navbar.jsp"%>
         <!-- Sub Banner -->
-        <section class="sub_banner position-relative">
+        <!-- <section class="sub_banner position-relative">
             <div class="container position-relative">
                 <div class="row">
                     <div class="col-12">
@@ -38,7 +38,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> -->
         <!-- Cart -->
         <div class="cart-con position-relative">
             <div class="container">
@@ -69,12 +69,10 @@
                                                 </div>
                                                 <div class="product-content">
                                                     <span class="product-title">${product.name}</span>
-                                                    <span class="product-color text"> <span>pistachio</span></span>
-                                                    <span class="product-size text mb-0">Size: <span>L</span></span>
                                                 </div>
                                             </div>
 
-                                            <div class="product-price"><span>EGP ${product.price}</span></div>
+                                            <div class="product-price"><span>${product.price} EGP</span></div>
                                             <div class="product-quantity d-flex">
                                                 <div class="product-qty-details">
                                                     <button id="decrease-${cartItem.key}" class="value-button decrease-button" onclick="decreaseValue('${cartItem.key}')" ${cartItem.value.quantity == 1 ? 'disabled' : ''}>-</button>
