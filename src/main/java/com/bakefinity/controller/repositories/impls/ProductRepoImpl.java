@@ -341,6 +341,32 @@ public class ProductRepoImpl implements ProductRepo {
     
         return products;
     }
+
+    public int getTotalProductsByPrice(Double minPrice, Double maxPrice, Integer categoryId) {
+        String sql = "SELECT COUNT(*) FROM product WHERE price BETWEEN ? AND ?";
+        if (categoryId != null) {
+            sql += " AND categoryId = ?";
+        }
+    
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    
+            stmt.setDouble(1, minPrice);
+            stmt.setDouble(2, maxPrice);
+            if (categoryId != null) {
+                stmt.setInt(3, categoryId);
+            }
+    
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    
+        return 0;
+    }
+    
     
     
     

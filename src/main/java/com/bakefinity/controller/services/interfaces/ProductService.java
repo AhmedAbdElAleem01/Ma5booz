@@ -29,5 +29,6 @@ public interface ProductService {
     boolean updateStockQuantity(int productId, int newQuantity) throws SQLException;
     List<ProductDTO> getProductsByCategoryAndPriceRange(int categoryId, double minPrice, double maxPrice, int page, int pageSize);
     List<ProductDTO> getProductsByPriceRange(double minPrice, double maxPrice, int page, int pageSize);
+    int getTotalProductsByPrice(double minPrice, double maxPrice, Integer categoryId);
 
 }

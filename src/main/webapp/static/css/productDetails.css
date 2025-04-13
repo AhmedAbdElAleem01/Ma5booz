@@ -1,46 +1,164 @@
-.sauce-picker {
-    font-family: sans-serif;
- 
-    max-width: 400px;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+.types_content {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #fdf0ff, #f3e5f5);
+    padding: 30px;
+    border-radius: 18px;
+    box-shadow: 0 8px 20px rgba(155, 89, 182, 0.15);
 }
 
-.sauce-options {
-    display: flex;
-    gap: 15px;
-    margin-top: 10px;
+.types_content h4 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #9c27b0;
+    margin-bottom: 8px;
+}
+
+.types_content .price {
+    font-size: 20px;
+    color: #e91e63;
+    font-weight: 500;
+}
+
+/* Rating */
+.rating i {
+    color: #ffd54f;
+}
+.rating span {
+    font-size: 14px;
+    font-weight: 500;
+    color: #6a1b9a;
+}
+
+/* Stock styles */
+.types_content p[style*="color: green"],
+.types_content p[style*="color: red"] {
+    font-size: 14px;
+    font-weight: 500;
+    padding: 6px 10px;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+.types_content p[style*="color: green"] {
+    color: #4caf50 !important;
+    background: #e8f5e9;
+}
+.types_content p[style*="color: red"] {
+    color: #e53935 !important;
+    background: #ffebee;
+}
+
+/* Sauce Card */
+.sauce-picker {
+    background: #fbeaff;
+    padding: 18px 22px;
+    border-radius: 14px;
+    box-shadow: 0 5px 12px rgba(186, 104, 200, 0.1);
+    margin-top: 25px;
+}
+
+.sauce-picker h6 {
+    font-size: 18px;
+    color: #ab47bc;
+    font-weight: 500;
+    margin-bottom: 12px;
 }
 
 .sauce-option {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-}
-
-input[type="checkbox"] {
-    display: none; /* Hide default checkbox */
+    background: #fff;
+    padding: 8px 14px;
+    border-radius: 12px;
+    border: 1.5px dashed #ce93d8;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6a1b9a;
 }
 
 .colored-checkbox {
     width: 18px;
     height: 18px;
+    border-radius: 5px;
     border: 2px solid #ccc;
-    border-radius: 4px;
+    position: relative;
+}
+
+/* Add to Cart Button */
+.all_button {
+    background: linear-gradient(to right, #ce93d8, #f48fb1);
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(240, 98, 146, 0.2);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.all_button:hover {
+    background: linear-gradient(to right, #ba68c8, #f06292);
+    box-shadow: 0 6px 15px rgba(240, 98, 146, 0.3);
+}
+
+/* Quantity Buttons */
+.quantity-field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.value-button {
+    background: #e1bee7;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 18px;
+    color: #6a1b9a;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.value-button:hover {
+    background: #ce93d8;
+}
+
+.number {
+    font-weight: 600;
+    font-size: 16px;
+    color: #4a148c;
+    min-width: 30px;
+    text-align: center;
+}
+
+/* Make checkbox indicators circular and colored */
+.colored-checkbox {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ccc;
+    border-radius: 50%; /* Circular */
     display: inline-block;
     position: relative;
     transition: all 0.3s;
 }
 
-/* Checked state - color fill */
-.strawberry:checked ~ .colored-checkbox {
+/* Checked colors */
+input.strawberry:checked ~ .colored-checkbox {
     background: #ff6b6b;
     border-color: #ff6b6b;
 }
-.mint:checked ~ .colored-checkbox {
-    background: #6bffb4;
-    border-color: #6bffb4;
+input.mint:checked ~ .colored-checkbox {
+    background: #a5d6a7; /* pistachio green */
+    border-color: #a5d6a7;
 }
-.chocolate:checked ~ .colored-checkbox {
+input.chocolate:checked ~ .colored-checkbox {
     background: #8d5524;
     border-color: #8d5524;
 }
@@ -51,9 +169,9 @@ input[type="checkbox"] {
     position: absolute;
     display: none;
     left: 5px;
-    top: 1px;
+    top: 2px;
     width: 4px;
-    height: 10px;
+    height: 8px;
     border: solid white;
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
@@ -63,7 +181,13 @@ input:checked ~ .colored-checkbox:after {
     display: block;
 }
 
-#message {
-    transition: opacity 0.5s ease, transform 0.5s ease;
-    transform: translateY(-10px);
+input[type="checkbox"] {
+    display: none;
 }
+
+body {
+    background: linear-gradient(135deg, #fce4ec, #f3e5f5, #e1bee7);
+    background-attachment: fixed;
+    font-family: 'Poppins', sans-serif;
+}
+

@@ -158,20 +158,23 @@ public class ShopController extends HttpServlet {
             if (catID > 0) {
                 if(minPrice != null && maxPrice != null){
                     products = productService.getProductsByCategoryAndPriceRange(catID, minPrice, maxPrice, page, pageSize);
+                    totalProducts = productService.getTotalProductsByPrice(minPrice, maxPrice, catID);
+
                 } else {
                     products = productService.getProductsByCategoryPage(catID, page, pageSize);
+                    totalProducts = productService.getTotalProductsByCategory(catID);
                 }
-            
-                totalProducts = productService.getTotalProductsByCategory(catID);
+                
             } 
             else {
                 if(minPrice != null && maxPrice != null){
                     products = productService.getProductsByPriceRange(minPrice, maxPrice, page, pageSize);
+                    totalProducts = productService.getTotalProductsByPrice(minPrice, maxPrice, null);
                 } else {
                     products = productService.getProductsByPage(page, pageSize);
+                    totalProducts = productService.getTotalProductCount();
                 }
-
-                totalProducts = productService.getTotalProductCount();
+                
             }
 
             int totalPages = (int) Math.ceil((double) totalProducts / pageSize);

@@ -3,15 +3,15 @@
 <%-- Footer Section --%>
 <section class="footer-con position-relative">
     <figure class="footer-image mb-0">
-        <img class="img-fluid" src="${pageContext.request.contextPath}/static/img/footer-image.png" alt="image">
+        <img class="img-fluid" src="${pageContext.request.contextPath}/static/img/left4.png" alt="image">
     </figure>
     <div class="container">
         <div class="middle_portion">
             <div class="row">
                 <div class="col-lg-2 col-md-12 col-sm-6 col-12 order-md-1 order-sm-1 order-1">
-                    <a href="${pageContext.request.contextPath}/views/user/home.jsp">
+                    <a href="${pageContext.request.contextPath}/home">
                         <figure class="footer-logo mb-0">
-                            <img class="img-fluid" src="${pageContext.request.contextPath}/static/img/footer-logo.png" alt="image">
+                            <img class="img-fluid" src="${pageContext.request.contextPath}/static/img/testlogo.png" alt="image">
                         </figure>
                     </a>
                 </div>
@@ -20,8 +20,8 @@
                         <h5 class="heading">Navigation</h5>
                         <div class="pages">
                             <ul class="list-unstyled mb-0 list1">
-                                <li><i class="fas fa-circle"></i><a href="${pageContext.request.contextPath}/views/user/home.jsp">Home</a></li>
-                                <li><i class="fas fa-circle"></i><a href="${pageContext.request.contextPath}/views/user/shop.jsp">Shop</a></li>
+                                <li><i class="fas fa-circle"></i><a href="${pageContext.request.contextPath}/home">Home</a></li>
+                                <li><i class="fas fa-circle"></i><a href="${pageContext.request.contextPath}/shop">Shop</a></li>
                             </ul>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
                                 <div class="text">
                                     <span>Address:</span>
                                     <a href="https://www.google.com/maps/place/121+King+St,+Melbourne+VIC+3000,+Australia/@-37.8172467,144.9532001,17z/data=!3m1!4b1!4m6!3m5!1s0x6ad65d4dd5a05d97:0x3e64f855a564844d!8m2!3d-37.817251!4d144.955775!16s%2Fg%2F11g0g8c54h?entry=ttu"
-                                        class="text-decoration-none address mb-0">121 King Street Melbourne, 3000, Australia
+                                        class="text-decoration-none address mb-0">Smart village ITI
                                     </a>
                                 </div>
                             </li>
@@ -42,7 +42,7 @@
                                 <i class="fas fa-envelope-open-text"></i>
                                 <div class="text">
                                     <span>Email:</span>
-                                    <a href="mailto:info@icedelights.com" class="text-decoration-none">info@icedelights.com</a>
+                                    <a href="mailto:info@icedelights.com" class="text-decoration-none">Ma5boozBakery@gmail.com</a>
                                 </div>
                             </li>
                         </ul>

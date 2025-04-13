@@ -272,6 +272,12 @@ public class ProductServiceImpl implements ProductService {
         }
     }
     
-    
+    public int getTotalProductsByPrice(double minPrice, double maxPrice, Integer categoryId) {
+        try {
+            return productRepo.getTotalProductsByPrice(minPrice, maxPrice, categoryId);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to retrieve products by price range: " + e.getMessage());
+        }
+    }
 
 }

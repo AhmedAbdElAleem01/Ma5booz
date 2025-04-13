@@ -25,4 +25,5 @@ public interface ProductRepo extends BaseRepo<Product>{
 
     List<Product> getProductsByPriceRange(int offset, int limit, double minPrice, double maxPrice)throws Exception;
     List<Product> getProductsByCategoryAndPriceRange(int categoryId, double minPrice, double maxPrice, int offset, int limit)throws Exception;
+    int getTotalProductsByPrice(Double minPrice, Double maxPrice, Integer categoryId) throws Exception;
 }

@@ -9,7 +9,7 @@
     <div class="sub_banner_outer position-relative">
         <%@ include file="navbar.jsp"%>
         <!-- Sub Banner -->
-        <section class="sub_banner position-relative">
+        <!-- <section class="sub_banner position-relative">
             <div class="container position-relative">
                 <div class="row">
                     <div class="col-12">
@@ -30,7 +30,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> -->
     </div>
     <!-- Types -->
     <section class="types-con">
@@ -49,17 +49,13 @@
                 </div>
                 <div class="col-lg-5 col-12">
                     <div class="types_content" data-aos="fade-up">
-                        <div class="rating">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <span>(4.9/5)</span>
-                        </div>
+                        
                         <c:if test="${not empty product}">
                             <h4>${product.name}</h4>
-                            <span class="price">$${product.price}</span>
+                            
+                            <span class="price">EGP ${product.price}</span>
+
+
                             <p class="text-size-16">${product.description}</p>
                             <c:choose>
                                 <c:when test="${product.stockQuantity <= 0}">
@@ -74,41 +70,34 @@
                             </c:choose>
 
                         </c:if>
-                       
+                        <div class="product-extra-info d-flex gap-4 mt-3">
+                            <div class="info-item d-flex align-items-center">
+                                <i class="fa-solid fa-truck-fast me-2 text-primary"> </i>
+                                <span><strong>Shipping: </strong> 30 min </span>
+                            </div>
+                        </div>
                         
                         <div class="sauce-picker">
-                            <h6>Extra Sauce <span style="color: rgb(126, 229, 126); font-size: medium;">+0.50$ each</span></h6>
+                            <h6>Extra Sauce <span style="color: rgb(126, 229, 126); font-size: medium;">+10 EGP each</span></h6>
                             <div class="sauce-options">
-                                <!-- Strawberry -->
-                                <label class="sauce-option">
-                                    <input type="checkbox" name="sauce" class="strawberry">
-                                    <span class="colored-checkbox"></span>
-                                    <span>Strawberry</span>
-                                </label>
                                 
-                                <!-- Mint -->
+                            
                                 <label class="sauce-option">
                                     <input type="checkbox" name="sauce" class="mint">
                                     <span class="colored-checkbox"></span>
                                     <span>Pistachio</span>
                                 </label>
                                 
-                                <!-- Chocolate -->
+                                
                                 <label class="sauce-option">
                                     <input type="checkbox" name="sauce" class="chocolate">
                                     <span class="colored-checkbox"></span>
                                     <span>Chocolate</span>
                                 </label>
+
                             </div>
                         </div>
-                        <div class="sizes" style="margin-top: 20px;">
-                            <span class="heading">Size:</span>
-                            <ul class="list-unstyled mb-0">
-                                <li>L</li>
-                                <li>M</li>
-                                <li>S</li>
-                            </ul>
-                        </div>
+                       
                         <div class="quatity_button_wrapper">
                             <div class="quantity-field">
                                 <button class="value-button decrease-button" onclick="decreaseValue()" title="">-</button>

@@ -7,13 +7,14 @@
     </script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/shop-style.css">
 
+
 </head>
 <body>
     <%@ include file="header.jsp"%>
     <div class="sub_banner_outer position-relative">
         <%@ include file="navbar.jsp"%>
         <!-- Sub Banner -->
-        <section class="sub_banner position-relative">
+        <!-- <section class="sub_banner position-relative">
             <div class="container position-relative">
                 <div class="row">
                     <div class="col-12">
@@ -30,7 +31,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> -->
     </div>
     <!-- Shop -->
     <section class="shop1-con classic-con position-relative">
@@ -72,13 +73,13 @@
                             <div class="widget-title font_weight_600">Categories</div>
                             <ul class="list-unstyled mb-0">
                                 <c:forEach var="cat" items="${categories}">
-                                    <li class="cat-item">
+                                    <div class="cat-item">
                                         <a href="#" onclick="fetchProducts(event, `${pageContext.request.contextPath}`, `${cat.id}`)" class="category-link">${cat.name}</a>
-                                    </li>
+                                    </div>
                                 </c:forEach>
-                                <li class="cat-item">
-                                    <a href="#" onclick="fetchProductsPerPage(event, 1, 0)" class="category-link">all</a>
-                                </li>
+                                <div class="cat-item" id="allCat">
+                                    <a href="#" onclick="markCategory(event); fetchProductsPerPage(event, 1, 0)" class="category-link">all</a>
+                                </div>
                             </ul>
                         </div>
                     </div>
@@ -137,6 +138,9 @@
     </section>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="${pageContext.request.contextPath}/static/js/shop.js"></script>
+    <script>
+
+    </script>
     <!-- Footer -->
     <%@ include file="footer.jsp"%>
 </body>

@@ -320,12 +320,12 @@ html{
 }
 .header .last_list .cart span{
     font-size: 7px;
-    width: 13px;
-    height: 13px;
-    line-height: 13px;
+    width: 16px;
+    height: 15px;
+    line-height: 15px;
     position: absolute;
-    right: -6px;
-    bottom: -4px;
+    right: 2px;
+    bottom: 1px;
     text-align: center;
     border-radius: 100%;
     color: var(--e-global-color-white);
@@ -566,7 +566,7 @@ html{
     min-height: 244px;
     display: flex;
     align-items: center;
-    position: relative;
+    /* position: relative; */
     text-align: center;
     border-radius: 10px;
     background: var(--e-global-color-white);
