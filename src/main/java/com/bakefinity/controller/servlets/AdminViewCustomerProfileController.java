@@ -57,7 +57,7 @@ public class AdminViewCustomerProfileController extends HttpServlet{
                 return;
             }
             AddressDTO addressDTO = customerAddress.get();
-            String address = addressDTO.getCity()+","+addressDTO.getStreet()+","+addressDTO.getBuildingNo();
+            String address = addressDTO.getCity()+","+addressDTO.getStreet()+(addressDTO.getBuildingNo() == -1 ? "" : ", " + addressDTO.getBuildingNo());
     
             req.setAttribute("customer", customer.get());
             req.setAttribute("address", address);

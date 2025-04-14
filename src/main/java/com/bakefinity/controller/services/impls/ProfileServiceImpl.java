@@ -62,7 +62,7 @@ public class ProfileServiceImpl implements ProfileService {
         }
         if(newCreditLimit<=0)
             return Optional.empty();
-        Optional<UserDTO> updatedUser = profileRepo.updateCreditLimit(retrievedUser.get() , newCreditLimit);
+        Optional<UserDTO> updatedUser = profileRepo.updateCreditLimit(user , newCreditLimit);
         if(updatedUser.isPresent()){
             return updatedUser;
         }

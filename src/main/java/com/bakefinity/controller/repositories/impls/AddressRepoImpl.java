@@ -3,61 +3,67 @@ package com.bakefinity.controller.repositories.impls;
 import com.bakefinity.controller.repositories.interfaces.AddressRepo;
 import com.bakefinity.model.dtos.AddressDTO;
 
+import java.awt.geom.QuadCurve2D;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
+import com.bakefinity.model.entities.Address;
+import com.bakefinity.model.entities.User;
 import com.bakefinity.utils.ConnectionManager;
+import com.bakefinity.utils.EntityManagerFactorySingleton;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 
 public class AddressRepoImpl implements AddressRepo {
     @Override
-    public boolean createAddress(AddressDTO address) throws SQLException {
-        if (address == null) {
+    public boolean createAddress(AddressDTO addressDTO) throws SQLException {
+        if (addressDTO == null) {
             System.err.println("Error creating address: Address is null");
             return false;
         }
-        try(Connection connection = ConnectionManager.getConnection();) {
-            String query = "INSERT INTO Address (userId, buildingNo, street, city, country) VALUES (?, ?, ?, ?, ?)";
-            try(PreparedStatement statement = connection.prepareStatement(query);) {
-                statement.setInt(1, address.getUserId());
-                statement.setInt(2, address.getBuildingNo());
-                statement.setString(3, address.getStreet());
-                statement.setString(4, address.getCity());
-                statement.setString(5, address.getCountry());
-                int rowsAffected = statement.executeUpdate();
-                if (rowsAffected <= 0) {
-                    System.err.println("Failed to create address");
-                    return false;
-                } else {
-                    System.out.println("address is created successfully");
-                    return true;
-                }
+        EntityManager em = EntityManagerFactorySingleton.getInstance().createEntityManager();
+        try {
+            em.getTransaction().begin();
+            User user = em.find(User.class, addressDTO.getUserId());
+            if(user == null){
+                System.out.println("there is no user with id = " + addressDTO.getUserId());
+                return false;
             }
+            Address address = new Address(user, addressDTO.getBuildingNo(), addressDTO.getStreet(), addressDTO.getCity(), addressDTO.getCountry());
+            em.persist(address);
+            em.getTransaction().commit();
+            return true;
+        }
+        finally{
+            em.close();
         }
     }
+
     @Override
     public Optional<AddressDTO> findUserAddressById(int id) {
-        String query = "SELECT * FROM address WHERE userId = ?";
-        try (Connection conn = ConnectionManager.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(query)) {
-
-            pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) { 
-                AddressDTO address = new AddressDTO();
-                address.setCity(rs.getString("city"));
-                address.setCountry(rs.getString("country"));
-                address.setStreet(rs.getString("street"));
-                address.setBuildingNo(rs.getInt("buildingNo"));
-
-                return Optional.of(address); 
+        EntityManager em = EntityManagerFactorySingleton.getInstance().createEntityManager();
+        try {
+            em.getTransaction().begin();
+            User user = em.find(User.class, id);
+            if(user == null){
+                System.out.println("there is no user with id = " + id);
+                return Optional.empty();
             }
-        } catch (SQLException e) {
-            System.out.println("DB ERROR: Failed to find user's address: " + e.getMessage());
+            Query query = em.createQuery("from Address a where a.user=:user").setParameter("user", user);
+            List<Address> addresses = query.getResultList();
+            if (!addresses.isEmpty()) {
+                AddressDTO addressDTO = new AddressDTO(addresses.get(0).getUser().getId(), addresses.get(0).getBuildingNo(), addresses.get(0).getStreet(), addresses.get(0).getCity(), addresses.get(0).getCountry());
+                return Optional.of(addressDTO);
+            }
+            em.getTransaction().commit();
+            return Optional.empty();
         }
-        return Optional.empty();
+        finally {
+            em.close();
+        }
     }
 }
