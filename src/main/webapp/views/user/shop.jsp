@@ -2,12 +2,7 @@
 <html>
 <head>
     <title>Shop | Ma5booz</title>
-    <script>
-        var windowPath= "${pageContext.request.contextPath}";
-    </script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/shop-style.css">
-
-
 </head>
 <body>
     <%@ include file="header.jsp"%>
@@ -75,7 +70,7 @@
                             <ul class="list-unstyled mb-0">
                                 <c:forEach var="cat" items="${categories}">
                                     <div class="cat-item">
-                                        <a href="#" onclick="fetchProducts(event, `${pageContext.request.contextPath}`, `${cat.id}`)" class="category-link">${cat.name}</a>
+                                        <a href="#" onclick="markCategory(event); fetchProductsPerPage(event, 1,`${cat.id}`)" class="category-link">${cat.name}</a>
                                     </div>
                                 </c:forEach>
                                 <div class="cat-item" id="allCat">

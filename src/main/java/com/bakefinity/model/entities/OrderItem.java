@@ -20,13 +20,6 @@ public class OrderItem implements Serializable {
         this.quantity = quantity;
     }
 
-    public OrderItem(OrderItemId id, Product product, Order order, Integer quantity) {
-        this.id = id;
-        this.product = product;
-        this.order = order;
-        this.quantity = quantity;
-    }
-
     @EmbeddedId
     @AttributeOverrides({
             @AttributeOverride(name = "productId", column = @Column(name = "productId", nullable = false)),

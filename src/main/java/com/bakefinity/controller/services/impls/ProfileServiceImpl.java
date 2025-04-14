@@ -41,16 +41,7 @@ public class ProfileServiceImpl implements ProfileService {
     }
     @Override
     public Optional<AddressDTO> getAddress(int userId) {
-        if(userId<-1)
-            return Optional.empty();
-
-        Optional<AddressDTO> address = addressRepo.findUserAddressById(userId);
-        
-        if (address.isPresent()) {
-            return address;
-        }else{
-            return Optional.empty();
-        }
+        return addressRepo.findUserAddressById(userId);
     }
 
     @Override
@@ -62,7 +53,7 @@ public class ProfileServiceImpl implements ProfileService {
         }
         if(newCreditLimit<=0)
             return Optional.empty();
-        Optional<UserDTO> updatedUser = profileRepo.updateCreditLimit(retrievedUser.get() , newCreditLimit);
+        Optional<UserDTO> updatedUser = profileRepo.updateCreditLimit(user , newCreditLimit);
         if(updatedUser.isPresent()){
             return updatedUser;
         }
