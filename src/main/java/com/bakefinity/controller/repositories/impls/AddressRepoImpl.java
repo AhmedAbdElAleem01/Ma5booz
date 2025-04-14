@@ -2,9 +2,17 @@ package com.bakefinity.controller.repositories.impls;
 
 import com.bakefinity.controller.repositories.interfaces.AddressRepo;
 import com.bakefinity.model.dtos.AddressDTO;
+import com.bakefinity.model.entities.Address;
 
 import java.sql.SQLException;
 import java.util.Optional;
+
+
+import com.bakefinity.utils.ConnectionManager;
+import com.bakefinity.utils.EntityManagerFactorySingleton;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 
 import com.bakefinity.model.entities.Address;
 import com.bakefinity.model.entities.User;
@@ -14,6 +22,8 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 
 public class AddressRepoImpl implements AddressRepo {
+    private EntityManagerFactory emf = EntityManagerFactorySingleton.getInstance();
+
     @Override
     public boolean createAddress(AddressDTO addressDTO) throws SQLException {
         if (addressDTO == null) {

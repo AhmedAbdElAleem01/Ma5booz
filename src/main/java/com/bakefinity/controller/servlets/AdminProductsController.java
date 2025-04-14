@@ -17,12 +17,10 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(urlPatterns = "/admin/products")
 public class AdminProductsController extends HttpServlet{
     ProductService productService;
-    CategoryService categoryService;
 
     @Override
     public void init() throws ServletException {
         productService = ProductServiceImpl.getInstance();
-        categoryService = CategoryServiceImpl.getInstance();
     }
 
     @Override

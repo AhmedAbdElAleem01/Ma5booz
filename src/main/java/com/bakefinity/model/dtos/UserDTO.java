@@ -129,6 +129,7 @@ public class UserDTO {
                 ", birthDate=" + birthDate +
                 ", job='" + job +  
                 ", createdAt=" + createdAt +
+                ", role=" + role +
                 '}';
     }
 }

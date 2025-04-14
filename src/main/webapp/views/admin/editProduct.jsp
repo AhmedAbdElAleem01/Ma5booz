@@ -51,7 +51,7 @@
                 </div>
                 <div class="form-group mb-3">
                     <label for="image">Product Image</label>
-                    <img src="${pageContext.request.contextPath}/static/img/${product.imageUrl}" alt="Product image" class="img-fluid d-block mx-auto">
+                    <img src="${pageContext.request.contextPath}/product-image/${product.imageUrl}" alt="Product image" class="img-fluid d-block mx-auto">
                 </div>
               </div>
               <div class="col-12">

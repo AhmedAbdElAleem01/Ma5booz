@@ -57,7 +57,7 @@ public class Product implements Serializable {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoryId", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "categoryId", nullable = false)
     public Category getCategory() {
         return this.category;
     }
