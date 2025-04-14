@@ -24,7 +24,7 @@ public class AdminViewOrderDetailsController extends HttpServlet{
         int orderId = Integer.parseInt(req.getParameter("id"));
 
         List<OrderItemDTO> orderItems = orderService.getOrderItemByOrderId(orderId);
-        req.setAttribute("orderItems", (orderItems.isEmpty())? "Error loading order details" :orderItems);
+        req.setAttribute("orderItems", orderItems);
         req.getRequestDispatcher("/views/admin/orderDetails.jsp").forward(req, resp);
     }
 }

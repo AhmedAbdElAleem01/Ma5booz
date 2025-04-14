@@ -61,7 +61,7 @@ public class AdminViewCustomerProfileController extends HttpServlet{
     
             req.setAttribute("customer", customer.get());
             req.setAttribute("address", address);
-            req.setAttribute("orders", (orders.isEmpty())? "No Orders Yet " : orders);
+            req.setAttribute("orders",orders);
 
         }
         req.getRequestDispatcher("/views/admin/customerProfile.jsp").forward(req, resp);

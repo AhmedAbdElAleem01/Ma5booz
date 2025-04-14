@@ -60,19 +60,28 @@
                     </tr>
                   </thead>
                   <tbody id="orders-body">
-                    <c:forEach var="order" items="${orders}">
-                      <tr>
-                          <td><b>${order.id}</b></td>
-                          <td><b>${order.totalCost}</b></td>
-                          <td>${order.orderedAt}</td>
-                          <td>${order.status}</td>
-                          <td>
-                            <a href="${pageContext.request.contextPath}/admin/orderDetails?id=${order.id}" class="tm-user-view-link">
-                              <i class="fas fa-eye tm-product-delete-icon"></i>
-                            </a>
-                          </td>
-                      </tr>
-                    </c:forEach>
+                    <c:choose>
+                      <c:when test="${not empty orders}">
+                        <c:forEach var="order" items="${orders}">
+                          <tr>
+                            <td><b>${order.id}</b></td>
+                            <td><b>${order.totalCost}</b></td>
+                            <td>${order.orderedAt}</td>
+                            <td>${order.status}</td>
+                            <td>
+                              <a href="${pageContext.request.contextPath}/admin/orderDetails?id=${order.id}" class="tm-user-view-link">
+                                <i class="fas fa-eye tm-product-delete-icon"></i>
+                              </a>
+                            </td>
+                          </tr>
+                        </c:forEach>
+                      </c:when>
+                      <c:otherwise>
+                        <tr>
+                          <td colspan="5" style="text-align: center;">No orders yet.</td>
+                        </tr>
+                      </c:otherwise>
+                    </c:choose>
                   </tbody>
                 </table>
             </div>

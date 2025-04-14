@@ -4,103 +4,145 @@ import com.bakefinity.controller.repositories.interfaces.CartRepo;
 import com.bakefinity.model.entities.CartItem;
 import com.bakefinity.model.entities.CartItemId;
 import com.bakefinity.utils.ConnectionManager;
+import com.bakefinity.utils.EntityManagerFactorySingleton;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CartRepoImpl implements CartRepo {
+    private EntityManagerFactory emf = EntityManagerFactorySingleton.getInstance();
 
     @Override
     public CartItem get(int userId, int productId) throws Exception {
-        try (Connection conn = ConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM cartitem WHERE userId = ? AND productId = ?")) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<CartItem> query = em.createQuery(
+                "SELECT c FROM CartItem c WHERE c.user.id = :userId AND c.product.id = :productId", 
+                CartItem.class);
+            query.setParameter("userId", userId);
+            query.setParameter("productId", productId);
 
-            stmt.setInt(1, userId);
-            stmt.setInt(2, productId);
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return extractCartItem(rs);
-                }
-            }
-            return null;
+            return query.getResultStream().findFirst().orElse(null);
+        } finally {
+            em.close();
         }
     }
 
     @Override
     public List<CartItem> getAllByUserId(int userId) throws Exception {
-        List<CartItem> cartItems = new ArrayList<>();
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<CartItem> query = em.createQuery(
+                "SELECT c FROM CartItem c WHERE c.user.id = :userId", CartItem.class);
+            query.setParameter("userId", userId);
 
-        try (Connection conn = ConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM cartitem WHERE userId = ?")) {
-
-            stmt.setInt(1, userId);
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    cartItems.add(extractCartItem(rs));
-                }
-            }
+            return query.getResultList();
+        } finally {
+            em.close();
         }
-        return cartItems;
     }
 
     @Override
     public void add(CartItem cartItem) throws Exception {
-        try (Connection conn = ConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(
-                     "INSERT INTO cartitem (userId, productId, quantity) " +
-                     "VALUES (?, ?, ?) " +
-                     "ON DUPLICATE KEY UPDATE quantity = VALUES(quantity)")) {
-    
-            stmt.setInt(1, cartItem.getId().getUserId());
-            stmt.setInt(2, cartItem.getId().getProductId());
-            stmt.setInt(3, cartItem.getQuantity());
-    
-            stmt.executeUpdate();
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+
+        try{
+            tx.begin();
+            CartItem existingItem = em.createQuery(
+                "SELECT c FROM CartItem c WHERE c.user.id = :userId AND c.product.id = :productId", 
+                CartItem.class)
+                .setParameter("userId", cartItem.getId().getUserId())
+                .setParameter("productId", cartItem.getId().getProductId())
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+            if (existingItem != null) {
+                existingItem.setQuantity(cartItem.getQuantity()); //update quantity
+                em.merge(existingItem);
+            } else {
+                em.persist(cartItem);
+            }
+            tx.commit();
+        }catch(Exception e){
+            tx.rollback();
+            System.out.println("DB Error: Could not add to cart : "+e.getMessage());
+        }finally{
+            em.close();
         }
     }
-    
 
     @Override
     public void update(CartItem cartItem) throws Exception {
-        try (Connection conn = ConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(
-                     "UPDATE cartitem SET quantity = ? WHERE userId = ? AND productId = ?")) {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
 
-            stmt.setInt(1, cartItem.getQuantity());
-            stmt.setInt(2, cartItem.getId().getUserId());
-            stmt.setInt(3, cartItem.getId().getProductId());
+        try{
+            tx.begin();
+            CartItem existingItem = em.createQuery(
+            "SELECT c FROM CartItem c WHERE c.user.id = :userId AND c.product.id = :productId",
+            CartItem.class)
+            .setParameter("userId", cartItem.getId().getUserId())
+            .setParameter("productId", cartItem.getId().getProductId())
+            .getSingleResult();
 
-            stmt.executeUpdate();
-        }
-    }
+        existingItem.setQuantity(cartItem.getQuantity());
 
-    @Override
-    public void delete(int userId, int productId) throws Exception {
-        try (Connection conn = ConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("DELETE FROM cartitem WHERE userId = ? AND productId = ?")) {
-
-            stmt.setInt(1, userId);
-            stmt.setInt(2, productId);
-
-            stmt.executeUpdate();
+        em.merge(existingItem);
+        tx.commit();
+        } catch (NoResultException e) {
+            System.err.println("CartItem not found for update.");
+        } catch (Exception e) {
+            tx.rollback();
+            System.out.println("DB Error: Could not update cart: " + e.getMessage());
+        } finally {
+            em.close();
         }
     }
 
     @Override
     public void clearUserCart(int userId) throws Exception {
-        try (Connection conn = ConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("DELETE FROM cartitem WHERE userId = ?")) {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
 
-            stmt.setInt(1, userId);
-            stmt.executeUpdate();
+        try {
+            tx.begin();
+            em.createQuery("DELETE FROM CartItem c WHERE c.user.id = :userId")
+            .setParameter("userId", userId)
+            .executeUpdate();
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+            System.out.println("DB Error: Could not clear user cart: "+e.getMessage());
+        } finally {
+            em.close();
         }
     }
-    
-    private CartItem extractCartItem(ResultSet rs) throws SQLException {
-        CartItem cartItem = new CartItem();
-        cartItem.setId(new CartItemId(rs.getInt("productId"), rs.getInt("userId")));
-        cartItem.setQuantity(rs.getInt("quantity"));
-        return cartItem;
+
+    @Override
+    public void delete(int userId, int productId) throws Exception {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            CartItemId id = new CartItemId(userId, productId);
+            CartItem cartItem = em.find(CartItem.class, id);
+            if (cartItem != null) {
+                em.remove(cartItem);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
     }
 }

@@ -27,7 +27,6 @@ public class ProfileRepoImpl implements ProfileRepo{
                 em.merge(retrievedUser);
                 tx.commit();
                 user.setCreditLimit(creditLimit); //update
-                System.out.println("new credit limit " + user.getCreditLimit());
                 return Optional.of(user);
             }else{
                 System.out.println("DB ERROR: Failed to update user's credit limit");
@@ -48,7 +47,8 @@ public class ProfileRepoImpl implements ProfileRepo{
         EntityTransaction tx = em.getTransaction();
         
         try{
-            tx.begin();TypedQuery<Address> query = em.createQuery(
+            tx.begin();
+            TypedQuery<Address> query = em.createQuery(
             "SELECT a FROM Address a WHERE a.user.id = :userId", Address.class);
             query.setParameter("userId", user.getId());
 
