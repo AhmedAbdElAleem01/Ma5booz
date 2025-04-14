@@ -3,28 +3,26 @@ package com.bakefinity.controller.repositories.impls;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
 import com.bakefinity.controller.repositories.interfaces.OrderRepo;
 import com.bakefinity.model.dtos.OrderDTO;
 import com.bakefinity.model.dtos.OrderItemDTO;
 import com.bakefinity.model.entities.Order;
+import com.bakefinity.model.entities.OrderItem;
 import com.bakefinity.model.entities.User;
 import com.bakefinity.model.enums.OrderStatus;
-import com.bakefinity.utils.ConnectionManager;
 import com.bakefinity.utils.EntityManagerFactorySingleton;
-import com.oracle.wls.shaded.org.apache.xpath.operations.Or;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
+import jakarta.persistence.EntityManagerFactory;
 
 public class OrderRepoImpl implements OrderRepo{
+    private EntityManagerFactory emf = EntityManagerFactorySingleton.getInstance();
     @Override
     public int create(OrderDTO orderDTO) throws SQLException {
         if (orderDTO == null) {
             System.err.println("Error creating order: order is null");
             return -1;
         }
-        EntityManager em = EntityManagerFactorySingleton.getInstance().createEntityManager();
+        EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
             User user = em.find(User.class, orderDTO.getUserId());
@@ -44,7 +42,7 @@ public class OrderRepoImpl implements OrderRepo{
 
     @Override
     public boolean updateStatus(int orderId, OrderStatus orderStatus) throws SQLException{
-        EntityManager em = EntityManagerFactorySingleton.getInstance().createEntityManager();
+        EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
             Order order = em.find(Order.class, orderId);
@@ -63,7 +61,7 @@ public class OrderRepoImpl implements OrderRepo{
 
     @Override
     public Order get(int id) throws Exception {
-        EntityManager em = EntityManagerFactorySingleton.getInstance().createEntityManager();
+        EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
             Order order = em.find(Order.class, id);
@@ -81,45 +79,40 @@ public class OrderRepoImpl implements OrderRepo{
 
     @Override
     public List<Order> getOrdersByCustomerId(int customerId) throws SQLException {
-        EntityManager em = EntityManagerFactorySingleton.getInstance().createEntityManager();
+        EntityManager em = emf.createEntityManager();
         try {
-            List<Order> orders = new ArrayList<>();
-            em.getTransaction().begin();
-            User user = em.find(User.class, customerId);
-            if(user == null){
-                System.out.println("there is no user with id = " + customerId);
-                return new ArrayList<>();
-            }
-            Query query = em.createQuery("select o from Order o where o.user=:customer", Order.class).setParameter("customer", user);
-            orders = query.getResultList();
-            if (orders.isEmpty()) {
-                System.out.println("customer with id = " + customerId + " has no orders");
-                return new ArrayList<>();
-            }
-            em.getTransaction().commit();
-            return orders;
-        }
-        finally {
+            return em.createQuery(
+                "SELECT o FROM Order o WHERE o.user.id = :userId", Order.class)
+                .setParameter("userId", customerId)
+                .getResultList();
+        } finally {
             em.close();
         }
     }
 
     @Override
     public List<OrderItemDTO> getOrderItemsByOrderId(int orderId) {
-        EntityManager em = EntityManagerFactorySingleton.getInstance().createEntityManager();
-        try {
-            List<OrderItemDTO> orderItems = null;
-            em.getTransaction().begin();
-            Query query = em.createQuery("select oi from OrderItem oi join oi.product p where oi.order.id = :orderId").setParameter("orderId", orderId);
-            orderItems = query.getResultList();
-            if (orderItems.isEmpty()) {
-                return new ArrayList<>();
+        EntityManager em = emf.createEntityManager();
+        List<OrderItemDTO> orderItemsDTO = new ArrayList<>();        
+        try{
+            List<OrderItem> orderItems = em.createQuery(
+            "SELECT oi FROM OrderItem oi JOIN oi.product p WHERE oi.order.id = :orderId",OrderItem.class)
+            .setParameter("orderId", orderId)
+            .getResultList();
+            
+            for(OrderItem oi: orderItems){
+                OrderItemDTO orderItem = new OrderItemDTO();
+                orderItem.setOrderId(oi.getId().getOrderId());
+                orderItem.setProductId(oi.getId().getProductId());
+                orderItem.setProductName(oi.getProduct().getName());
+                orderItem.setPrice(oi.getProduct().getPrice());
+                orderItem.setQuantity(oi.getQuantity());
+                
+                orderItemsDTO.add(orderItem);
             }
-            em.getTransaction().commit();
-            return orderItems;
+        } catch (Exception e) {
+            new RuntimeException("Failed to retreive order items: " + e.getMessage());
         }
-        finally {
-            em.close();
-        }
+        return orderItemsDTO;
     }
 }

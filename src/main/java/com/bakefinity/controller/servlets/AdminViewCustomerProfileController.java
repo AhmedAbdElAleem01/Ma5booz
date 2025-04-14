@@ -53,7 +53,7 @@ public class AdminViewCustomerProfileController extends HttpServlet{
             List<OrderDTO> orders = orderService.getAllOrdersByCustomerId(customerId);
     
             if(customer.isEmpty() || customerAddress.isEmpty()){
-                req.getRequestDispatcher("/views/admin/error.jsp?error-message=Could not retreive this customer's profile. Try Again.");
+                req.getRequestDispatcher("/views/admin/error.jsp?error-message=Could not retreive this customer's profile. Try Again.").forward(req, resp);;
                 return;
             }
             AddressDTO addressDTO = customerAddress.get();
@@ -61,7 +61,7 @@ public class AdminViewCustomerProfileController extends HttpServlet{
     
             req.setAttribute("customer", customer.get());
             req.setAttribute("address", address);
-            req.setAttribute("orders", (orders.isEmpty())? "No Orders Yet " : orders);
+            req.setAttribute("orders", orders);
 
         }
         req.getRequestDispatcher("/views/admin/customerProfile.jsp").forward(req, resp);
