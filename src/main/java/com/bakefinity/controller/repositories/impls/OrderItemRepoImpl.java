@@ -4,6 +4,9 @@ import com.bakefinity.controller.repositories.interfaces.OrderItemRepo;
 import com.bakefinity.model.dtos.UserInterestsDTO;
 import com.bakefinity.model.entities.OrderItem;
 import com.bakefinity.utils.ConnectionManager;
+import com.bakefinity.utils.EntityManagerFactorySingleton;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,21 +19,15 @@ public class OrderItemRepoImpl implements OrderItemRepo {
             System.err.println("Error creating orderItem: OrderItem is null");
             return false;
         }
-        try(Connection connection = ConnectionManager.getConnection();) {
-            String query = "INSERT INTO OrderItem (orderId, productId, quantity) VALUES (?, ?, ?)";
-            try(PreparedStatement statement = connection.prepareStatement(query);) {
-                statement.setInt(1, orderItem.getId().getOrderId());
-                statement.setInt(2, orderItem.getId().getProductId());
-                statement.setInt(3, orderItem.getQuantity());
-                int rowsAffected = statement.executeUpdate();
-                if (rowsAffected <= 0) {
-                    System.err.println("Failed to create orderItem");
-                    return false;
-                } else {
-                    System.out.println("orderItem is created successfully");
-                    return true;
-                }
-            }
+        EntityManager em = EntityManagerFactorySingleton.getInstance().createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(orderItem);
+            em.getTransaction().commit();
+            return true;
+        }
+        finally {
+            em.close();
         }
     }
 }

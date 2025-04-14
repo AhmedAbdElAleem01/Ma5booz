@@ -20,4 +20,9 @@ public class InputValidation {
         String namePattern = "^[A-Za-z]+([\\s-][A-Za-z]+)*$";
         return name.matches(namePattern);
     }
+
+    public static boolean validateEmail(String email) {
+        String emailPattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        return email.matches(emailPattern);
+    }
 }

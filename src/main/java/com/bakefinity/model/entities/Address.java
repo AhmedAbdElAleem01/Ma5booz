@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class Address implements Serializable {
     private Integer id;
     private User user;
-    private String buildingNo;
+    private Integer buildingNo;
     private String street;
     private String city;
     private String country;
@@ -17,7 +17,7 @@ public class Address implements Serializable {
     public Address() {
     }
 
-    public Address(Integer id, User user, String buildingNo, String street, String city, String country) {
+    public Address(Integer id, User user, Integer buildingNo, String street, String city, String country) {
         this.id = id;
         this.user = user;
         this.buildingNo = buildingNo;
@@ -26,7 +26,7 @@ public class Address implements Serializable {
         this.country = country;
     }
 
-    public Address(User user, String buildingNo, String street, String city, String country) {
+    public Address(User user, Integer buildingNo, String street, String city, String country) {
         this.user = user;
         this.buildingNo = buildingNo;
         this.street = street;
@@ -56,11 +56,11 @@ public class Address implements Serializable {
     }
 
     @Column(name = "buildingNo", length = 255)
-    public String getBuildingNo() {
+    public Integer getBuildingNo() {
         return this.buildingNo;
     }
 
-    public void setBuildingNo(String buildingNo) {
+    public void setBuildingNo(Integer buildingNo) {
         this.buildingNo = buildingNo;
     }
 

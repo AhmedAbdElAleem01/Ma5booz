@@ -105,7 +105,8 @@
                                 </div>
                                 <div class="form-group input1 float-left">
                                     <label for="BNo">Building Number*</label>
-                                    <input type="number" class="form-control" name="BNo" id="BNo" min="1" value="${sessionScope.address.buildingNo == -1 ? "" : sessionScope.address.buildingNo}" required>
+                                    <input type="number" class="form-control" name="BNo" id="BNo" min="1" value="${sessionScope.address.buildingNo == -1 ? "" : sessionScope.address.buildingNo}" required onblur="validateBuildingNo()">
+                                     <span id="validBuildingNo"></span>
                                 </div>
                             </div>
                             <button data-aos="fade-up" type="submit" id="submit" class="submit_now text-decoration-none">Place Order<i class="fa-solid fa-arrow-right"></i></button>
