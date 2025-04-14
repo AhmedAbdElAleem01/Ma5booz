@@ -56,7 +56,7 @@ public class ProfileRepoImpl implements ProfileRepo{
             address.setCountry(country);
             address.setCity(city);
             address.setStreet(street);
-            address.setBuildingNo(BNo);
+            address.setBuildingNo(Integer.parseInt(BNo));
             em.merge(address); 
             tx.commit();
 
@@ -64,7 +64,7 @@ public class ProfileRepoImpl implements ProfileRepo{
             dto.setCountry(address.getCountry());
             dto.setCity(address.getCity());
             dto.setStreet(address.getStreet());
-            dto.setBuildingNo(Integer.parseInt(address.getBuildingNo()));
+            dto.setBuildingNo(address.getBuildingNo());
             return Optional.of(dto);
         } catch (Exception e) {
             tx.rollback();
