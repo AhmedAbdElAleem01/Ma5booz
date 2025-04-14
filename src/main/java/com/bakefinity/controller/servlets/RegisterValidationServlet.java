@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.Map;
 
 @WebServlet("/valid")
-public class ValidationServlet extends HttpServlet {
+public class RegisterValidationServlet extends HttpServlet {
     UserRegisterService userRegisterService = new UserRegisterServiceImpl();
 
     @Override
