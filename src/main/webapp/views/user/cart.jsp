@@ -82,8 +82,8 @@
                                             </div>
 
                                             <div class="product-line-price">
-                                                <span id="totalPrice-${cartItem.key}" data-price="EGP ${product.price}">
-                                                    <fmt:formatNumber value="${cartItem.value.quantity * product.price}" type="number" maxFractionDigits="2"/>
+                                                <span id="totalPrice-${cartItem.key}" data-price="${product.price}">
+                                                    <fmt:formatNumber value="${cartItem.value.quantity * product.price}" type="number" maxFractionDigits="2"  minFractionDigits="2"/>
                                                 </span>
                                             </div>
                                             <div class="product-removal">

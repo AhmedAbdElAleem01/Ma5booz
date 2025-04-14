@@ -9,10 +9,18 @@ function startPageAutoRefresh(page , cat) {
     }
     currentPage = page;
     if (cat !== undefined) currentCatID = cat;
-    console.log("Auto-refreshing page:", currentPage, "category:", currentCatID);
+    console.log("Auto-refreshing page:", page, "category:", currentCatID);
     pageRefreshIntervalID = setInterval(() => {
         fetchProductsPerPage({ preventDefault: () => {} }, currentPage, currentCatID);
-    }, 2000); // refresh every 2 seconds
+    }, 5000); // refresh every 2 seconds
+}
+
+function stopPageAutoRefresh() {
+    if (pageRefreshIntervalID !== null) {
+        clearInterval(pageRefreshIntervalID);
+        pageRefreshIntervalID = null;
+        console.log("Auto-refresh stopped.");
+    }
 }
 
 function fetchProducts(e,path, catID) {
@@ -20,6 +28,7 @@ function fetchProducts(e,path, catID) {
     markCategory(e);
     if(!catID) catID = 0;
     currentCatID = catID;
+
 
     console.log("Selected Category ID:", currentCatID);
 
@@ -29,6 +38,8 @@ function fetchProducts(e,path, catID) {
             let response = JSON.parse(this.responseText);
             console.log("AJAX Response:", response);
             renderProducts(response, path);
+            console.log("current in fetchProducts and page passed: "+ response.currentPage);
+            currentPage = response.currentPage;
             updatePagination(response.currentPage, response.totalPages);
         }
     };
@@ -104,6 +115,7 @@ function fetchProductsPerPage(event, page, cat) {
         event.preventDefault();
     }
     if(cat !== undefined) currentCatID = cat;
+    
     $.ajax({
         url: "shop",
         type: "POST",
@@ -111,11 +123,13 @@ function fetchProductsPerPage(event, page, cat) {
         dataType: "json",
         headers: { "X-Requested-With": "XMLHttpRequest" },
         success: function(response) {
-            renderProducts(response, windowPath);
+            currentPage = response.currentPage;
+            renderProducts(response, window.contextPath);
             updatePagination(response.currentPage, response.totalPages);
             console.log("Pagination response:", response);
+            console.log("page" + page)
 
-            startPageAutoRefresh(page, currentCatID);
+            startPageAutoRefresh(currentPage, currentCatID);
         },
         error: function(xhr, status, error) {
             console.error("Error fetching products:", error);
@@ -125,6 +139,7 @@ function fetchProductsPerPage(event, page, cat) {
 
 
 function updatePagination(currentPage, totalPages) {
+    console.log("current in updatePagination with current page rec: " + currentPage );
     let pagination = document.querySelector(".pagination");
     if (!pagination) {
         console.error("Pagination container not found.");
@@ -183,9 +198,12 @@ function updatePagination2(currentPage, totalPages) {
 
 function applyPriceFilter(event, page , cat) {
     event.preventDefault();
+    stopPageAutoRefresh();
     if(cat !== undefined) currentCatID = cat;
-    min = parseFloat(document.getElementById('minPrice').value);
-    max = parseFloat(document.getElementById('maxPrice').value);
+    let minEle = document.getElementById('minPrice');
+    let maxEle = document.getElementById('maxPrice');
+    min = parseFloat(minEle.value);
+    max = parseFloat(maxEle.value);
     $.ajax({
         url: "shop",
         type: "POST",
@@ -212,5 +230,12 @@ function markCategory(event) {
     event.preventDefault();
     event.currentTarget.classList.add('selected-category');
     console.log(event.currentTarget);
+}
+
+function resetHandler(event) {
+    fetchProductsPerPage(event, 1, currentCatID);
+    startPageAutoRefresh(currentPage, currentCatID);
+    document.getElementById('minPrice').value = 0;
+    document.getElementById('maxPrice').value = 1000;
 }
 

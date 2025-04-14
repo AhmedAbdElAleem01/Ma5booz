@@ -4,258 +4,285 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.management.RuntimeErrorException;
+
 import com.bakefinity.controller.repositories.interfaces.ProductRepo;
 import com.bakefinity.model.dtos.ProductDTO;
 import com.bakefinity.model.entities.Product;
+import com.bakefinity.model.entities.Category;
 import com.bakefinity.utils.ConnectionManager;
+import com.bakefinity.utils.EntityManagerFactorySingleton;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 
 public class ProductRepoImpl implements ProductRepo {
+    private EntityManagerFactory emf = EntityManagerFactorySingleton.getInstance();
 
     @Override
     public ProductDTO get(int productId) throws Exception {
-        try (Connection conn = ConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM product WHERE id=?")) {
-            
-            stmt.setInt(1, productId);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if(rs.next()) {
-                    return extractProduct(rs);
+        EntityManager em = emf.createEntityManager();
+        try{
+            Product product = em.find(Product.class, productId);
+            if(product!=null){
+                  return extractProductDTO(product);
                 }
+            }finally{
+                em.close();
             }
             return null;
-        }
     }
 
-    private ProductDTO extractProduct(ResultSet rs) throws SQLException {
-        return new ProductDTO(
-            rs.getInt("id"),
-            rs.getString("name"),
-            rs.getInt("categoryId"),
-            rs.getString("description"),
-            rs.getDouble("price"),
-            rs.getString("imageUrl"),
-            rs.getInt("stockQuantity"),
-            rs.getString("ingredients")
-        );
+    // private ProductDTO extractProduct(ResultSet rs) throws SQLException {
+    //     return new ProductDTO(
+    //         rs.getInt("id"),
+    //         rs.getString("name"),
+    //         rs.getInt("categoryId"),
+    //         rs.getString("description"),
+    //         rs.getDouble("price"),
+    //         rs.getString("imageUrl"),
+    //         rs.getInt("stockQuantity"),
+    //         rs.getString("ingredients")
+    //     );
+    // }
+    private ProductDTO extractProductDTO(Product product) throws SQLException {
+        ProductDTO dto = new ProductDTO();
+        dto.setId(product.getId());
+        dto.setName(product.getName());
+        dto.setCategoryId(product.getCategory().getId());
+        dto.setCategoryName(product.getCategory().getName());
+        dto.setDescription(product.getDescription());
+        dto.setPrice(product.getPrice());
+        dto.setImageUrl(product.getImageUrl());
+        dto.setStockQuantity(product.getStockQuantity());
+        dto.setIngredients(product.getIngredients());
+        return dto;
     }
 
     @Override
     public List<ProductDTO> getAll() throws Exception {
-        List<ProductDTO> products = new ArrayList<>();
-        
-        try (Connection conn = ConnectionManager.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT * FROM product")) {
-            
-            while(rs.next()) {
-                products.add(extractProduct(rs));
-            }
-        }
-        return products;
+        EntityManager em = emf.createEntityManager();
+        try {
+            List<Product> products = em.createQuery("FROM Product", Product.class).getResultList();
+            List<ProductDTO> dtos = new ArrayList<>();
+            for (Product p : products) dtos.add(extractProductDTO(p));
+            return dtos;
+        } finally{
+            em.close();
+        } 
     }
 
     // returns all products with the name of the category they belong in
     @Override
     public List<ProductDTO> getAllProducts() throws Exception {
+        EntityManager em = emf.createEntityManager();
         List<ProductDTO> products = new ArrayList<>();
         
-        String query = "SELECT p.*, c.name AS categoryName " +
-                    "FROM product p " +
-                    "JOIN category c ON p.categoryId = c.id";
-        
-        try (Connection conn = ConnectionManager.getConnection();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query)) {
-            
-            while (rs.next()) {
+        try{
+            List<Product> resultList = em.createQuery(
+            "SELECT p FROM Product p JOIN FETCH p.category", Product.class).getResultList();
+            for (Product p : resultList) {
                 ProductDTO product = new ProductDTO();
-                product.setId(rs.getInt("id"));
-                product.setCategoryName(rs.getString("categoryName"));
-                product.setName(rs.getString("name"));
-                product.setDescription(rs.getString("description"));
-                product.setPrice(rs.getDouble("price"));
-                product.setImageUrl(rs.getString("imageUrl"));
-                product.setStockQuantity(rs.getInt("stockQuantity"));
+                product.setId(p.getId());
+                product.setCategoryName(p.getCategory().getName());
+                product.setName(p.getName());
+                product.setDescription(p.getDescription());
+                product.setPrice(p.getPrice());
+                product.setImageUrl(p.getImageUrl());
+                product.setStockQuantity(p.getStockQuantity());
                 
                 products.add(product);
             }
+        }finally{
+            em.close();
         }
         return products;
     }
+
+    
     @Override
-    public void add(ProductDTO product) throws Exception {
-        try (Connection conn = ConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(
-                 "INSERT INTO product (categoryId, name, description, price, " +
-                 "imageUrl, stockQuantity, ingredients) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                 Statement.RETURN_GENERATED_KEYS)) {
+    public void add(ProductDTO newProduct) throws Exception {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+
+        try{
+            tx.begin();
+            Product product = new Product();
+            Category category = em.getReference(Category.class, newProduct.getCategoryId());
+            product.setCategory(category); 
+            product.setName(newProduct.getName());
+            product.setDescription(newProduct.getDescription());
+            product.setPrice(newProduct.getPrice());
+            product.setImageUrl(newProduct.getImageUrl());
+            product.setStockQuantity(newProduct.getStockQuantity());
+            product.setIngredients(newProduct.getIngredients());
             
-            stmt.setInt(1, product.getCategoryId());
-            stmt.setString(2, product.getName());
-            stmt.setString(3, product.getDescription());
-            stmt.setDouble(4, product.getPrice());
-            stmt.setString(5, product.getImageUrl());
-            stmt.setInt(6, product.getStockQuantity());
-            stmt.setString(7, product.getIngredients());
-            
-            int affectedRows = stmt.executeUpdate();
-            
-            if (affectedRows == 0) {
-                throw new SQLException("Creating product failed, no rows affected.");
-            }
+            em.persist(product);
+            tx.commit();
+        }catch(Exception e){
+            tx.rollback();
+            System.out.println("DB Error: Failed to add new product: " + e.getMessage());
+        }finally{
+            em.close();
         }
     }
 
     @Override
-    public void update(ProductDTO product) throws Exception {
-        try (Connection conn = ConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(
-                 "UPDATE product SET categoryId=?, name=?, description=?, price=?, " +
-                 "imageUrl=?, stockQuantity=?, ingredients=? WHERE id=?")) {
-            
-            stmt.setInt(1, product.getCategoryId());
-            stmt.setString(2, product.getName());
-            stmt.setString(3, product.getDescription());
-            stmt.setDouble(4, product.getPrice());
-            stmt.setString(5, product.getImageUrl());
-            stmt.setInt(6, product.getStockQuantity());
-            stmt.setString(7, product.getIngredients());
-            stmt.setInt(8, product.getId());
-            
-            stmt.executeUpdate();
+    public void update(ProductDTO updatedProduct) throws Exception {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try{
+            tx.begin();
+            Product product= em.find(Product.class, updatedProduct.getId());
+            Category category = em.find(Category.class, updatedProduct.getCategoryId());
+            if(product!=null){
+                product.setCategory(category); 
+                product.setName(updatedProduct.getName());
+                product.setDescription(updatedProduct.getDescription());
+                product.setPrice(updatedProduct.getPrice());
+                product.setImageUrl(updatedProduct.getImageUrl());
+                product.setStockQuantity(updatedProduct.getStockQuantity());
+                product.setIngredients(updatedProduct.getIngredients());
+                em.merge(product);
+                tx.commit();
+            }
+        }catch(Exception e){
+            tx.rollback();
+            System.out.println("DB Error: Failed to update product " + e.getMessage());
+        }finally{
+            em.close();
         }
     }
 
     @Override
     public void delete(int productId) throws Exception {
-        try (Connection conn = ConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("DELETE FROM product WHERE id=?")) {
-            
-            stmt.setInt(1, productId);
-            stmt.executeUpdate();
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            Product product = em.find(Product.class, productId);
+            if(product!=null){
+                em.remove(product);
+            }
+            tx.commit();
+        }catch(Exception e){
+            tx.rollback();
+            System.out.println("DB Error: Failed to delete product " + e.getMessage());
+        }finally{
+            em.close();
         }
     }
 
     @Override
     public List<ProductDTO> getByCategory(int categoryId) throws Exception {
-        List<ProductDTO> products = new ArrayList<>();
-        
-        try (Connection conn = ConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM product WHERE categoryId=?")) {
-            
-            stmt.setInt(1, categoryId);
-            try (ResultSet rs = stmt.executeQuery()) {
-                while(rs.next()) {
-                    products.add(extractProduct(rs));
-                }
-            }
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Product> query = em.createQuery("SELECT p FROM Product p WHERE p.category.id = :categoryId", Product.class);
+            query.setParameter("categoryId", categoryId);
+            List<ProductDTO> dtos = new ArrayList<>();
+            for (Product p : query.getResultList()) dtos.add(extractProductDTO(p));
+            return dtos;
+        } finally {
+            em.close();
         }
-        return products;
     }
 
     @Override
     public List<ProductDTO> getTopInStock(int limit) throws Exception {
-        List<ProductDTO> products = new ArrayList<>();
-        
-        try (Connection conn = ConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM product ORDER BY stockQuantity DESC LIMIT ?")) {
-            
-            stmt.setInt(1, limit);
-            try (ResultSet rs = stmt.executeQuery()) {
-                while(rs.next()) {
-                    products.add(extractProduct(rs));
-                }
-            }
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Product> query = em.createQuery("SELECT p FROM Product p ORDER BY p.stockQuantity DESC", Product.class);
+            query.setMaxResults(limit);
+            List<ProductDTO> dtos = new ArrayList<>();
+            for (Product p : query.getResultList()) dtos.add(extractProductDTO(p));
+            return dtos;
+        } finally {
+            em.close();
         }
-        return products;
     }
 
     @Override
     public List<ProductDTO> searchByName(String name) throws Exception {
-        List<ProductDTO> products = new ArrayList<>();
-    
-        try (Connection conn = ConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM product WHERE LOWER(name) LIKE LOWER(?)")) {
-    
-            stmt.setString(1, "%" + name + "%");
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    products.add(extractProduct(rs));
-                    System.out.println("add: "+ extractProduct(rs));
-                }
-            }
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Product> query = em.createQuery("SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(:name)", Product.class);
+            query.setParameter("name", "%" + name + "%");
+            List<ProductDTO> dtos = new ArrayList<>();
+            for (Product p : query.getResultList()) dtos.add(extractProductDTO(p));
+            return dtos;
+        } finally {
+            em.close();
         }
-        return products;
     }
 
     public List<ProductDTO> getProductsByCategoryPage(int categoryId, int offset, int limit) {
-        String sql = "SELECT * FROM product WHERE categoryId = ? LIMIT ? OFFSET ?";
+        EntityManager em = emf.createEntityManager();
         List<ProductDTO> products = new ArrayList<>();
-
-        try (Connection conn = ConnectionManager.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, categoryId);
-            stmt.setInt(2, limit);
-            stmt.setInt(3, offset);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                products.add(extractProduct(rs));
+        try {
+            List<Product> resultList = em.createQuery(
+                "SELECT p FROM Product p JOIN FETCH p.category WHERE p.category.id = :categoryId", Product.class)
+                .setParameter("categoryId", categoryId)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+    
+            for (Product p : resultList) {
+                products.add(extractProductDTO(p));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        
+        } catch(Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+         finally {
+            em.close();
         }
         return products;
     }
 
     public int getTotalCountByCategory(int categoryId) {
-        String sql = "SELECT COUNT(*) FROM product WHERE categoryId = ?";
-        try (Connection conn = ConnectionManager.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, categoryId);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        EntityManager em = emf.createEntityManager();
+        try {
+            Long count = em.createQuery(
+                "SELECT COUNT(p) FROM Product p WHERE p.category.id = :categoryId", Long.class)
+                .setParameter("categoryId", categoryId)
+                .getSingleResult();
+            return count.intValue();
+        } finally {
+            em.close();
         }
-        return 0;
     }
 
     @Override
     public List<ProductDTO> getProductsByPage(int offset, int limit) {
-        String sql = "SELECT * FROM product LIMIT ? OFFSET ?";
+        EntityManager em = emf.createEntityManager();
         List<ProductDTO> products = new ArrayList<>();
-    
-        try (Connection conn = ConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-    
-            stmt.setInt(1, limit);
-            stmt.setInt(2, offset);
-    
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                products.add(extractProduct(rs));
+        try {
+            List<Product> resultList = em.createQuery("SELECT p FROM Product p", Product.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+            for (Product p : resultList) {
+                products.add(extractProductDTO(p));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch(Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+        finally {
+            em.close();
         }
         return products;
     }
 
     public int getTotalCount() {
-        String sql = "SELECT COUNT(*) FROM product";
-        try (Connection conn = ConnectionManager.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        EntityManager em = emf.createEntityManager();
+        try {
+            Long count = em.createQuery("SELECT COUNT(p) FROM Product p", Long.class).getSingleResult();
+            return count.intValue();
+        } finally {
+            em.close();
         }
-        return 0;
     }
 
     @Override
@@ -277,97 +304,90 @@ public class ProductRepoImpl implements ProductRepo {
 
     @Override
     public ProductDTO getById(int productId) throws SQLException{
-        String query = "SELECT * FROM Product WHERE id = ?";
-        try(Connection connection = ConnectionManager.getConnection();) {
-            try(PreparedStatement statement = connection.prepareStatement(query);) {
-                statement.setInt(1, productId);
-                try(ResultSet resultSet = statement.executeQuery();) {
-                    if (resultSet.next()) {
-                        return new ProductDTO(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getInt("categoryId"), resultSet.getString("description"), resultSet.getDouble("price"), resultSet.getString("imageUrl"), resultSet.getInt("stockQuantity"), resultSet.getString("ingredients"));
-                    }
-                    return null;
-                }
-            }
+        try {
+            return get(productId);
+        } catch (Exception e) {
+            throw new SQLException();
         }
     }
 
 
     public List<ProductDTO> getProductsByCategoryAndPriceRange(int categoryId, double minPrice, double maxPrice, int offset, int limit) {
-        String sql = "SELECT * FROM product WHERE categoryId = ? AND price BETWEEN ? AND ? ORDER BY price ASC LIMIT ? OFFSET ?";
+        EntityManager em = emf.createEntityManager();
         List<ProductDTO> products = new ArrayList<>();
+        try {
+            List<Product> resultList = em.createQuery(
+                "SELECT p FROM Product p JOIN FETCH p.category WHERE p.category.id = :categoryId AND p.price BETWEEN :minPrice AND :maxPrice ORDER BY p.price ASC",
+                Product.class)
+                .setParameter("categoryId", categoryId)
+                .setParameter("minPrice", minPrice)
+                .setParameter("maxPrice", maxPrice)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
     
-        try (Connection conn = ConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-    
-            stmt.setInt(1, categoryId);
-            stmt.setDouble(2, minPrice);
-            stmt.setDouble(3, maxPrice);
-            stmt.setInt(4, limit);
-            stmt.setInt(5, offset);
-    
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    products.add(extractProduct(rs));
-                }
+            for (Product p : resultList) {
+                products.add(extractProductDTO(p));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch(Exception e){
+            throw new RuntimeException(e.getMessage());
+        } finally {
+            em.close();
         }
-    
         return products;
     }
     
 
+    @Override
     public List<ProductDTO> getProductsByPriceRange(int offset, int limit, double minPrice, double maxPrice) {
-        String sql = "SELECT * FROM product WHERE price BETWEEN ? AND ? ORDER BY price ASC LIMIT ? OFFSET ?";
+        EntityManager em = emf.createEntityManager();
         List<ProductDTO> products = new ArrayList<>();
-    
-        try (Connection conn = ConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-    
-            stmt.setDouble(1, minPrice);
-            stmt.setDouble(2, maxPrice);
-            stmt.setInt(3, limit);
-            stmt.setInt(4, offset);
-    
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    products.add(extractProduct(rs));
-                }
+        try {
+            List<Product> resultList = em.createQuery(
+                "SELECT p FROM Product p JOIN FETCH p.category WHERE p.price BETWEEN :minPrice AND :maxPrice ORDER BY p.price ASC",
+                Product.class)
+                .setParameter("minPrice", minPrice)
+                .setParameter("maxPrice", maxPrice)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+
+            for (Product p : resultList) {
+                products.add(extractProductDTO(p));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch(Exception e){
+            throw new RuntimeException(e.getMessage());
+        } 
+        finally {
+            em.close();
         }
-    
         return products;
     }
 
     public int getTotalProductsByPrice(Double minPrice, Double maxPrice, Integer categoryId) {
-        String sql = "SELECT COUNT(*) FROM product WHERE price BETWEEN ? AND ?";
-        if (categoryId != null) {
-            sql += " AND categoryId = ?";
-        }
-    
-        try (Connection conn = ConnectionManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-    
-            stmt.setDouble(1, minPrice);
-            stmt.setDouble(2, maxPrice);
+        EntityManager em = emf.createEntityManager();
+        try {
+            String query = "SELECT COUNT(p) FROM Product p WHERE p.price BETWEEN :min AND :max";
             if (categoryId != null) {
-                stmt.setInt(3, categoryId);
+                query += " AND p.category.id = :catId";
+            }
+            var q = em.createQuery(query, Long.class)
+                .setParameter("min", minPrice)
+                .setParameter("max", maxPrice);
+    
+            if (categoryId != null) {
+                q.setParameter("catId", categoryId);
             }
     
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) return rs.getInt(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            return q.getSingleResult().intValue();
+        } finally {
+            em.close();
         }
-    
-        return 0;
     }
     
-    
-    
-    
 }
+
+    
+    
+    
+    
