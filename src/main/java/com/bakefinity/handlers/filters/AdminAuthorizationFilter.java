@@ -12,7 +12,7 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 
 @WebFilter( filterName = "AdminAuthorizationFilter", urlPatterns = {"/cart" , "/order-summary" , "/checkout"},
-        description = "restricts access of cart and checkout pages to authenticated users only")
+        description = "allows only guest users or authenticated users to access the cart and checkout pages")
 
 public class AdminAuthorizationFilter implements Filter {
     @Override
@@ -27,7 +27,8 @@ public class AdminAuthorizationFilter implements Filter {
         }
 
         UserDTO user = (UserDTO) httpSession.getAttribute( "user" );
-        if ( user != null && "USER".equals(user.getRole())) {
+        boolean isGuest = ( user == null);
+        if ( isGuest || "USER".equals(user.getRole())) {
             chain.doFilter( request, response );
         } else {
             httpServletResponse.sendRedirect( httpServletRequest.getContextPath() + "/home" );

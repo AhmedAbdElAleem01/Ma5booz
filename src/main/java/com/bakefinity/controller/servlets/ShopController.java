@@ -177,6 +177,7 @@ public class ShopController extends HttpServlet {
                 
             }
 
+            System.out.println("products to send:" + products);
             int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
 
             JsonObject jsonResponse = new JsonObject();

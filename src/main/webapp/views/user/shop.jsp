@@ -66,6 +66,7 @@
                                     <input name="maxPrice" type="number" id="maxPrice" class="form-control" value="1000" min="0" max="10000" step="10" />
                                   </div>
                                   <button class="btn btn-outline-primary mt-3 w-100" onclick="applyPriceFilter(event,1)">Apply Filter</button>
+                                  <button class="btn btn-outline-primary mt-3 w-100" onclick="resetHandler(event)">Reset</button>
                                 </div>
                               </div>
                         </div>
@@ -139,7 +140,7 @@
     <script src="https://c...content-available-to-author-only...y.com/jquery-3.6.4.min.js"></script>
     <script src="${pageContext.request.contextPath}/static/js/shop.js"></script>
     <script>
-
+        window.contextPath = "${pageContext.request.contextPath}";
     </script>
     <!-- Footer -->
     <%@ include file="footer.jsp"%>
