@@ -46,12 +46,12 @@ public class OrderServiceImpl implements OrderService{
     }
     @Override
     public List<OrderDTO> getAllOrdersByCustomerId(int customerId){
+        List<OrderDTO> orderDTOs = new ArrayList<>();
         Optional<UserDTO> customer = userRepo.findById(customerId);
         if(customer.isEmpty())
             return new ArrayList<>();
         try {
             List<Order> orders = orderRepo.getOrdersByCustomerId(customerId);
-            List<OrderDTO> orderDTOs = new ArrayList<>();
             for (Order order : orders) {
                 OrderDTO dto = new OrderDTO();
                 dto.setId(order.getId());

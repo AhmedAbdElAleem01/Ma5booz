@@ -95,7 +95,8 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label for="creditLimit">Credit Limit*</label>
-                                            <input type="number" class="form-control" name="creditLimit" id="creditLimit" min="0" step="any" value="<%= request.getAttribute("creditLimit") != null ? request.getAttribute("creditLimit") : "" %>" required>
+                                            <input type="number" class="form-control" name="creditLimit" id="creditLimit" min="0" step="any" value="<%= request.getAttribute("creditLimit") != null ? request.getAttribute("creditLimit") : "" %>" required onblur="validateCredit()">
+                                            <span id="validCredit"></span>
                                         </div>
                                      </div>
                                 </div>

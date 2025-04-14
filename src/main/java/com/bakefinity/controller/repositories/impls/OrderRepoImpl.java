@@ -7,134 +7,112 @@ import com.bakefinity.controller.repositories.interfaces.OrderRepo;
 import com.bakefinity.model.dtos.OrderDTO;
 import com.bakefinity.model.dtos.OrderItemDTO;
 import com.bakefinity.model.entities.Order;
+import com.bakefinity.model.entities.OrderItem;
+import com.bakefinity.model.entities.User;
 import com.bakefinity.model.enums.OrderStatus;
-import com.bakefinity.utils.ConnectionManager;
+import com.bakefinity.utils.EntityManagerFactorySingleton;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 
 public class OrderRepoImpl implements OrderRepo{
-    
+    private EntityManagerFactory emf = EntityManagerFactorySingleton.getInstance();
     @Override
-    public int create(OrderDTO order) throws SQLException {
-        if (order == null) {
+    public int create(OrderDTO orderDTO) throws SQLException {
+        if (orderDTO == null) {
             System.err.println("Error creating order: order is null");
             return -1;
         }
-        try(Connection connection = ConnectionManager.getConnection();) {
-            String query = "INSERT INTO orders (userId, totalCost, paymentMethod, status) VALUES (?, ?, ?, ?)";
-            try(PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
-                statement.setInt(1, order.getUserId());
-                statement.setDouble(2, order.getTotalCost());
-                statement.setString(3, String.valueOf(order.getPaymentMethod()));
-                statement.setString(4, String.valueOf(order.getStatus()));
-                int rowsAffected = statement.executeUpdate();
-                if (rowsAffected <= 0) {
-                    System.err.println("Failed to create order");
-                    return -1;
-                } else {
-                    System.out.println("order is created successfully");
-                    try (ResultSet resultSet = statement.getGeneratedKeys()) {
-                        if (resultSet.next()) {
-                            int newOrderId = resultSet.getInt(1); // getGeneratedKeys() -> "id" (wrong), 1 (right)
-                            System.out.println("order created successfully with ID: " + newOrderId);
-                            return newOrderId;
-                        }
-                    }
-                    System.err.println("Failed to retrieve order ID");
-                    return -1;
-                }
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            User user = em.find(User.class, orderDTO.getUserId());
+            if(user == null){
+                System.out.println("there is no user with id = " + orderDTO.getUserId());
+                return -1;
             }
+            Order order = new Order(user, orderDTO.getTotalCost(), orderDTO.getPaymentMethod(), orderDTO.getOrderedAt(), orderDTO.getStatus());
+            em.persist(order);
+            em.getTransaction().commit();
+            return order.getId();
+        }
+        finally {
+            em.close();
         }
     }
 
     @Override
     public boolean updateStatus(int orderId, OrderStatus orderStatus) throws SQLException{
-        String query = "UPDATE orders SET status = ? WHERE id = ?";
-        try(Connection connection = ConnectionManager.getConnection();) {
-            try(PreparedStatement statement = connection.prepareStatement(query);) {
-                statement.setString(1, String.valueOf(orderStatus));
-                statement.setInt(2, orderId);
-                int rowsAffected = statement.executeUpdate();
-                if (rowsAffected > 0) {
-                    System.out.println("order status is updated successfully");
-                    return true;
-                }
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Order order = em.find(Order.class, orderId);
+            if (order == null) {
+                System.out.println("There is no order with id = " + order);
                 return false;
             }
+            order.setStatus(orderStatus);
+            em.getTransaction().commit();
+            return true;
+        }
+        finally {
+            em.close();
         }
     }
 
     @Override
-    public Order get(int id) throws Exception { 
-        try (Connection conn = ConnectionManager.getConnection();
-        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM orders WHERE id=?")) {
-            
-            stmt.setInt(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if(rs.next()) {
-                    Order order = new Order();
-                    order.setId(rs.getInt("id"));
-                    order.setTotalCost(rs.getDouble("totalCost"));
-                    order.setOrderedAt(rs.getTimestamp("orderedAt").toLocalDateTime());
-                    order.setStatus(OrderStatus.valueOf(rs.getString("status")));
-                    return order;
-                }
+    public Order get(int id) throws Exception {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Order order = em.find(Order.class, id);
+            if (order == null) {
+                System.out.println("there is no order with id = " + id);
+                return null;
             }
-            return null;
+            em.getTransaction().commit();
+            return order;
+        }
+        finally {
+            em.close();
         }
     }
+
     @Override
     public List<Order> getOrdersByCustomerId(int customerId) throws SQLException {
-        List<Order> orders = new ArrayList<>();
-
-        String query = "SELECT * FROM orders WHERE userId=?";
-        try (Connection conn = ConnectionManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query);){
-
-            pstmt.setInt(1, customerId);
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                Order order = new Order();
-                order.setId(rs.getInt("id"));
-                order.setTotalCost(rs.getDouble("totalCost"));
-                order.setOrderedAt(rs.getTimestamp("orderedAt").toLocalDateTime());
-                order.setStatus(OrderStatus.valueOf(rs.getString("status")));
-                orders.add(order);
-            }
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.createQuery(
+                "SELECT o FROM Order o WHERE o.user.id = :userId", Order.class)
+                .setParameter("userId", customerId)
+                .getResultList();
+        } finally {
+            em.close();
         }
-        System.out.println("From DB: Orders of " + customerId + " : " + orders);
-        return orders;
     }
 
     @Override
     public List<OrderItemDTO> getOrderItemsByOrderId(int orderId) {
-        List<OrderItemDTO> orderItems = new ArrayList<>();
-        
-        String query = "SELECT oi.* , oi.quantity, p.price, p.name AS productName " +
-                        "FROM orderitem oi " +
-                        "JOIN product p ON oi.productId = p.id " +
-                        "WHERE oi.orderId = ?";
-        
-        try (Connection conn = ConnectionManager.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(query)) {
+        EntityManager em = emf.createEntityManager();
+        List<OrderItemDTO> orderItemsDTO = new ArrayList<>();        
+        try{
+            List<OrderItem> orderItems = em.createQuery(
+            "SELECT oi FROM OrderItem oi JOIN oi.product p WHERE oi.order.id = :orderId",OrderItem.class)
+            .setParameter("orderId", orderId)
+            .getResultList();
             
-            stmt.setInt(1, orderId);
-            ResultSet rs = stmt.executeQuery();
-            
-            while (rs.next()) {
+            for(OrderItem oi: orderItems){
                 OrderItemDTO orderItem = new OrderItemDTO();
-//                orderItem.setId(rs.getInt("id"));
-                orderItem.setOrderId(rs.getInt("orderId"));
-                orderItem.setProductId(rs.getInt("productId"));
-                orderItem.setProductName(rs.getString("productName"));
-                orderItem.setPrice(rs.getDouble("price"));
-                orderItem.setQuantity(rs.getInt("quantity"));
+                orderItem.setOrderId(oi.getId().getOrderId());
+                orderItem.setProductId(oi.getId().getProductId());
+                orderItem.setProductName(oi.getProduct().getName());
+                orderItem.setPrice(oi.getProduct().getPrice());
+                orderItem.setQuantity(oi.getQuantity());
                 
-                orderItems.add(orderItem);
+                orderItemsDTO.add(orderItem);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             new RuntimeException("Failed to retreive order items: " + e.getMessage());
         }
-        return orderItems;
+        return orderItemsDTO;
     }
-
 }

@@ -1,44 +1,40 @@
 package com.bakefinity.controller.repositories.impls;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Optional;
 
 import com.bakefinity.controller.repositories.interfaces.AdminRepo;
 import com.bakefinity.model.dtos.UserDTO;
 import com.bakefinity.model.entities.Admin;
-import com.bakefinity.utils.ConnectionManager;
+import com.bakefinity.utils.EntityManagerFactorySingleton;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
 
 public class AdminRepoImpl implements AdminRepo{
+    private EntityManagerFactory emf = EntityManagerFactorySingleton.getInstance();
 
    public Optional<UserDTO> findByEmailAndPassword(String email, String password) {
-        String query = "SELECT * FROM admin WHERE email = ? AND password = ?";
-        try (Connection conn = ConnectionManager.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(query)) {
-
-            pstmt.setString(1, email);
-            pstmt.setString(2, password);
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) { 
-                UserDTO user = new UserDTO();
-                user.setUsername(rs.getString("name"));
-                user.setEmail(rs.getString("email"));
-                user.setPassword(rs.getString("password"));
-                
-                return Optional.of(user); 
-            }
-        } catch (SQLException e) {
-            System.out.println("Failed to find user: " + e.getMessage());
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Admin> query = em.createQuery(
+                "SELECT u FROM Admin u WHERE u.email = :email AND u.password = :password", Admin.class
+            );
+            query.setParameter("email", email);
+            query.setParameter("password", password);
+            UserDTO admin = new UserDTO();
+            admin.setId(query.getSingleResult().getId());
+            admin.setName(query.getSingleResult().getName());
+            admin.setEmail(query.getSingleResult().getEmail());
+            admin.setPassword(query.getSingleResult().getPassword());
+            return Optional.of(admin);
+        } catch (NoResultException e) {
+            return Optional.empty();
+        } finally {
+            em.close(); 
         }
-        return Optional.empty();
-    }
+    }    
 
     
 }

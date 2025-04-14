@@ -4,9 +4,6 @@ public class UserInterestsDTO {
     private int userId;
     private int categoryId;
 
-    public UserInterestsDTO() {
-    }
-
     public UserInterestsDTO(int userId, int categoryId) {
         this.userId = userId;
         this.categoryId = categoryId;
