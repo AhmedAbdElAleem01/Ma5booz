@@ -13,10 +13,7 @@ import com.bakefinity.model.entities.Category;
 import com.bakefinity.utils.ConnectionManager;
 import com.bakefinity.utils.EntityManagerFactorySingleton;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.TypedQuery;
+import jakarta.persistence.*;
 
 public class ProductRepoImpl implements ProductRepo {
     private EntityManagerFactory emf = EntityManagerFactorySingleton.getInstance();
@@ -287,18 +284,21 @@ public class ProductRepoImpl implements ProductRepo {
 
     @Override
     public boolean updateStockQuantity(int productId, int newQuantity) throws SQLException {
-        String query = "UPDATE Product SET stockQuantity = ? WHERE id = ?";
-        try(Connection connection = ConnectionManager.getConnection();) {
-            try(PreparedStatement statement = connection.prepareStatement(query);) {
-                statement.setInt(1, newQuantity);
-                statement.setInt(2, productId);
-                int rowsAffected = statement.executeUpdate();
-                if (rowsAffected > 0) {
-                    System.out.println("stock quantity is updated successfully");
-                    return true;
-                }
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Product product = em.find(Product.class, productId);
+            if (product == null) {
+                System.out.println("there is no product with id = " + product);
                 return false;
             }
+            product.setStockQuantity(newQuantity);
+            em.merge(product);
+            em.getTransaction().commit();
+            return true;
+        }
+        finally {
+            em.close();
         }
     }
 
