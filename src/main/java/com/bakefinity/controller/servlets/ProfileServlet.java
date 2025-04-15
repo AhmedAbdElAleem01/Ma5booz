@@ -1,11 +1,13 @@
 package com.bakefinity.controller.servlets;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 import com.bakefinity.controller.services.impls.ProfileServiceImpl;
 import com.bakefinity.controller.services.interfaces.ProfileService;
 import com.bakefinity.model.dtos.*;
 
+import com.bakefinity.utils.Hashing;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
@@ -104,7 +106,12 @@ public class ProfileServlet extends HttpServlet {
             String newPass = req.getParameter("newPass");
             String confirmPass = req.getParameter("confirmPass");
 
-            Optional<UserDTO> updatedUser = profileService.updatePassword(user, currentPass , newPass , confirmPass);
+            Optional<UserDTO> updatedUser = null;
+            try {
+                updatedUser = profileService.updatePassword(user, Hashing.getHashedPassword(currentPass) , Hashing.getHashedPassword(newPass) , Hashing.getHashedPassword(confirmPass));
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            }
             if(updatedUser.isPresent()){
                 req.getSession().setAttribute("user", updatedUser.get());
                 deleteOldCookie(req , resp);

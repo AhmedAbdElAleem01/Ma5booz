@@ -34,7 +34,9 @@ public class UserRepoImpl implements UserRepo{
                 user.getEmail(),
                 user.getPassword(),
                 user.getPhoneNumber(),
-                user.getCreditLimit());
+                user.getCreditLimit(),
+                user.getJob(),
+                user.getBirthDate());
                 em.persist(myUser);
             tx.commit();
             return myUser.getId();

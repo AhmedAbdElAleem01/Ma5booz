@@ -13,6 +13,7 @@ import com.bakefinity.controller.services.interfaces.UserLoginService;
 import com.bakefinity.model.dtos.*;
 import com.bakefinity.controller.services.impls.CartServiceImpl;
 import com.bakefinity.controller.services.interfaces.CartService;
+import com.bakefinity.utils.Hashing;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
@@ -34,9 +35,13 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
-        String rememberMe = req.getParameter("rememberMe");
 
-        Optional<UserDTO> user = user = userLoginService.login(email, password);
+        Optional<UserDTO> user = null;
+        try {
+            user = userLoginService.login(email, Hashing.getHashedPassword(password));
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
         if (user.isPresent()) {
             if ("ADMIN".equals(user.get().getRole())) {
                 req.getSession().setAttribute("user", user.get());
@@ -53,11 +58,6 @@ public class LoginServlet extends HttpServlet {
                 }
     
                 loadCart(req, user);
-                if ( rememberMe != null ) {
-                    String emailPasswordCookieString = user.get().getEmail() + "+" + user.get().getPassword();
-                    Cookie rememberMeCookie = new Cookie( "rememberMeCookie", emailPasswordCookieString );
-                    resp.addCookie( rememberMeCookie );
-                }
                 resp.sendRedirect(getServletContext().getContextPath()+"/shop");
             }
         }else{

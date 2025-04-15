@@ -33,13 +33,15 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String username, String name, String email, String password, String phoneNumber, Double creditLimit) {
+    public User(String username, String name, String email, String password, String phoneNumber, Double creditLimit, String job, Date birthDate) {
         this.username = username;
         this.name = name;
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.creditLimit = creditLimit;
+        this.job = job;
+        this.birthDate = birthDate;
     }
 
     public User(Integer id, String username, String name, String email, String password, String phoneNumber, Double creditLimit, Date birthDate, String job, LocalDateTime createdAt) {
