@@ -44,10 +44,6 @@
                                     <label for="password">Password</label>
                                     <input type="password" class="form_style" name="password" id="password" required>
                                 </div>
-                                <div class="form-group check-box mt-3">
-                                    <input type="checkbox" id="rememberMe" name="rememberMe">
-                                    <label for="rememberMe">Remember Me</label>
-                                </div>
                                 <p class="text-center text-size-14">
                                     Don't have an account? 
                                     <a href="${pageContext.request.contextPath}/views/user/register.jsp" class="text-decoration-none terms-btn">Sign up</a>

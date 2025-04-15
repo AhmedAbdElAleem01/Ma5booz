@@ -8,6 +8,7 @@ import com.bakefinity.model.dtos.AddressDTO;
 import com.bakefinity.model.dtos.CategoryDTO;
 import com.bakefinity.model.dtos.UserDTO;
 import com.bakefinity.model.dtos.UserInterestsDTO;
+import com.bakefinity.utils.Hashing;
 import com.bakefinity.utils.InputValidation;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -82,7 +84,12 @@ public class RegisterServlet extends HttpServlet {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        UserDTO user = new UserDTO(fname + " " + lname, username, phoneNumber, email, password, Double.parseDouble(creditLimit), birthDate, job, LocalDateTime.now());
+        UserDTO user = null;
+        try {
+            user = new UserDTO(fname + " " + lname, username, phoneNumber, email, Hashing.getHashedPassword(password), Double.parseDouble(creditLimit), birthDate, job, LocalDateTime.now());
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
 
         int userId = 0;
         try {

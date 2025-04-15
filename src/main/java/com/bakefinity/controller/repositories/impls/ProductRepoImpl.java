@@ -13,10 +13,7 @@ import com.bakefinity.model.entities.Category;
 import com.bakefinity.utils.ConnectionManager;
 import com.bakefinity.utils.EntityManagerFactorySingleton;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.TypedQuery;
+import jakarta.persistence.*;
 
 public class ProductRepoImpl implements ProductRepo {
     private EntityManagerFactory emf = EntityManagerFactorySingleton.getInstance();
@@ -25,28 +22,18 @@ public class ProductRepoImpl implements ProductRepo {
     public ProductDTO get(int productId) throws Exception {
         EntityManager em = emf.createEntityManager();
         try{
+            em.getTransaction().begin();
             Product product = em.find(Product.class, productId);
             if(product!=null){
-                  return extractProductDTO(product);
-                }
-            }finally{
-                em.close();
+                return extractProductDTO(product);
             }
-            return null;
+            em.getTransaction().commit();
+        }finally{
+            em.close();
+        }
+        return null;
     }
 
-    // private ProductDTO extractProduct(ResultSet rs) throws SQLException {
-    //     return new ProductDTO(
-    //         rs.getInt("id"),
-    //         rs.getString("name"),
-    //         rs.getInt("categoryId"),
-    //         rs.getString("description"),
-    //         rs.getDouble("price"),
-    //         rs.getString("imageUrl"),
-    //         rs.getInt("stockQuantity"),
-    //         rs.getString("ingredients")
-    //     );
-    // }
     private ProductDTO extractProductDTO(Product product) throws SQLException {
         ProductDTO dto = new ProductDTO();
         dto.setId(product.getId());
@@ -65,9 +52,11 @@ public class ProductRepoImpl implements ProductRepo {
     public List<ProductDTO> getAll() throws Exception {
         EntityManager em = emf.createEntityManager();
         try {
+            em.getTransaction().begin();
             List<Product> products = em.createQuery("FROM Product", Product.class).getResultList();
             List<ProductDTO> dtos = new ArrayList<>();
             for (Product p : products) dtos.add(extractProductDTO(p));
+            em.getTransaction().commit();
             return dtos;
         } finally{
             em.close();
@@ -81,6 +70,7 @@ public class ProductRepoImpl implements ProductRepo {
         List<ProductDTO> products = new ArrayList<>();
         
         try{
+            em.getTransaction().begin();
             List<Product> resultList = em.createQuery(
             "SELECT p FROM Product p JOIN FETCH p.category", Product.class).getResultList();
             for (Product p : resultList) {
@@ -92,13 +82,14 @@ public class ProductRepoImpl implements ProductRepo {
                 product.setPrice(p.getPrice());
                 product.setImageUrl(p.getImageUrl());
                 product.setStockQuantity(p.getStockQuantity());
-                
+
                 products.add(product);
             }
+            em.getTransaction().commit();
+            return products;
         }finally{
             em.close();
         }
-        return products;
     }
 
     
@@ -179,10 +170,12 @@ public class ProductRepoImpl implements ProductRepo {
     public List<ProductDTO> getByCategory(int categoryId) throws Exception {
         EntityManager em = emf.createEntityManager();
         try {
+            em.getTransaction().begin();
             TypedQuery<Product> query = em.createQuery("SELECT p FROM Product p WHERE p.category.id = :categoryId", Product.class);
             query.setParameter("categoryId", categoryId);
             List<ProductDTO> dtos = new ArrayList<>();
             for (Product p : query.getResultList()) dtos.add(extractProductDTO(p));
+            em.getTransaction().commit();
             return dtos;
         } finally {
             em.close();
@@ -193,10 +186,12 @@ public class ProductRepoImpl implements ProductRepo {
     public List<ProductDTO> getTopInStock(int limit) throws Exception {
         EntityManager em = emf.createEntityManager();
         try {
+            em.getTransaction().begin();
             TypedQuery<Product> query = em.createQuery("SELECT p FROM Product p ORDER BY p.stockQuantity DESC", Product.class);
             query.setMaxResults(limit);
             List<ProductDTO> dtos = new ArrayList<>();
             for (Product p : query.getResultList()) dtos.add(extractProductDTO(p));
+            em.getTransaction().commit();
             return dtos;
         } finally {
             em.close();
@@ -207,10 +202,12 @@ public class ProductRepoImpl implements ProductRepo {
     public List<ProductDTO> searchByName(String name) throws Exception {
         EntityManager em = emf.createEntityManager();
         try {
+            em.getTransaction().begin();
             TypedQuery<Product> query = em.createQuery("SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(:name)", Product.class);
             query.setParameter("name", "%" + name + "%");
             List<ProductDTO> dtos = new ArrayList<>();
             for (Product p : query.getResultList()) dtos.add(extractProductDTO(p));
+            em.getTransaction().commit();
             return dtos;
         } finally {
             em.close();
@@ -221,6 +218,7 @@ public class ProductRepoImpl implements ProductRepo {
         EntityManager em = emf.createEntityManager();
         List<ProductDTO> products = new ArrayList<>();
         try {
+            em.getTransaction().begin();
             List<Product> resultList = em.createQuery(
                 "SELECT p FROM Product p JOIN FETCH p.category WHERE p.category.id = :categoryId", Product.class)
                 .setParameter("categoryId", categoryId)
@@ -231,6 +229,7 @@ public class ProductRepoImpl implements ProductRepo {
             for (Product p : resultList) {
                 products.add(extractProductDTO(p));
             }
+            em.getTransaction().commit();
         
         } catch(Exception e){
             throw new RuntimeException(e.getMessage());
@@ -244,10 +243,12 @@ public class ProductRepoImpl implements ProductRepo {
     public int getTotalCountByCategory(int categoryId) {
         EntityManager em = emf.createEntityManager();
         try {
+            em.getTransaction().begin();
             Long count = em.createQuery(
                 "SELECT COUNT(p) FROM Product p WHERE p.category.id = :categoryId", Long.class)
                 .setParameter("categoryId", categoryId)
                 .getSingleResult();
+            em.getTransaction().commit();
             return count.intValue();
         } finally {
             em.close();
@@ -259,6 +260,7 @@ public class ProductRepoImpl implements ProductRepo {
         EntityManager em = emf.createEntityManager();
         List<ProductDTO> products = new ArrayList<>();
         try {
+            em.getTransaction().begin();
             List<Product> resultList = em.createQuery("SELECT p FROM Product p", Product.class)
                 .setFirstResult(offset)
                 .setMaxResults(limit)
@@ -266,6 +268,7 @@ public class ProductRepoImpl implements ProductRepo {
             for (Product p : resultList) {
                 products.add(extractProductDTO(p));
             }
+            em.getTransaction().commit();
         } catch(Exception e){
             throw new RuntimeException(e.getMessage());
         }
@@ -278,7 +281,9 @@ public class ProductRepoImpl implements ProductRepo {
     public int getTotalCount() {
         EntityManager em = emf.createEntityManager();
         try {
+            em.getTransaction().begin();
             Long count = em.createQuery("SELECT COUNT(p) FROM Product p", Long.class).getSingleResult();
+            em.getTransaction().commit();
             return count.intValue();
         } finally {
             em.close();
@@ -287,18 +292,21 @@ public class ProductRepoImpl implements ProductRepo {
 
     @Override
     public boolean updateStockQuantity(int productId, int newQuantity) throws SQLException {
-        String query = "UPDATE Product SET stockQuantity = ? WHERE id = ?";
-        try(Connection connection = ConnectionManager.getConnection();) {
-            try(PreparedStatement statement = connection.prepareStatement(query);) {
-                statement.setInt(1, newQuantity);
-                statement.setInt(2, productId);
-                int rowsAffected = statement.executeUpdate();
-                if (rowsAffected > 0) {
-                    System.out.println("stock quantity is updated successfully");
-                    return true;
-                }
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Product product = em.find(Product.class, productId);
+            if (product == null) {
+                System.out.println("there is no product with id = " + product);
                 return false;
             }
+            product.setStockQuantity(newQuantity);
+            em.merge(product);
+            em.getTransaction().commit();
+            return true;
+        }
+        finally {
+            em.close();
         }
     }
 
@@ -316,6 +324,7 @@ public class ProductRepoImpl implements ProductRepo {
         EntityManager em = emf.createEntityManager();
         List<ProductDTO> products = new ArrayList<>();
         try {
+            em.getTransaction().begin();
             List<Product> resultList = em.createQuery(
                 "SELECT p FROM Product p JOIN FETCH p.category WHERE p.category.id = :categoryId AND p.price BETWEEN :minPrice AND :maxPrice ORDER BY p.price ASC",
                 Product.class)
@@ -329,6 +338,7 @@ public class ProductRepoImpl implements ProductRepo {
             for (Product p : resultList) {
                 products.add(extractProductDTO(p));
             }
+            em.getTransaction().commit();
         } catch(Exception e){
             throw new RuntimeException(e.getMessage());
         } finally {
@@ -343,6 +353,7 @@ public class ProductRepoImpl implements ProductRepo {
         EntityManager em = emf.createEntityManager();
         List<ProductDTO> products = new ArrayList<>();
         try {
+            em.getTransaction().begin();
             List<Product> resultList = em.createQuery(
                 "SELECT p FROM Product p JOIN FETCH p.category WHERE p.price BETWEEN :minPrice AND :maxPrice ORDER BY p.price ASC",
                 Product.class)
@@ -355,6 +366,7 @@ public class ProductRepoImpl implements ProductRepo {
             for (Product p : resultList) {
                 products.add(extractProductDTO(p));
             }
+            em.getTransaction().commit();
         } catch(Exception e){
             throw new RuntimeException(e.getMessage());
         } 
@@ -367,6 +379,7 @@ public class ProductRepoImpl implements ProductRepo {
     public int getTotalProductsByPrice(Double minPrice, Double maxPrice, Integer categoryId) {
         EntityManager em = emf.createEntityManager();
         try {
+            em.getTransaction().begin();
             String query = "SELECT COUNT(p) FROM Product p WHERE p.price BETWEEN :min AND :max";
             if (categoryId != null) {
                 query += " AND p.category.id = :catId";
@@ -378,7 +391,7 @@ public class ProductRepoImpl implements ProductRepo {
             if (categoryId != null) {
                 q.setParameter("catId", categoryId);
             }
-    
+            em.getTransaction().commit();
             return q.getSingleResult().intValue();
         } finally {
             em.close();
@@ -386,8 +399,3 @@ public class ProductRepoImpl implements ProductRepo {
     }
     
 }
-
-    
-    
-    
-    

@@ -2,9 +2,10 @@
 
   <Resource name="jdbc/ecommerce" 
   			auth="Container" type="javax.sql.DataSource"
-               maxActive="20" maxIdle="5" maxWait="10000"
-               username="root" password="root"
+        
+               maxTotal="20" maxIdle="5" maxWaitMillis="10000"
+               username="root" password="vOAFaWKTcrtXvNDxTgMAyTVXXbXLuutt"
                driverClassName="com.mysql.cj.jdbc.Driver"
-               url="jdbc:mysql://localhost:3306/ecommercedb?useSSL=false&amp;serverTimezone=UTC"/>
+               url="jdbc:mysql://caboose.proxy.rlwy.net:56293/railway?allowPublicKeyRetrieval=true&amp;useSSL=false"/>
 
 </Context>
