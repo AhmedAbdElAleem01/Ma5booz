@@ -73,6 +73,18 @@ function updateCartAsync(id, quantity) {
             document.getElementById("totalItems").textContent = parseInt(data.cartSize);
             document.getElementById("totalOrderPrice").textContent = parseFloat(data.totalPrice).toFixed(2);
             document.getElementById("grandTotal").textContent = (parseFloat(data.totalPrice)).toFixed(2);
+            cartIcon.textContent = response.cartSize;
+            if (parseInt(data.cartSize) === 0){
+                console.log("cart is empty now...");
+                // disable the proceed to checkout button
+                const checkoutBtn = document.querySelector(".all_button");
+                if (checkoutBtn) {
+                    checkoutBtn.classList.add("disabled");
+                    checkoutBtn.style.pointerEvents = "none";
+                    checkoutBtn.setAttribute("onclick", "return false;");
+                    checkoutBtn.setAttribute("href", "#");
+                }
+            }
             console.log("Cart updated:", response);
         },
         error: function (xhr, status, error) {
