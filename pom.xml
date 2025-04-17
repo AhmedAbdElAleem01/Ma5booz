@@ -89,6 +89,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>5.0.1</version>
+        </dependency>
+        
+        <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-hikaricp</artifactId>
             <version>6.5.2.Final</version>
@@ -121,5 +127,8 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    
+    
 
 </project>

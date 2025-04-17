@@ -1,0 +1,48 @@
+# Ignore version control directories
+.git/
+.gitignore
+
+# Ignore IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Ignore build outputs (but include WAR file for Docker)
+target/
+*.class
+.gradle/
+
+# Ignore temporary and debug files
+tmp/
+temp/
+*.tmp
+*.log
+
+# Ignore environment and secret files
+.env*
+*.env
+*.pem
+*.key
+*.crt
+
+# Ignore documentation and local development files
+docs/
+*.md
+README*
+.local/
+local/
+
+# Ignore other development artifacts
+dist/
+build/
+out/
+
+# Ignore test files
+test/
+tests/
+*_test.go
+
+# Ensure necessary files are included
+!src/main/java/**
+!pom.xml

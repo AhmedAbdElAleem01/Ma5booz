@@ -105,11 +105,13 @@
                             
                             <button  class="text-decoration-none all_button" onclick="addToCartAsync()">Add to cart<i class="fa-solid fa-arrow-right"></i></button>
 
-                            
-                
                         </div>
                         <p id="message" style="color:red;"></p>                        
                     </div>
+                    <div style="display: flex; justify-content: center; align-items: center; margin-top: 20px;">
+                        <a href="${pageContext.request.contextPath}/shop" class="continue-shopping-link">Continue Shopping</a>
+                      </div>
+                      
                 </div>
             </div>
         </div>

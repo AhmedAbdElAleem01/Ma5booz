@@ -39,7 +39,7 @@
             <div class="row">
                 <div class="col-lg-8 col-12">
                     <div class="product-detail-box">
-                        <form id="contactpage" method="post" action="http://localhost:9090/Ma5booz/register" class="position-relative">
+                        <form id="contactpage" method="post" action="${pageContext.request.contextPath}/register" class="position-relative">
                             <div class="upper-form" data-aos="fade-up">
                                 <span class="address">Personal Information:</span>
                                 <div class="row">
@@ -200,5 +200,8 @@
 
     <%@ include file="footer.jsp"%>
     <script src="${pageContext.request.contextPath}/static/js/register.js"> </script>
+    <script>
+        window.contextPath = "${pageContext.request.contextPath}";
+    </script>
 </body>
 </html>

@@ -9,7 +9,7 @@
         <div class="middle_portion">
             <div class="row">
                 <div class="col-lg-2 col-md-12 col-sm-6 col-12 order-md-1 order-sm-1 order-1">
-                    <a href="${pageContext.request.contextPath}/home">
+                    <a href="${pageContext.request.contextPath}/home" style="width: 50%; height: 30%;">
                         <figure class="footer-logo mb-0">
                             <img class="img-fluid" src="${pageContext.request.contextPath}/static/img/testlogo.png" alt="image">
                         </figure>

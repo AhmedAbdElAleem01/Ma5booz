@@ -15,4 +15,12 @@
         <welcome-file>home</welcome-file>
     </welcome-file-list>
 
+    <error-page>
+        <error-code>404</error-code>
+        <location>/views/user/test.jsp</location>
+    </error-page>
+
+    <listener>
+        <listener-class>com.bakefinity.handlers.listeners.AppContextListener</listener-class>
+    </listener>
 </web-app>

@@ -8,7 +8,7 @@ function isUsernameAvailable(){
             document.getElementById("valid").innerText = req.responseText;
         }
     };
-    req.open("GET", "http://localhost:9090/Ma5booz/valid?Username=" + document.getElementById("username").value, true);
+    req.open("GET", "/valid?Username=" + document.getElementById("username").value, true);
     req.send(null);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -22,7 +22,7 @@ function isEmailUnique(){
             document.getElementById("uniqueEmail").innerText = req1.responseText;
         }
     };
-    req1.open("GET", "http://localhost:9090/Ma5booz/valid?Email=" + document.getElementById("email").value, true);
+    req1.open("GET", "/valid?Email=" + document.getElementById("email").value, true);
     req1.send(null);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -36,7 +36,7 @@ function validateFName(){
             document.getElementById("validFName").innerText = req2.responseText;
         }
     };
-    req2.open("GET", "http://localhost:9090/Ma5booz/valid?Name=" + document.getElementById("fname").value, true);
+    req2.open("GET", "/valid?Name=" + document.getElementById("fname").value, true);
     req2.send(null);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +50,9 @@ function validateLName(){
             document.getElementById("validLName").innerText = req3.responseText;
         }
     };
-    req3.open("GET", "http://localhost:9090/Ma5booz/valid?Name=" + document.getElementById("lname").value, true);
+    req3.open("GET", `/valid?Name=` + document.getElementById("lname").value, true);
+    console.log("Request sent to: " , `${window.contextPath}`);
+
     req3.send(null);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,7 +66,7 @@ function validatePhone(){
             document.getElementById("validPhone").innerText = req4.responseText;
         }
     };
-    req4.open("GET", "http://localhost:9090/Ma5booz/valid?Phone=" + document.getElementById("phoneNumber").value, true);
+    req4.open("GET", "/valid?Phone=" + document.getElementById("phoneNumber").value, true);
     req4.send(null);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,7 +80,7 @@ function validateJob(){
             document.getElementById("validJob").innerText = req5.responseText;
          }
     };
-    req5.open("GET", "http://localhost:9090/Ma5booz/valid?Job=" + document.getElementById("job").value, true);
+    req5.open("GET", "/valid?Job=" + document.getElementById("job").value, true);
     req5.send(null);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,7 +94,7 @@ function validatePassword(){
             document.getElementById("validPassword").innerText = req6.responseText;
         }
     };
-    req6.open("GET", "http://localhost:9090/Ma5booz/valid?Password=" + document.getElementById("password").value, true);
+    req6.open("GET", "/valid?Password=" + document.getElementById("password").value, true);
     req6.send(null);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,7 +108,7 @@ function validateCity(){
             document.getElementById("validCity").innerText = req7.responseText;
         }
     };
-    req7.open("GET", "http://localhost:9090/Ma5booz/valid?City=" + document.getElementById("city").value, true);
+    req7.open("GET", "/valid?City=" + document.getElementById("city").value, true);
     req7.send(null);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,7 +122,7 @@ function validateStreet(){
             document.getElementById("validStreet").innerText = req8.responseText;
         }
     };
-    req8.open("GET", "http://localhost:9090/Ma5booz/valid?Street=" + document.getElementById("street").value, true);
+    req8.open("GET", "/valid?Street=" + document.getElementById("street").value, true);
     req8.send(null);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -134,6 +136,6 @@ function validateCredit(){
             document.getElementById("validCredit").innerText = req9.responseText;
         }
     };
-    req9.open("GET", "http://localhost:9090/Ma5booz/valid?Credit=" + document.getElementById("creditLimit").value, true);
+    req9.open("GET", "/valid?Credit=" + document.getElementById("creditLimit").value, true);
     req9.send(null);
 }

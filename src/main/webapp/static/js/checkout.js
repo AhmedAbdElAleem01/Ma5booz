@@ -8,7 +8,7 @@ function validatePhone(){
             document.getElementById("validPhone").innerText = req.responseText;
         }
     };
-    req.open("GET", "http://localhost:9090/Ma5booz/validData?Phone=" + document.getElementById("phoneNumber").value, true);
+    req.open("GET", "/validData?Phone=" + document.getElementById("phoneNumber").value, true);
     req.send(null);
 }
 
@@ -22,7 +22,7 @@ function validateCity(){
             document.getElementById("validCity").innerText = req2.responseText;
         }
     };
-    req2.open("GET", "http://localhost:9090/Ma5booz/validData?City=" + document.getElementById("city").value, true);
+    req2.open("GET", "/validData?City=" + document.getElementById("city").value, true);
     req2.send(null);
 }
 
@@ -36,7 +36,7 @@ function validateStreet(){
             document.getElementById("validStreet").innerText = req3.responseText;
         }
     };
-    req3.open("GET", "http://localhost:9090/Ma5booz/validData?Street=" + document.getElementById("street").value, true);
+    req3.open("GET", "/validData?Street=" + document.getElementById("street").value, true);
     req3.send(null);
 }
 
@@ -50,6 +50,6 @@ function validateBuildingNo(){
             document.getElementById("validBuildingNo").innerText = req4.responseText;
         }
     };
-    req4.open("GET", "http://localhost:9090/Ma5booz/validData?BuildingNo=" + document.getElementById("BNo").value, true);
+    req4.open("GET", "/validData?BuildingNo=" + document.getElementById("BNo").value, true);
     req4.send(null);
 }

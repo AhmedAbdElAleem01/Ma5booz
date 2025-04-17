@@ -48,25 +48,8 @@
                                 </div>
                             </form>
                         </div>
-                        <div>
-                            <div class="widget" data-aos="fade-up">
-                                <div class="widget-title font_weight_600 mb-3">Filter by Price</div>
-                                <div class="price-filter bg-white p-4 rounded shadow-sm">
-                                  <div class="mb-3">
-                                    <label for="minPrice" class="form-label">Min Price (EGP)</label>
-                                    <input name="minPrice" type="number" id="minPrice" class="form-control" value="0" min="0" max="10000" step="10" />
-                                  </div>
-                                  <div class="mb-3">
-                                    <label for="maxPrice" class="form-label">Max Price (EGP)</label>
-                                    <input name="maxPrice" type="number" id="maxPrice" class="form-control" value="1000" min="0" max="10000" step="10" />
-                                  </div>
-                                  <button class="btn btn-outline-primary mt-3 w-100" onclick="applyPriceFilter(event,1)">Apply Filter</button>
-                                  <button class="btn btn-outline-primary mt-3 w-100" onclick="resetHandler(event)">Reset</button>
-                                </div>
-                              </div>
-                        </div>
-                        <div class="widget widget-categories" data-aos="fade-up">
-                            <div class="widget-title font_weight_600">Categories</div>
+                        <div class="widget widget-categories category-box" data-aos="fade-up">
+                            <div class="price-filter-title font_weight_600 mb-4">Categories</div>
                             <ul class="list-unstyled mb-0">
                                 <c:forEach var="cat" items="${categories}">
                                     <div class="cat-item">
@@ -78,6 +61,43 @@
                                 </div>
                             </ul>
                         </div>
+                    
+                            <div class="widget" data-aos="fade-up">
+                                <!-- <div class="price-filter-title font_weight_600 mb-4">Price Range</div> -->
+                                <div class="price-filter-widget">
+                                    <div class="price-filter-title font_weight_600 mb-4">Price Range</div>
+                                    <div class="price-input-group">
+                                        <div class="price-input">
+                                            <input type="number" 
+                                                   id="minPrice" 
+                                                   class="form-control price-input-field"
+                                                   value="0" 
+                                                   min="0" 
+                                                   max="10000" 
+                                                   step="10"
+                                                   placeholder="Min">
+                                        </div>
+                                        <div class="price-input">
+                                            <input type="number" 
+                                                   id="maxPrice" 
+                                                   class="form-control price-input-field"
+                                                   value="1000" 
+                                                   min="0" 
+                                                   max="10000" 
+                                                   step="10"
+                                                   placeholder="Max">
+                                        </div>
+                                    </div>
+                                    
+                                    <button class="price-filter-apply" onclick="applyPriceFilter(event,1)">
+                                        Apply Filters
+                                    </button>
+                                    
+                                    <button class="price-filter-reset" onclick="resetHandler(event)">
+                                        Reset Filters
+                                    </button>
+                                </div>
+                            </div>
                     </div>
                 </div>
                 <div class="col-lg-9">

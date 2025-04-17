@@ -61,6 +61,20 @@
         visibility: hidden;
       }
     }
+
+    #message {
+      display: none;
+      color: #a64db3;
+      font-size: 1.2em;
+      text-align: center;
+    }
+
+    #message a {
+      display: block;
+      margin-top: 8px;
+      color: #a64db3;
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -70,6 +84,11 @@
     </div>
     <div class="percentage" id="percentText">0%</div>
     <p class="loading-text">Flaking in progress...</p>
+  </div>
+
+  <div id="message">
+    Sorry for the inconvenience. If the problem remains, contact us.
+    <a href="${pageContext.request.contextPath}/home">Back to Home</a>
   </div>
 
   <script>
@@ -82,12 +101,13 @@
       if (percent >= 100) {
         clearInterval(interval);
       }
-    }, 10); // 100 steps in 1s = 1000ms / 100 = 10ms
+    }, 10);
 
     window.addEventListener("load", () => {
       setTimeout(() => {
         document.getElementById("loader").style.display = "none";
-      }, 1200); // 1s fill + 0.2s fade
+        document.getElementById("message").style.display = "block";
+      }, 1200);
     });
   </script>
 </body>

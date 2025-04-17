@@ -106,7 +106,7 @@
                                     <i class="fa-solid fa-ticket"></i>
                                     <span class="heading">Apply Coupons</span>
                                 </div>
-                                <a href="cart.html" class="text-decoration-none">Apply</a>
+                                <a href="${pageContext.request.contextPath}/cart" class="text-decoration-none">Apply</a>
                             </div>
                             <div class="detail">
                                 <span class="heading">Product Details:</span>

@@ -73,7 +73,18 @@ function updateCartAsync(id, quantity) {
             document.getElementById("totalItems").textContent = parseInt(data.cartSize);
             document.getElementById("totalOrderPrice").textContent = parseFloat(data.totalPrice).toFixed(2);
             document.getElementById("grandTotal").textContent = (parseFloat(data.totalPrice)).toFixed(2);
-            console.log("Cart updated:", response);
+            document.getElementById("cartIcon").innerText = parseInt(data.cartSize);
+
+            if (parseInt(data.cartSize) === 0){
+                console.log("cart is empty now...");
+                const checkoutBtn = document.querySelector(".all_button");
+                if (checkoutBtn) {
+                    checkoutBtn.classList.add("disabled");
+                    checkoutBtn.style.pointerEvents = "none";
+                    checkoutBtn.setAttribute("onclick", "return false;");
+                    checkoutBtn.setAttribute("href", "#");
+                }
+            }
         },
         error: function (xhr, status, error) {
             console.error("Error updating cart:", error);

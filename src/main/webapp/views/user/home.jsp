@@ -25,7 +25,7 @@
                         <h3>Made to Delight</h3>
                         <h1><span>Breads & <br>Pastries</span></h1>
                         <p>Sweet, buttery, and baked with love.</p>
-                        <a href="${pageContext.request.contextPath}/views/user/shop.jsp" class="text-decoration-none all_button">
+                        <a href="${pageContext.request.contextPath}/shop" class="text-decoration-none all_button">
                             Shop the Menu <i class="fa-solid fa-arrow-right"></i>
                         </a>
                     </div>
@@ -61,11 +61,14 @@
                     <div class="owl-carousel owl-theme">
 
                         <c:forEach var="product" items="${classicProducts}">
+                            <c:url value="product_details" var="detailsUrl">
+                                <c:param name="productID" value="${product.id}"/>
+                            </c:url>
                             <div class="item">
                                 <div class="classic-box">
                                     <div class="classic_image_box box1">
                                         <figure class="mb-0">
-                                            <img src="${pageContext.request.contextPath}/product-image/${product.imageUrl}" alt="image" class="img-fluid">
+                                           <a href="${detailsUrl}"> <img src="${pageContext.request.contextPath}/product-image/${product.imageUrl}" alt="image" class="img-fluid"></a>
                                         </figure>
                                         <i class="fa-regular fa-heart"></i>
                                     </div>
@@ -129,7 +132,8 @@
 </c:if>
 
 <!-- Categories -->
-<section class="categories-con position-relative">
+<section class="categories-con position-relative" style="background: linear-gradient(to right, #f8f0ff, #fff0f5);
+">
     <div class="container position-relative">
         <div class="row">
             <div class="col-12">

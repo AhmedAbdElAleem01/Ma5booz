@@ -117,7 +117,7 @@ public class RegisterServlet extends HttpServlet {
                 }
             }
         }
-        resp.sendRedirect("/Ma5booz/views/user/registerConfirmation.jsp");
+        resp.sendRedirect("/views/user/registerConfirmation.jsp");
     }
 
     @Override
