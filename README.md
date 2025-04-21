@@ -59,6 +59,7 @@
 - [Alaa Hathout](https://github.com/AlaaHathout)
 - [Salma ElKhatib](https://github.com/Salmaelkatib)
 
+---
 
 ## 🍰 Made with Love
 
