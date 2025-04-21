@@ -54,7 +54,7 @@
 ```
 ---
 
-##💻 Development Team
+## 💻 Development Team
 
 - [Ahmed AbdElAleem](https://github.com/AhmedAbdElAleem01)
 - [Alaa Hathout](https://github.com/AlaaHathout)
