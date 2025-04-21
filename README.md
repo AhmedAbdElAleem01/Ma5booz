@@ -56,7 +56,3 @@
 ## 🍰 Made with Love
 
 Created as a graduation project by a passionate Java backend dev with a sweet tooth and a flair for playful UX. 💜✨
-
----
-
-Wanna add your name, logo, or anything specific to it?
