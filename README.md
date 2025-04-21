@@ -52,6 +52,7 @@
    docker build -t ma5booz-app .
    docker run -p 8080:8080 --env-file .env ma5booz-app
 ```
+---
 
 ## 👨‍🍳 Development Team
 
