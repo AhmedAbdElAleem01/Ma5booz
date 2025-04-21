@@ -12,21 +12,15 @@
 - **Asynchronous**: Vanilla JS for dynamic updates
 - **ORM**: Custom/native ORM implementation
 - **Build**: Single JAR package (no Maven)
-- **Hosting**: (You can add this later if deployed)
+- **Deployment**: Dockerized app for easy setup and scaling
 
 ---
 
 ## 🧁 Features
 
-### 🌸 Customer Side
 - Browse delightful products with a stylish card layout
 - Add to cart, update quantity, or remove with ease
-- Subscribe for monthly sweet deliveries
-- Reorder past favorites from history
-- Leave reviews for products
 - Secure login/registration before checkout
-
-### 🛠 Admin Side
 - Add/Edit/Delete bakery & pastry items
 - Manage customer reviews
 - Track subscriptions & reorder history
@@ -53,27 +47,11 @@
    - Import the SQL dump in `db/ma5booz.sql` to your MySQL instance (Railway or local)
    - Update DB credentials in `DBConnection.java`
 
-3. **Build the JAR**
-   ```bash
-   javac -d build src/**/*.java
-   jar -cvf ma5booz.jar -C build .
-   ```
-
-4. **Run**
-   ```bash
-   java -jar ma5booz.jar
-   ```
-
----
-
-## 💡 Future Work
-
-- Payment gateway integration
-- Email notifications for orders/subscriptions
-- Admin analytics dashboard
-- More themes (seasonal, minimalist, etc.)
-
----
+3.🐳 Docker Deployment
+```bash
+   docker build -t ma5booz-app .
+   docker run -p 8080:8080 --env-file .env ma5booz-app
+```
 
 ## 🍰 Made with Love
 
