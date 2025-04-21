@@ -64,4 +64,4 @@
 
 ## 🍰 Made with Love
 
-Created as a graduation project by a group of passionate ITI trainees with a sweet tooth and a flair for playful UX. 💜✨
+Created as a graduation project by a group of passionate ITI trainees with a sweet tooth and a flair for playful UX.💜✨
