@@ -53,6 +53,13 @@
    docker run -p 8080:8080 --env-file .env ma5booz-app
 ```
 
+## 👨‍🍳 Development Team
+
+- [Ahmed AbdElAleem](https://github.com/AhmedAbdElAleem01)
+- [Alaa Hathout](https://github.com/AlaaHathout)
+- [Salma ElKhatib](https://github.com/Salmaelkatib)
+
+
 ## 🍰 Made with Love
 
-Created as a graduation project by a passionate Java backend dev with a sweet tooth and a flair for playful UX. 💜✨
+Created as a graduation project by a group of passionate ITI trainees with a sweet tooth and a flair for playful UX. 💜✨
